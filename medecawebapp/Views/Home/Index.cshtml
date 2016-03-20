@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div ng-controller="DashboardController" >
+  <div class="row" >
+                <div class="col-lg-12">
+                    <h1 class="page-header">Dashboard</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row" ng-cloack>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-stethoscope fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{serviciosContinuosProx.length}}</div>
+                                    <div>Proximos mantenimientos!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer" ng-click="mostrarServPendientes(0, 'panel-green')">
+                                <span class="pull-left">Ver Veh&iacute;culos</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-stethoscope fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{serviciosContinuos.length}}</div>
+                                    <div>Mantenimientos vencidos!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" >
+                            <div class="panel-footer" ng-click="mostrarServPendientes(1, 'panel-yellow')">
+                                <span class="pull-left">Ver Veh&iacute;culos</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{citas.length > 0 ? citas.length : 'Ninguna'}}</div>
+                                    <div>Citas de Hoy</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" ng-click="mostrarServPendientes(2, 'panel-red')">
+                            <div class="panel-footer">
+                                <span class="pull-left">Ver Veh&iacute;culos</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+    <hr />
+            <div ng-show="pivotservs" style="display:flexbox;flex-wrap:wrap;" layout-xs="column" layout="row" class="md-padding well" >
+                <div current-page="currentPage" dir-paginate="serviciosContinuo in pivotservs | itemsPerPage: 12" flex-xs flex-gt-xs="20" layout="column" style="margin-right:5px">
+                <div class="panel {{selPanel}}"  >
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-stethoscope fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div>{{serviciosContinuo.Vehiculo}}</div>
+                                    <div><b>Placa {{serviciosContinuo.Placa}}</b></div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="modal-body">
+                          <div class="md-headline">{{serviciosContinuo.Telefono}}</div>
+            <span class="md-subhead">{{serviciosContinuo.Cliente}}</span>
+                         <span class="pull-right text-muted">
+                                        <em>{{serviciosContinuo.Info}}</em>
+                                    </span>
+                    </div>
+                    </div>
+              </div>
+                </div>
+            <!-- /.row -->
+                            <dir-pagination-controls></dir-pagination-controls>
+            
+    </div>

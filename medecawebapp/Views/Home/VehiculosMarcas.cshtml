@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "VehiculosMarcas";
+}
+
+  <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                    <h1 >Marcas de Veh&iacute;culos</h1>
+                    <h5>En este modulo podra añadir y editar marcas de Veh&iacute;culos.</h5>
+                        </div>
+                </div>
+            </div>
+<div class="row" ng-controller="VehiculoMarcasController">
+                <div class="col-lg-5 col-sm-5 col-xs-8">
+
+    <table class="table table-striped">
+        <thead>
+          <tr>  <th>
+            Nombre
+        </th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="marca in marcas | orderObjectBy : 'Nombre'">
+            <td>
+                <span ng-show="!marca.editar">
+                {{marca.Nombre}}
+                    </span>
+                <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" ng-show="marca.editar" class="form-control"/>
+            </td>
+            <td>
+               <button type="submit" class="btn btn-warning" ng-click="editar(marca)" ng-show="!marca.editar"> <i class="fa fa-edit"></i></button>
+               <button type="submit" class="btn btn-success" ng-click="guardar(marca)" ng-show="marca.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-check-square-o"></i></button>
+               <button type="submit" class="btn btn-danger"  ng-click="cancelarEdicion(marca)" ng-show="marca.editar"> <i class="fa fa-close"></i></button>
+
+            </td>
+        </tr>
+            </tbody>
+        <tfoot ng-show="!nuevoModel.editar">
+        <tr>
+                <td>
+                <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" class="form-control" placeholder="Escriba aqu&iacute; el nombre de la Marca que desea agregar..."/>
+            </td>
+            <td>
+               <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-plus-square"></i></button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div></div>

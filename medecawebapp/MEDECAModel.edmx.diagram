@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2a6082f38d594d30b53a085e7b5a04bb" Name="Diagram1" ZoomLevel="48">
+        <EntityTypeShape EntityType="MEDECAModel.Cliente" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.Combustible" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.Insumo" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.Modelo" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.sysdiagram" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.VehiculoMarca" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MEDECAModel.Vehiculo" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="MEDECAModel.FK_Vehiculos_Clientes" ManuallyRouted="false" />
+        <AssociationConnector Association="MEDECAModel.FK_Vehiculos_Combustibles" ManuallyRouted="false" />
+        <AssociationConnector Association="MEDECAModel.FK_Modelos_VehiculoMarcas" ManuallyRouted="false" />
+        <AssociationConnector Association="MEDECAModel.FK_Vehiculos_Modelos" ManuallyRouted="false" />
+        <AssociationConnector Association="MEDECAModel.VehiculosInsumos" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MEDECAModel.Servicio" Width="1.5" PointX="12.125" PointY="13.5" />
+        <EntityTypeShape EntityType="MEDECAModel.OrdenesTrabajo" Width="1.5" PointX="10.375" PointY="8.5" />
+        <AssociationConnector Association="MEDECAModel.FK_OrdenesTrabajos_Vehiculos" />
+        <AssociationConnector Association="MEDECAModel.OrdenesServicios" />
+        <EntityTypeShape EntityType="MEDECAModel.InsumosProveedore" Width="1.5" PointX="7.9393853079245353" PointY="23.25386437366431" />
+        <EntityTypeShape EntityType="MEDECAModel.Proveedore" Width="1.5" PointX="1.5974479064333476" PointY="29.398419498185824" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosProveedores_Insumos" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosProveedores_OrdenesTrabajos" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosProveedores_Proveedores" />
+        <EntityTypeShape EntityType="MEDECAModel.Cita" Width="1.5" PointX="8.2123490368073568" PointY="22.245456765520135" />
+        <AssociationConnector Association="MEDECAModel.FK_Cita_Vehiculos" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

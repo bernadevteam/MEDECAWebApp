@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Insumos";
+}
+<div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                    <h1 >Insumos</h1>
+                    <h5>En este modulo podra añadir y editar Insumos.</h5>
+                        </div>
+                </div>
+            </div>
+<div class="row" ng-controller="InsumosController">
+                <div class="col-lg-5 col-sm-5 col-xs-8">
+
+    <table class="table table-striped">
+        <thead>
+          <tr>  <th>
+            Nombre
+        </th>
+              <th>Activo</th>
+                <th></th>
+          </tr>
+            <tr>
+                <th>
+                    <input type="text" class="form-control" placeholder="Buscar insumo" ng-model="filtrarNombre"/>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="insumo in modelos | orderObjectBy : 'Nombre' | filter: {Nombre: filtrarNombre}">
+            <td>
+                <span ng-show="!insumo.editar">
+                {{insumo.Nombre}}
+                    </span>
+                <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" ng-show="insumo.editar" class="form-control" />
+            </td>
+            <td>
+                    <span ng-show="!insumo.editar">
+                           {{ insumo.Activo ? 'Si' : 'No'}}
+                    </span>
+                <input type="checkbox" name="Activo" ng-model="nuevoModel.Activo" ng-show="insumo.editar" data-toggle="toggle"/>
+            </td>
+            <td>
+               <button type="submit" class="btn btn-warning" ng-click="editar(insumo)" ng-show="!insumo.editar"> <i class="fa fa-edit"></i></button>
+               <button type="submit" class="btn btn-success" ng-click="guardar(insumo)" ng-show="insumo.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-check-square-o"></i></button>
+               <button type="submit" class="btn btn-danger" ng-click="cancelarEdicion(insumo)" ng-show="insumo.editar"> <i class="fa fa-close"></i></button>
+            </td>
+        </tr>
+            </tbody>
+        <tfoot ng-show="!nuevoModel.editar">
+
+        <tr>
+                <td>
+                <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" class="form-control" required placeholder="Escriba aqu&iacute; el nombre del Insumo nuevo..."/>
+            </td>
+            <td>
+                <input type="checkbox" data-toggle="toggle" ng-model="nuevoModel.Activo"/>
+            </td>
+            <td>
+               <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-plus-square"></i></button>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div></div>

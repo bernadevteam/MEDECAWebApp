@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+}
+
+<div ng-controller="ReportesController">
+        <div class="row" >
+            
+            <div class="page-header">
+                <h2>Gr&aacute;fico <small>Basado en {{verHist == 0 ? 'los &uacute;ltimos 30 d&iacute;as' : 'este año'}}.</small></h2>
+            
+</div>
+    <div class="row" >
+        
+    <div class="col-lg-10">
+        Ver para <label class="radio-inline">
+  <input type="radio" ng-model="verHist" value="0"> Ultimos 30 d&iacute;as.
+</label>
+<label class="radio-inline">
+  <input type="radio" ng-model="verHist" value="1"> Este año
+</label>
+        <div ng-if="verHist == 0"
+area-chart
+area-data='historicosConteo'
+area-xkey='Fecha'
+area-ykeys='["Vehiculos"]'
+area-labels='["Vehiculos"]'
+line-colors='["#31C0BE"]'>
+</div>
+        <div ng-if="verHist == 1"
+area-chart
+area-data='historicosMesConteo'
+area-xkey='Fecha'
+area-ykeys='["Vehiculos"]'
+area-labels='["Vehiculos"]'
+line-colors='["#31C0BE"]'>
+</div>
+
+</div>
+</div>
+    <div class="row" >
+     <div class="col-md-10">
+                    <h1 class="page-header">Reporte Servicios</h1>
+                </div>
+        </div>
+  
+      <div class="row" >
+             <div class="col-md-2">
+                 <label>Fecha Inicio</label>
+                 <md-datepicker ng-model="FechaInicio" ></md-datepicker>
+                    
+                </div>
+         <div class="col-md-2">
+                 <label>Fecha Fin</label>
+                 <md-datepicker ng-model="FechaFin" ></md-datepicker>
+                    
+                </div>
+                        <div class="col-md-2">
+                  <label>Estado</label>
+                <select ng-model="Entregado" class="form-control"> 
+                    <option value=true>Entregado</option>
+                    <option value=false>En Taller</option>
+                    <option value selected>Todos</option>
+                </select>
+  </div>
+
+</div>
+        
+    <div class="row" >
+
+                <div class="col-lg-10">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+Vehiculo
+                    </th>
+                        <th>Placa</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Cliente</th>
+                        <th>Servicios</th>
+                    </tr>
+                                    </thead>
+                <tbody>
+                    <tr current-page="currentPage"
+                        dir-paginate="hist in historicos  | dataRangeFilter : FechaInicio : FechaFin | getAllByKey: 'Entregado' : Entregado | itemsPerPage: pageSize">
+                        <td>{{hist.Info}}</td>
+                        <td>{{hist.Placa}}</td>
+                        <td>{{hist.Fecha}}</td>
+                        <td>{{hist.Estado}}</td>
+                        <td>{{hist.Cliente}}</td>
+                        <td>{{hist.Servicios}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                          
+                        </td>
+                        <td colspan="5">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            </div>
+    </div>
+        <div class="row" >
+
+                <div class="col-lg-2">
+                      <label>Registros por pagina:</label>
+                            <select ng-model="pageSize" class="form-control"> 
+                    <option value=15>15</option>
+                    <option value=25>25</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+                </div>
+                <div class="col-lg-10">
+                            <dir-pagination-controls></dir-pagination-controls>
+                </div>
+            <!-- /.row -->
+@section Scripts{
+    }

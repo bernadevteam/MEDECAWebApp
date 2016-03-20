@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/img/icon.png" rel="icon" type="image/png"  />
+    <link href="~/Content/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/morris.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-toggle.css" rel="stylesheet" />
+    <link href="~/Scripts/angular/angular-material/angular-material.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/angular-bootstrap-calendar.min.css" rel="stylesheet" />
+</head>
+<body ng-app="medecaApp">
+    
+     <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0" ng-controller="NavBarController">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-calendar fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="text-center well">
+                                <strong>Citas de Hoy</strong>
+                            </div>
+                            <div class="divider"></div>
+
+                        </li>
+                        <li ng-repeat="cita in citasdehoy">
+                            <a href="#">
+                                <div>
+                                    <strong>{{cita.Cliente}}</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>{{cita.Hora}}</em>
+                                    </span>
+                                </div>
+                                <div>{{cita.Vehiculo}} </div>
+                                <div>Tel. {{cita.Telefono}}</div>
+                            </a>
+                            <div class="divider"></div>
+                        </li>
+                        <li ng-show="citasdehoy.length < 1">
+                            <a href="#">
+                            <p>No hay citas programadas para hoy.</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                          <li><a href="~/Content/MedecaGuiaUso.pdf" target="_blank"><i class="fa fa-newspaper-o fa-fw"></i> Guia de Uso</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                         <li>
+                            <img src="~/Content/LogoMecanicaDelCaribe.png" width="90%"/>
+                        </li>
+                           <li>
+                            <a href="@Url.Action("Citas")"><i class="fa fa-calendar"></i> Citas</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i> Configuraciones<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                     <li>
+                                                                            @Html.ActionLink("Clientes", "Clientes", "Home")
+                                </li>
+                                <li>
+                                        @Html.ActionLink("Insumos", "Insumos", "Home")
+
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Marcas", "VehiculosMarcas", "Home")
+                                </li>
+                                <li>
+                                                                        @Html.ActionLink("Modelos", "Modelos", "Home")
+                                </li>
+                                 <li>
+                            <a href="@Url.Action("Proveedores")">Proveedores</a>
+                        </li>
+                                <li>
+                                    @Html.ActionLink("Vehículos", "Vehiculos", "Home")
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                         <li>
+                            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                          <li>
+                            <a href="@Url.Action("OrdenesTrabajos")"><i class="fa fa-sticky-note-o"></i> Ordenes Trabajos</a>
+                        </li>
+                         
+                       <li>
+                            <a href="@Url.Action("Reportes")"><i class="fa fa-line-chart"></i> Reportes</a>
+                        </li>
+                     
+                        
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+           <div id="page-wrapper" style="position:relative">
+                 <div class="loading-spiner" data-loading>
+</div>
+                 @RenderBody()
+    </div>
+         </div>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/angular/angular.js"></script>
+    <script src="~/Scripts/i18n/angular-locale_es-mx.js"></script>
+    <script src="~/Scripts/angular/angular-animate.js"></script>
+    <script src="~/Scripts/angular/angular-aria.js"></script>
+    <script src="~/Scripts/angular/angular-material/angular-material.js"></script>
+    <script src="~/Scripts/angular/angular-morris-chart.min.js"></script>
+    
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap.min.js"></script>
+    <script src="~/Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+
+    <script src="~/Scripts/bootstrap-timepicker.min.js"></script>
+    <script src="~/Scripts/sb-admin-2.js"></script>
+    <script src="~/Scripts/metisMenu.min.js"></script>
+    <script src="~/Scripts/raphael-min.js"></script>
+    <script src="~/Scripts/morris.min.js"></script>
+    <script src="~/Scripts/morris-data.js"></script>
+    <script src="~/Scripts/bootstrap-toggle.js"></script>
+      <script src="~/Scripts/moment.js"></script>
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/angular-ui/angular-bootstrap-calendar-tpls.min.js"></script>
+    <script src="~/Scripts/angular-ui/dirPagination.js"></script>
+
+
+    <script src="~/Scripts/app/app.js"></script>
+    <script src="~/Scripts/app/checklist-model.js"></script>
+    <script src="~/Scripts/app/filters.js"></script>
+    <script src="~/Scripts/app/ng-order-object-by.js.js"></script>
+    <script src="~/Scripts/app/services.js"></script>
+    <script src="~/Scripts/app/controllers.js"></script>
+</body>
+</html>
