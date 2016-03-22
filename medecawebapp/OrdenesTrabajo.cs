@@ -27,6 +27,7 @@ namespace MEDECAWebApp
         public System.DateTime Fecha { get; set; }
         public int IdVehiculo { get; set; }
         public bool Entregado { get; set; }
+        public string Diagnostico { get; set; }
     
         public virtual Vehiculo Vehiculo { get; set; }
         public virtual ICollection<Servicio> Servicios { get; set; }

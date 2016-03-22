@@ -141,6 +141,7 @@ angular.module('medecaApp')
     .controller('InsumosController', ['$scope', 'insumosFactory', function ($scope, modelosFactory) {
         $scope.modelos = {};
         $scope.nuevoModel = {};
+        $scope.deleteInsumo = {};
 
         modelosFactory.get().then(function (response) {
             $scope.modelos = response.data;
@@ -150,6 +151,16 @@ angular.module('medecaApp')
             modelosFactory.agregar($scope.nuevoModel).then(function (response) {
                 $scope.modelos.push(response.data);
                 $scope.nuevoModel = {};
+            });
+        };
+        $scope.eliminarInsumo = function (model) {
+            $scope.deleteInsumo = model;
+        };
+
+        $scope.eliminar = function () {
+            modelosFactory.eliminar($scope.deleteInsumo).then(function () {
+                var i = $scope.modelos.indexOf($scope.deleteInsumo);
+                $scope.modelos.splice(i,1);
             });
         };
 
@@ -197,8 +208,7 @@ angular.module('medecaApp')
 
         });
 
-       
-        $scope.agregar = function () {
+       $scope.agregar = function () {
             $scope.nuevoModel.IdVehiculo = $scope.nuevoModel.Vehiculo.IdVehiculo;
             
             modelosFactory.agregar($scope.nuevoModel).then(function (response) {
@@ -221,7 +231,6 @@ angular.module('medecaApp')
                 $scope.events.splice(i, 1);
             });
         };
-
 
         $scope.guardar = function () {
             $scope.nuevoModel.IdVehiculo = $scope.nuevoModel.Vehiculo.IdVehiculo;
@@ -315,14 +324,21 @@ angular.module('medecaApp')
         $scope.nuevoModel = {};
         $scope.editingModel = {};
         $scope.tiposIdentificacion = [{ Tipo: 'RNC' }, { Tipo: 'CED' }];
+        $scope.isOrden = $scope.$parent.isOrden;
+        $scope.ordenClients = null;
 
-        modelosFactory.get().then(function (response) {
-            $scope.modelos = response.data;
-        });
-
+        if (!$scope.isOrden) {
+            modelosFactory.get().then(function (response) {
+                $scope.modelos = response.data;
+            });
+        }
         $scope.agregar = function () {
             modelosFactory.agregar($scope.nuevoModel).then(function (response) {
-                $scope.modelos.push(response.data);
+                if ($scope.isOrden) {
+                    $scope.ordenClients.push(response.data);
+                } else {
+                    $scope.modelos.push(response.data);
+                }
                 reset();
             });
         };
@@ -330,7 +346,6 @@ angular.module('medecaApp')
         $scope.editar = function (model) {
             $scope.editingModel = model;
             angular.extend($scope.nuevoModel, model);
-
             $scope.nuevoModel.editar = true;
         };
         function reset() {
@@ -340,8 +355,12 @@ angular.module('medecaApp')
         }
 
         $scope.guardar = function (model) {
+            var vehicles = model.Vehiculos;
+            model.Vehiculos = [];
+
             modelosFactory.editar(model).then(function () {
                 $scope.nuevoModel.editar = false;
+                $scope.nuevoModel.Vehiculos = vehicles;
                 angular.extend($scope.editingModel, $scope.nuevoModel);
                 reset();
             });
@@ -354,7 +373,13 @@ angular.module('medecaApp')
         $scope.restablecerNuevo = function () {
             reset();
         };
+        $scope.$on('manageeditingclient', function (event, args) {            
+            $scope.editar(args.Client);
+        });
 
+        $scope.$on('managecreatingclient', function (event, args) {            
+            $scope.ordenClients = args.Clients;
+        });
     }])
     .controller('VehiculosController', ['$scope', '$filter', 'vehiculosFactory', 'clientesFactory', 'modelosFactory', 'vehiculoMarcasFactory', 'insumosFactory',
         function ($scope, $filter, modelosFactory, clientesFact, modFact, vehMarcVehFact, insumosFact) {
@@ -365,16 +390,22 @@ angular.module('medecaApp')
             $scope.marcas = {};
             $scope.buscarInsumo = null;
             $scope.selInsumo = null;
+            $scope.SelCliente = null;
+            $scope.isOrden = $scope.$parent.isOrden;
 
             $scope.editingModel = {};
             $scope.combustibles = [{ IdCombustible: 1, Nombre: 'Gas Natural' }, { IdCombustible: 2, Nombre: 'GLP' }, { IdCombustible: 3, Nombre: 'Gasolina' }];
             $scope.nuevoModel = { Insumos: [] };
+            if (!$scope.isOrden) {
+                clientesFact.getVehiculos().then(function (response) {
+                    $scope.clientes = response.data;
+                });
 
-
-            modelosFactory.get().then(function (response) {
-                $scope.modelos = response.data;
-            });
-
+                modelosFactory.get().then(function (response) {
+                    $scope.modelos = response.data;
+                });
+            }
+       
             insumosFact.get().then(function (response) {
                 $scope.insumos = response.data;
             });
@@ -383,7 +414,12 @@ angular.module('medecaApp')
                 var results = query ? $scope.insumos.filter(createFilterFor(query)) : [];
                 return results;
             }
-
+            $scope.transformInsumo = function (chip) {
+                if (angular.isObject(chip)) {
+                    return chip;
+                }
+                return { Nombre: chip, isNew: true, Activo: true };
+            }
             function createFilterFor(query) {
                 var lowercaseQuery = angular.lowercase(query);
 
@@ -405,15 +441,16 @@ angular.module('medecaApp')
             modFact.get().then(function (response) {
                 $scope.models = response.data;
             });
-
-            clientesFact.getVehiculos().then(function (response) {
-                $scope.clientes = response.data;
-            });
+           
 
             $scope.agregar = function () {
                 modelosFactory.agregar($scope.nuevoModel).then(function (response) {
                     var vehiculo = response.data;
-                    $filter('getByKey')($scope.clientes, 'IDCliente', vehiculo.IdCliente).Vehiculos.push(vehiculo);
+                    if ($scope.isOrden) {
+                        $scope.SelCliente.Vehiculos.push(vehiculo);
+                    } else {
+                        $filter('getByKey')($scope.clientes, 'IDCliente', vehiculo.IdCliente).Vehiculos.push(vehiculo);
+                    }
                     reset();
                 });
             };
@@ -430,12 +467,10 @@ angular.module('medecaApp')
             };
 
             function reset() {
-                $scope.modelForm.$setPristine();
-
+                $scope.vehiculoForm.$setPristine();
+                $scope.buscarInsumo = null;
                 $scope.nuevoModel = {Insumos:[]};
-
                 $scope.SelectedMarca = {};
-
             };
 
             $scope.guardar = function () {
@@ -445,6 +480,17 @@ angular.module('medecaApp')
                     reset();
                 });
             };
+
+            $scope.$on('manageeditingvehicle', function (event, args) {
+                $scope.SelCliente = args.Client;
+                $scope.editar(args.Vehicle);
+            });
+
+            $scope.$on('managecreatingvehicle', function (event, args) {
+                $scope.SelCliente = args.Client;
+                $scope.nuevoModel.IdCliente = args.Client.IDCliente;
+            });
+
         }])
     .controller('ModelosController', ['$scope', '$filter', 'modelosFactory', 'vehiculoMarcasFactory', function ($scope, $filter, modelosFactory, vehiculoMarcasFactory) {
         $scope.modelos = {};
@@ -499,12 +545,16 @@ angular.module('medecaApp')
         $scope.servicios = {};
         $scope.proveedores = {};
         $scope.nuevoModel = {};
+        $scope.selectedClient = {};
+        $scope.selectedVehiculo = {};
+        $scope.isOrden = true;
         $scope.SelectedVehiculo = null;
         $scope.buscarInsumo = null;
         $scope.buscarProveedor = null;
         $scope.selInsumosProvs = [];
         $scope.selInsumo = null;
         $scope.selProveedor = null;
+        $scope.test = 'test';
 
         clientesFact.getWithVeh().then(function (response) {
             $scope.modelos = response.data;
@@ -516,23 +566,6 @@ angular.module('medecaApp')
                 });
             });
         });
-
-        function mostrarFormulario(ev) {
-            $mdDialog.show({
-                controller: DialogController,
-                scope:$scope,
-                templateUrl: 'nuevaOrdenTrabajo',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                fullscreen: false
-            })
-    .then(function (answer) {
-        $scope.status = 'You said the information was "' + answer + '".';
-    }, function () {
-        $scope.status = 'You cancelled the dialog.';
-    });
-        };
 
         $scope.totalPreciosInsumos = function () {
             var total = 0;
@@ -578,9 +611,9 @@ angular.module('medecaApp')
 
         function reset() {
             $scope.nuevoModel = {};
-            $scope.buscarInsumo = null;
+            $scope.buscarInsumo = '';
             $scope.selInsumosProvs = [];
-
+            $('#otTabs a:first').tab('show');
             $scope.buscarProveedor = null;
             $scope.selInsumo = null;
             $scope.selProveedor = null;
@@ -622,6 +655,20 @@ angular.module('medecaApp')
             return function filterFn(item) {
                 return (item.Nombre.toLowerCase().indexOf(lowercaseQuery) != -1);
             };
+        }
+
+        $scope.addVeh = function (cl) {
+            $scope.$emit('creatingvehicle', { Client: cl });
+        }
+
+        $scope.editVeh = function (cl, vh) {
+            $scope.$emit('editingvehicle', { Client: cl, Vehicle: vh });
+        }
+        $scope.addClient = function () {
+            $scope.$emit('creatingclient', { Clients: $scope.modelos });
+        }
+        $scope.editClient = function (cl) {
+            $scope.$emit('editingclient', { Client: cl});
         }
     }]);
 

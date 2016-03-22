@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -338,6 +339,10 @@
     <Content Include="MEDECAModel.edmx.diagram">
       <DependentUpon>MEDECAModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Partials\viewVehicle.html" />
+    <Content Include="Partials\viewClient.html" />
+    <Content Include="Partials\manageClient.html" />
+    <Content Include="Partials\manageVehiculo.html" />
     <Content Include="Scripts\angular-ui\angular-bootstrap-calendar-tpls.min.js" />
     <Content Include="Scripts\angular-ui\angular-bootstrap-calendar.min.js" />
     <Content Include="Scripts\angular-ui\calendar.js" />
@@ -1520,6 +1525,8 @@
     <Content Include="Scripts\select.js" />
     <Content Include="Scripts\select.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Home\Clientes.cshtml" />
+    <Content Include="Views\Home\Vehiculos.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1538,8 +1545,6 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Home\Modelos.cshtml" />
     <Content Include="Views\Home\Insumos.cshtml" />
-    <Content Include="Views\Home\Clientes.cshtml" />
-    <Content Include="Views\Home\Vehiculos.cshtml" />
     <Content Include="Views\Home\OrdenesTrabajos.cshtml" />
     <Content Include="Views\Home\Reportes.cshtml" />
     <Content Include="Views\Home\Citas.cshtml" />

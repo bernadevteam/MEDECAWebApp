@@ -1,0 +1,93 @@
+﻿<form name="vehiculoForm">
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="manageVehiculo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="star" ng-show="SelCliente.Favorito"></span>
+                    <h4 class="modal-title">{{nuevoModel.editar ? 'Modificar' : 'Agregar'}} Veh&iacute;culo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Propietario</label><span class="required" ng-if="!isOrden"> *</span>
+                        <select class="form-control" ng-model="nuevoModel.IdCliente" required ng-options="cliente.IDCliente as cliente.Nombre for cliente in clientes" ng-if="!isOrden"></select>
+                        <span ng-if="isOrden">{{SelCliente.Nombre}}</span>
+                    </div>
+                    <div class="form-group row">
+
+                        <div class="col-md-3">
+                            <label>Marca</label><span class="required"> *</span>
+                            <select class="form-control" ng-model="SelectedMarca" ng-options="marca as marca.Nombre for marca in marcas"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Modelo</label><span class="required"> *</span>
+                            <select class="form-control" ng-model="nuevoModel.IdModelo" required ng-options="modelo.IdModelo as modelo.Nombre for modelo in SelectedMarca.Modelos"></select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>A&ntilde;o</label><span class="required"> *</span>
+                            <input type="number" required ng-model="nuevoModel.Anio" class="form-control" ng-maxlength="4" ng-minlength="4" ng-class="{'required-dirty' : vehiculoForm.Anio.$dirty && vehiculoForm.Anio.$invalid}" name="Anio" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>Color</label>
+                            <input type="text" ng-model="nuevoModel.Color" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Combustible</label> <span class="required"> *</span>
+                        <label class="radio-inline" ng-repeat="com in combustibles | orderObjectBy: 'Nombre' : '-'">
+                            <input type="radio" name="IdCombustible" ng-model="nuevoModel.IdCombustible" value="{{com.IdCombustible}}" ng-required="!nuevoModel.IdCombustible"> {{com.Nombre}}
+                        </label>
+                    </div>
+                    <div class="form-group row">
+
+                        <div class="col-md-4">
+                            <label>Placa </label><span class="required"> *</span>
+                            <input type="text" required ng-unique="/api/Vehiculos/ExistePlaca" ng-modid="{{nuevoModel.IdVehiculo}}" ng-model="nuevoModel.Placa" ng-prevValue="{{editingModel.Placa}}"
+                                   class="form-control" ng-minlength="7" ng-maxlength="8" ng-class="{'required-dirty' : vehiculoForm.Placa.$dirty && vehiculoForm.Placa.$invalid}" name="Placa" />
+
+                        </div>
+                        <div class="col-md-5">
+                            <label>No. Chasis</label>
+                            <input type="text" ng-model="nuevoModel.NoChasis" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>Kilometraje</label>
+                            <input type="number" ng-model="nuevoModel.Kilometraje" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+
+                            <div ng-show="vehiculoForm.Placa.$error.unique && vehiculoForm.Placa.$dirty" class="alert alert-danger" role="alert">
+                                Esta <strong>placa</strong> ya esta asociada a un veh&iacute;culo.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label>Insumos</label>
+                        <div layout="column" ng-cloak="">
+                            <md-chips ng-model="nuevoModel.Insumos" md-autocomplete-snap="" md-transform-chip="transformInsumo($chip)"
+>
+                                <md-autocomplete md-selected-item="selInsumo" md-search-text="buscarInsumo" md-items="item in querySearch(buscarInsumo)"
+                                                 md-item-text="item.Nombre" placeholder="Buscar insumo">
+                                    <span md-highlight-text="buscarInsumo">{{item.Nombre}} </span>
+                                </md-autocomplete>
+                                <md-chip-template>
+                                    <span>
+                                        <strong>{{$chip.Nombre}} {{$chip.isNew ? '(+)' : ''}}</strong>
+                                    </span>
+                                </md-chip-template>
+                            </md-chips>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                    <a type="submit" class="btn btn-success" ng-disabled="vehiculoForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>

@@ -93,15 +93,16 @@ namespace MEDECAWebApp.Controllers
                 Telefono = x.Telefono,
                 Vehiculos = x.Vehiculos.Select(v => new 
                 {
+                    Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
                     Modelo = new Modelo
                     {
                         Nombre = v.Modelo.Nombre,
+                        IdMarca = v.Modelo.IdMarca,
                         VehiculoMarca = new VehiculoMarca
                         {
                             Nombre = v.Modelo.VehiculoMarca.Nombre
                         }
                     },
-                    Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
                     Anio = v.Anio,
                     Color = v.Color,
                     Combustible = new Combustible
@@ -109,15 +110,21 @@ namespace MEDECAWebApp.Controllers
                         Nombre = v.Combustible.Nombre
                     },
                     Kilometraje = v.Kilometraje,
+                    Insumos = v.Insumos.Where(i => i.Activo).Select(i => new Insumo
+                    {
+                        Nombre = i.Nombre,
+                        IdInsumo = i.IdInsumo
+                    }),
                     NoChasis = v.NoChasis,
                     Placa = v.Placa,
                     Cliente = new Cliente
                     {
-                        IDCliente = x.IDCliente,
                         Nombre = x.Nombre
                     },
                     IdVehiculo = v.IdVehiculo,
-                    Insumos = v.Insumos.Select(i => new Insumo { Activo = i.Activo, Nombre = i.Nombre, IdInsumo = i.IdInsumo }).ToList(),
+                    IdCliente = v.IdCliente,
+                    IdModelo = v.IdModelo,
+                    IdCombustible = v.IdCombustible,
                     OrdenesTrabajos = v.OrdenesTrabajos.Select(ot => new OrdenesTrabajo
                     {
                         Fallas = ot.Fallas,
@@ -126,6 +133,7 @@ namespace MEDECAWebApp.Controllers
                         Entregado = ot.Entregado,
                         NoOrden = ot.NoOrden,
                         Reparaciones = ot.Reparaciones,
+                        Diagnostico = ot.Diagnostico,
                         IdVehiculo = v.IdVehiculo,
                         InsumosProveedores = ot.InsumosProveedores.Select(ip => new InsumosProveedore
                         {

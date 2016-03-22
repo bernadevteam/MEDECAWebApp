@@ -25,7 +25,35 @@ angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial',
                 })
                 }
         }}
-        ])
+    ])
+     .directive('manageVehiculo', function () {
+         return {
+             restrict: 'E',
+             scope: false,
+             templateUrl: '/partials/manageVehiculo.html'
+         }
+     })
+       .directive('manageClient', function () {
+           return {
+               restrict: 'E',
+               scope: false,
+               templateUrl: '/partials/manageClient.html'
+           }
+       })
+          .directive('viewClient', function () {
+              return {
+                  restrict: 'E',
+                  scope: false,
+                  templateUrl: '/partials/viewClient.html'
+              }
+          })
+     .directive('viewVehicle', function () {
+         return {
+             restrict: 'E',
+             scope: false,
+             templateUrl: '/partials/viewVehicle.html'
+         }
+     })
     .directive('loading', ['$http', function ($http) {
     return {
         restrict: 'A',
@@ -52,5 +80,21 @@ angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial',
     */
     $rootScope.$on('cambiocita', function (event, args) {
         $rootScope.$broadcast('manejarcambiocita', args);
+    });
+
+    $rootScope.$on('editingvehicle', function (event, args) {
+        $rootScope.$broadcast('manageeditingvehicle', args);
+    }); 
+    $rootScope.$on('cambiovehiculo', function (event, args) {
+        $rootScope.$broadcast('managecambiovehiculo', args);
+    });
+    $rootScope.$on('creatingvehicle', function (event, args) {
+        $rootScope.$broadcast('managecreatingvehicle', args);
+    });
+    $rootScope.$on('creatingclient', function (event, args) {
+        $rootScope.$broadcast('managecreatingclient', args);
+    });
+    $rootScope.$on('editingclient', function (event, args) {
+        $rootScope.$broadcast('manageeditingclient', args);
     });
 });;

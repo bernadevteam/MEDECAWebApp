@@ -41,91 +41,10 @@
         </tr>
             </tbody>
     </table>
-
+                     
                     </div>
                 <div class="col-lg-5 col-sm-5 col-xs-8">
                <button  class="btn btn-success" data-toggle="modal" data-target="#manageClient" > <i class="fa fa-plus-square"></i></button>
 </div>
-            <form name="clientForm">
-
-                    <div class="modal fade" tabindex="-1" role="dialog" id="manageClient">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="star" ng-show="nuevoModel.Favorito"></span> 
-        <h4 class="modal-title">{{nuevoModel.editar ? 'Modificar' : 'Agregar'}} Cliente </h4> 
-      </div>
-      <div class="modal-body">
-          <div class="row">
-  <div class="col-md-10">
-
-  <div class="form-group">
-    <label>Nombre</label> <span class="required"> *</span>
-    <input type="text" class="form-control" placeholder="Nombre de la persona / compañia" required ng-model="nuevoModel.Nombre" ng-minlength="4">
-  </div>
-  </div>
-              <div class="col-md-2">
-                  <div class="checkbox">
-    <label>
-      <input type="checkbox" ng-model="nuevoModel.Favorito"> Es Favorito
-    </label>
-  </div>
-              </div>
-  </div>
-          <div class="row">
-  <div class="form-group col-md-6">
-
-        <label>Identificacion</label> <span class="required"> *</span>
-       <div class="form-group row">
-                  <div class="col-md-4">
-                        <select class="form-control" ng-model="nuevoModel.TipoIdentificacion" required ng-options="tipoIdentificacion.Tipo as tipoIdentificacion.Tipo for tipoIdentificacion in tiposIdentificacion"></select>
-                    </div>
-                                     <div class="col-md-8">
-                       <input type="text" required ng-unique="/api/Clientes/ExisteCliente" ng-modid="{{nuevoModel.IDCliente}}" ng-model="nuevoModel.Identificacion" class="form-control" 
-                           ng-minlength="8" ng-maxlength="12" ng-class="{'required-dirty' : clientForm.Identificacion.$dirty && clientForm.Identificacion.$invalid}" name="Identificacion" 
-                           ng-prevValue="{{editingModel.Identificacion}}" ng-disabled="!nuevoModel.TipoIdentificacion" placeholder="RNC o Cedula"/>
-
-                                 </div>
-       </div>
- 
-  </div>
-
-          <div class="form-group col-md-3">
-    <label>Correo Electronico</label>
-    <input type="email" class="form-control" placeholder="ejemplo&#64;mail.com" ng-model="nuevoModel.Email">
-  </div>
-          <div class="form-group col-md-3">
-    <label>Tel&eacute;fono</label>
-    <input type="tel" class="form-control" placeholder="xxx-xxx-xxxxx" ng-model="nuevoModel.Telefono">
-  </div>
-
-              </div>
-          <div class="row">
-            <div class="col-md-12">
-
-              <div ng-show="clientForm.Identificacion.$error.unique && clientForm.Identificacion.$dirty" class="alert alert-danger" role="alert">
-    Este n&uacute;mero de <strong>{{nuevoModel.TipoIdentificacion}}</strong> ya esta asociado al cliente <strong>{{uniquemsg}}</strong>.
-  </div>
-  </div>
-</div>
-          <div class="row">
-            <div class="col-md-12">
-
-  <div class="form-group">
-      <label>Direcci&oacute;n</label>
-      <textarea class="form-control" ng-model="nuevoModel.Direccion"></textarea>
-</div>
-</div>
-</div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()" >Cerrar</button>
-          <button type="submit" class="btn btn-success" ng-disabled="clientForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar(nuevoModel)" data-dismiss="modal">Guardar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-</form>
-
+    <manage-client></manage-client>
     </div>

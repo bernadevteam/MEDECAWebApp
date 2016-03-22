@@ -1,4 +1,13 @@
-﻿.md-datepicker-calendar-pane, .md-autocomplete-suggestions-container, .md-select-menu-container, .bootstrap-timepicker-widget {
+﻿.nav-tabs {
+    margin-bottom: 15px !important;
+}
+.panel-heading-veh, .page-header-edit, .editor{
+    cursor:pointer;
+}
+.client-box{
+    margin-top:25px;
+}
+.md-datepicker-calendar-pane, .md-autocomplete-suggestions-container, .md-select-menu-container, .bootstrap-timepicker-widget {
     z-index:1050 !important;
 }
 span.required {

@@ -4,94 +4,26 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MEDECAModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="MEDECAModelStoreContainer">
-          <EntitySet Name="Cita" EntityType="MEDECAModel.Store.Cita" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Clientes" EntityType="MEDECAModel.Store.Clientes" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Combustibles" EntityType="MEDECAModel.Store.Combustibles" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Insumos" EntityType="MEDECAModel.Store.Insumos" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="InsumosProveedores" EntityType="MEDECAModel.Store.InsumosProveedores" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Modelos" EntityType="MEDECAModel.Store.Modelos" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OrdenesServicios" EntityType="MEDECAModel.Store.OrdenesServicios" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="OrdenesTrabajos" EntityType="MEDECAModel.Store.OrdenesTrabajos" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Proveedores" EntityType="MEDECAModel.Store.Proveedores" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Servicios" EntityType="MEDECAModel.Store.Servicios" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="sysdiagrams" EntityType="MEDECAModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="VehiculoMarcas" EntityType="MEDECAModel.Store.VehiculoMarcas" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Vehiculos" EntityType="MEDECAModel.Store.Vehiculos" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="VehiculosInsumos" EntityType="MEDECAModel.Store.VehiculosInsumos" store:Type="Tables" Schema="dbo" />
-          <AssociationSet Name="FK_Cita_Vehiculos" Association="MEDECAModel.Store.FK_Cita_Vehiculos">
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-            <End Role="Cita" EntitySet="Cita" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InsumosProveedores_Insumos" Association="MEDECAModel.Store.FK_InsumosProveedores_Insumos">
-            <End Role="Insumos" EntitySet="Insumos" />
-            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InsumosProveedores_OrdenesTrabajos" Association="MEDECAModel.Store.FK_InsumosProveedores_OrdenesTrabajos">
-            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
-            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InsumosProveedores_Proveedores" Association="MEDECAModel.Store.FK_InsumosProveedores_Proveedores">
-            <End Role="Proveedores" EntitySet="Proveedores" />
-            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Modelos_VehiculoMarcas" Association="MEDECAModel.Store.FK_Modelos_VehiculoMarcas">
-            <End Role="VehiculoMarcas" EntitySet="VehiculoMarcas" />
-            <End Role="Modelos" EntitySet="Modelos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesServicios_OrdenesTrabajos" Association="MEDECAModel.Store.FK_OrdenesServicios_OrdenesTrabajos">
-            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
-            <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesServicios_Servicios" Association="MEDECAModel.Store.FK_OrdenesServicios_Servicios">
-            <End Role="Servicios" EntitySet="Servicios" />
-            <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OrdenesTrabajos_Vehiculos" Association="MEDECAModel.Store.FK_OrdenesTrabajos_Vehiculos">
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Vehiculos_Clientes" Association="MEDECAModel.Store.FK_Vehiculos_Clientes">
-            <End Role="Clientes" EntitySet="Clientes" />
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Vehiculos_Combustibles" Association="MEDECAModel.Store.FK_Vehiculos_Combustibles">
-            <End Role="Combustibles" EntitySet="Combustibles" />
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Vehiculos_Modelos" Association="MEDECAModel.Store.FK_Vehiculos_Modelos">
-            <End Role="Modelos" EntitySet="Modelos" />
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VehiculosInsumos_Insumos" Association="MEDECAModel.Store.FK_VehiculosInsumos_Insumos">
-            <End Role="Insumos" EntitySet="Insumos" />
-            <End Role="VehiculosInsumos" EntitySet="VehiculosInsumos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VehiculosInsumos_Vehiculos" Association="MEDECAModel.Store.FK_VehiculosInsumos_Vehiculos">
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-            <End Role="VehiculosInsumos" EntitySet="VehiculosInsumos" />
-          </AssociationSet>
-        </EntityContainer>
+    <Schema Namespace="MEDECAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="Cita">
           <Key>
             <PropertyRef Name="IdCita" />
           </Key>
-          <Property Name="IdCita" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="IdCita" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
-          <Property Name="Hora" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Hora" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="IdVehiculo" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Clientes">
           <Key>
             <PropertyRef Name="IDCliente" />
           </Key>
-          <Property Name="IDCliente" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="150" />
-          <Property Name="Identificacion" Type="varchar" Nullable="false" MaxLength="25" />
-          <Property Name="TipoIdentificacion" Type="char" Nullable="false" MaxLength="3" />
+          <Property Name="IDCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Identificacion" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="TipoIdentificacion" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="100" />
-          <Property Name="Email" Type="varchar" MaxLength="25" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
           <Property Name="Favorito" Type="bit" />
         </EntityType>
@@ -99,15 +31,15 @@
           <Key>
             <PropertyRef Name="IdCombustible" />
           </Key>
-          <Property Name="IdCombustible" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="IdCombustible" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
         </EntityType>
         <EntityType Name="Insumos">
           <Key>
             <PropertyRef Name="IdInsumo" />
           </Key>
-          <Property Name="IdInsumo" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IdInsumo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="InsumosProveedores">
@@ -125,9 +57,9 @@
           <Key>
             <PropertyRef Name="IdModelo" />
           </Key>
-          <Property Name="IdModelo" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="IdModelo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdMarca" Type="int" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="OrdenesServicios">
           <Key>
@@ -141,20 +73,21 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NoOrden" Type="int" Nullable="false" />
           <Property Name="Fallas" Type="varchar(max)" />
           <Property Name="Reparaciones" Type="varchar(max)" />
           <Property Name="Fecha" Type="datetime" Nullable="false" />
           <Property Name="IdVehiculo" Type="int" Nullable="false" />
           <Property Name="Entregado" Type="bit" Nullable="false" />
+          <Property Name="Diagnostico" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Proveedores">
           <Key>
             <PropertyRef Name="IdProveedor" />
           </Key>
-          <Property Name="IdProveedor" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IdProveedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="RNC" Type="varchar" MaxLength="12" />
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="Telefono" Type="varchar" MaxLength="12" />
@@ -163,8 +96,8 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="25" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="IntervaloDias" Type="int" />
         </EntityType>
@@ -172,9 +105,9 @@
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -182,16 +115,16 @@
           <Key>
             <PropertyRef Name="IdMarca" />
           </Key>
-          <Property Name="IdMarca" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IdMarca" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Vehiculos">
           <Key>
             <PropertyRef Name="IdVehiculo" />
           </Key>
-          <Property Name="IdVehiculo" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="IdVehiculo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdCliente" Type="int" Nullable="false" />
-          <Property Name="Placa" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Placa" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="NoChasis" Type="varchar" MaxLength="50" />
           <Property Name="IdModelo" Type="int" Nullable="false" />
           <Property Name="Anio" Type="int" Nullable="false" />
@@ -208,8 +141,8 @@
           <Property Name="IdInsumo" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Cita_Vehiculos">
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="1" />
-          <End Role="Cita" Type="MEDECAModel.Store.Cita" Multiplicity="*" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Vehiculos">
               <PropertyRef Name="IdVehiculo" />
@@ -220,8 +153,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_InsumosProveedores_Insumos">
-          <End Role="Insumos" Type="MEDECAModel.Store.Insumos" Multiplicity="1" />
-          <End Role="InsumosProveedores" Type="MEDECAModel.Store.InsumosProveedores" Multiplicity="*" />
+          <End Role="Insumos" Type="Self.Insumos" Multiplicity="1" />
+          <End Role="InsumosProveedores" Type="Self.InsumosProveedores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Insumos">
               <PropertyRef Name="IdInsumo" />
@@ -232,8 +165,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_InsumosProveedores_OrdenesTrabajos">
-          <End Role="OrdenesTrabajos" Type="MEDECAModel.Store.OrdenesTrabajos" Multiplicity="1" />
-          <End Role="InsumosProveedores" Type="MEDECAModel.Store.InsumosProveedores" Multiplicity="*" />
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
+          <End Role="InsumosProveedores" Type="Self.InsumosProveedores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrdenesTrabajos">
               <PropertyRef Name="Id" />
@@ -244,8 +177,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_InsumosProveedores_Proveedores">
-          <End Role="Proveedores" Type="MEDECAModel.Store.Proveedores" Multiplicity="1" />
-          <End Role="InsumosProveedores" Type="MEDECAModel.Store.InsumosProveedores" Multiplicity="*" />
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
+          <End Role="InsumosProveedores" Type="Self.InsumosProveedores" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Proveedores">
               <PropertyRef Name="IdProveedor" />
@@ -256,8 +189,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Modelos_VehiculoMarcas">
-          <End Role="VehiculoMarcas" Type="MEDECAModel.Store.VehiculoMarcas" Multiplicity="1" />
-          <End Role="Modelos" Type="MEDECAModel.Store.Modelos" Multiplicity="*" />
+          <End Role="VehiculoMarcas" Type="Self.VehiculoMarcas" Multiplicity="1" />
+          <End Role="Modelos" Type="Self.Modelos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="VehiculoMarcas">
               <PropertyRef Name="IdMarca" />
@@ -268,8 +201,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdenesServicios_OrdenesTrabajos">
-          <End Role="OrdenesTrabajos" Type="MEDECAModel.Store.OrdenesTrabajos" Multiplicity="1" />
-          <End Role="OrdenesServicios" Type="MEDECAModel.Store.OrdenesServicios" Multiplicity="*" />
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
+          <End Role="OrdenesServicios" Type="Self.OrdenesServicios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrdenesTrabajos">
               <PropertyRef Name="Id" />
@@ -280,8 +213,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdenesServicios_Servicios">
-          <End Role="Servicios" Type="MEDECAModel.Store.Servicios" Multiplicity="1" />
-          <End Role="OrdenesServicios" Type="MEDECAModel.Store.OrdenesServicios" Multiplicity="*" />
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="1" />
+          <End Role="OrdenesServicios" Type="Self.OrdenesServicios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Servicios">
               <PropertyRef Name="Id" />
@@ -292,8 +225,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="1" />
-          <End Role="OrdenesTrabajos" Type="MEDECAModel.Store.OrdenesTrabajos" Multiplicity="*" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Vehiculos">
               <PropertyRef Name="IdVehiculo" />
@@ -304,8 +237,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Vehiculos_Clientes">
-          <End Role="Clientes" Type="MEDECAModel.Store.Clientes" Multiplicity="1" />
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="*" />
+          <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Clientes">
               <PropertyRef Name="IDCliente" />
@@ -316,8 +249,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Vehiculos_Combustibles">
-          <End Role="Combustibles" Type="MEDECAModel.Store.Combustibles" Multiplicity="1" />
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="*" />
+          <End Role="Combustibles" Type="Self.Combustibles" Multiplicity="1" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Combustibles">
               <PropertyRef Name="IdCombustible" />
@@ -328,8 +261,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Vehiculos_Modelos">
-          <End Role="Modelos" Type="MEDECAModel.Store.Modelos" Multiplicity="1" />
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="*" />
+          <End Role="Modelos" Type="Self.Modelos" Multiplicity="1" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Modelos">
               <PropertyRef Name="IdModelo" />
@@ -340,8 +273,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VehiculosInsumos_Insumos">
-          <End Role="Insumos" Type="MEDECAModel.Store.Insumos" Multiplicity="1" />
-          <End Role="VehiculosInsumos" Type="MEDECAModel.Store.VehiculosInsumos" Multiplicity="*" />
+          <End Role="Insumos" Type="Self.Insumos" Multiplicity="1" />
+          <End Role="VehiculosInsumos" Type="Self.VehiculosInsumos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Insumos">
               <PropertyRef Name="IdInsumo" />
@@ -352,8 +285,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_VehiculosInsumos_Vehiculos">
-          <End Role="Vehiculos" Type="MEDECAModel.Store.Vehiculos" Multiplicity="1" />
-          <End Role="VehiculosInsumos" Type="MEDECAModel.Store.VehiculosInsumos" Multiplicity="*" />
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="VehiculosInsumos" Type="Self.VehiculosInsumos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Vehiculos">
               <PropertyRef Name="IdVehiculo" />
@@ -386,6 +319,74 @@
           <Parameter Name="RNC" Type="varchar" Mode="In" />
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
+        <EntityContainer Name="MEDECAModelStoreContainer">
+          <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Combustibles" EntityType="Self.Combustibles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Insumos" EntityType="Self.Insumos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InsumosProveedores" EntityType="Self.InsumosProveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Modelos" EntityType="Self.Modelos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrdenesServicios" EntityType="Self.OrdenesServicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrdenesTrabajos" EntityType="Self.OrdenesTrabajos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proveedores" EntityType="Self.Proveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VehiculoMarcas" EntityType="Self.VehiculoMarcas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculos" EntityType="Self.Vehiculos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VehiculosInsumos" EntityType="Self.VehiculosInsumos" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cita_Vehiculos" Association="Self.FK_Cita_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="Cita" EntitySet="Cita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosProveedores_Insumos" Association="Self.FK_InsumosProveedores_Insumos">
+            <End Role="Insumos" EntitySet="Insumos" />
+            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosProveedores_OrdenesTrabajos" Association="Self.FK_InsumosProveedores_OrdenesTrabajos">
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosProveedores_Proveedores" Association="Self.FK_InsumosProveedores_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="InsumosProveedores" EntitySet="InsumosProveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Modelos_VehiculoMarcas" Association="Self.FK_Modelos_VehiculoMarcas">
+            <End Role="VehiculoMarcas" EntitySet="VehiculoMarcas" />
+            <End Role="Modelos" EntitySet="Modelos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesServicios_OrdenesTrabajos" Association="Self.FK_OrdenesServicios_OrdenesTrabajos">
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+            <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesServicios_Servicios" Association="Self.FK_OrdenesServicios_Servicios">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesTrabajos_Vehiculos" Association="Self.FK_OrdenesTrabajos_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehiculos_Clientes" Association="Self.FK_Vehiculos_Clientes">
+            <End Role="Clientes" EntitySet="Clientes" />
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehiculos_Combustibles" Association="Self.FK_Vehiculos_Combustibles">
+            <End Role="Combustibles" EntitySet="Combustibles" />
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehiculos_Modelos" Association="Self.FK_Vehiculos_Modelos">
+            <End Role="Modelos" EntitySet="Modelos" />
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehiculosInsumos_Insumos" Association="Self.FK_VehiculosInsumos_Insumos">
+            <End Role="Insumos" EntitySet="Insumos" />
+            <End Role="VehiculosInsumos" EntitySet="VehiculosInsumos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VehiculosInsumos_Vehiculos" Association="Self.FK_VehiculosInsumos_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="VehiculosInsumos" EntitySet="VehiculosInsumos" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -479,7 +480,7 @@
           <Property Name="Identificacion" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
           <Property Name="TipoIdentificacion" Type="String" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
           <Property Name="Direccion" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
-          <Property Name="Email" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Vehiculos" Relationship="MEDECAModel.FK_Vehiculos_Clientes" FromRole="Clientes" ToRole="Vehiculos" />
           <Property Type="String" Name="Telefono" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
@@ -627,6 +628,7 @@
           <NavigationProperty Name="Vehiculo" Relationship="MEDECAModel.FK_OrdenesTrabajos_Vehiculos" FromRole="OrdenesTrabajo" ToRole="Vehiculo" />
           <NavigationProperty Name="Servicios" Relationship="MEDECAModel.OrdenesServicios" FromRole="OrdenesTrabajo" ToRole="Servicio" />
           <NavigationProperty Name="InsumosProveedores" Relationship="MEDECAModel.FK_InsumosProveedores_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosProveedore" />
+          <Property Name="Diagnostico" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -890,6 +892,7 @@
           <EntitySetMapping Name="OrdenesTrabajos">
             <EntityTypeMapping TypeName="MEDECAModel.OrdenesTrabajo">
               <MappingFragment StoreEntitySet="OrdenesTrabajos">
+                <ScalarProperty Name="Diagnostico" ColumnName="Diagnostico" />
                 <ScalarProperty Name="Entregado" ColumnName="Entregado" />
                 <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
@@ -1061,6 +1064,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

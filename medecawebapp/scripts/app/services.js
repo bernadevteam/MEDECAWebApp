@@ -118,6 +118,10 @@ angular.module('medecaApp')
         return $http.put(url, model);
     };
 
+    modelFact.eliminar = function (model) {
+        return $http.delete(url + '?id=' + model.IdInsumo);
+    };
+
     return modelFact;
     }])
     .factory('vehiculosFactory', ['$http', function ($http, baseURL) {

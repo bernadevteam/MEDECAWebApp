@@ -1,0 +1,51 @@
+﻿
+    <div class="modal fade" tabindex="-1" role="dialog" id="viewClient">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="star" ng-show="nuevoModel.Favorito"></span>
+                    <h4 class="modal-title">Cliente Detalle</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>Nombre:</label> {{nuevoModel.Nombre}}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+
+                            <label>Identificacion:</label> <span> {{nuevoModel.TipoIdentificacion}} {{nuevoModel.Identificacion}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Correo Electronico:</label>
+                            {{nuevoModel.Email}}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tel&eacute;fono</label>
+                            {{nuevoModel.Telefono}}
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label>Direcci&oacute;n:</label>
+                                <div>
+                                    {{nuevoModel.Direccion}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

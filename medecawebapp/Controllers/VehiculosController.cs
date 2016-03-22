@@ -75,6 +75,14 @@ namespace MEDECAWebApp.Controllers
                     }
                 }
 
+                foreach (var insumo in insumos)
+                {
+                    if (insumo.IdInsumo.Equals(0))
+                    {
+                        vh.Insumos.Add(insumo);
+                    }
+                }
+
                 try
                 {
                     db.SaveChanges();
@@ -93,6 +101,12 @@ namespace MEDECAWebApp.Controllers
                     }
 
                 }).First();
+                vehiculo.Insumos = vehiculo.Insumos.Select(i => new Insumo
+                {
+                    IdInsumo = i.IdInsumo,
+                    Nombre = i.Nombre,
+                    Activo = i.Activo
+                }).ToList();
                 vehiculo.Info = string.Format("{0} {1} {2}", selModelo.VehiculoMarca.Nombre, selModelo.Nombre, vehiculo.Anio);
                 vehiculo.Modelo = selModelo;
 
@@ -115,7 +129,7 @@ namespace MEDECAWebApp.Controllers
                 vehiculo.Insumos.Clear();
                 db.Vehiculos.Add(vehiculo);
 
-                
+
                 db.SaveChanges();
                 var newVeh = db.Vehiculos.Find(vehiculo.IdVehiculo);
 
@@ -126,43 +140,51 @@ namespace MEDECAWebApp.Controllers
                         newVeh.Insumos.Add(insumo);
                     }
                 }
-                
-                    db.SaveChanges();
-                    vehiculo.Insumos = insumos.Select(i => new Insumo { 
-                             IdInsumo = i.IdInsumo,
-                             Nombre = i.Nombre
-                    }).ToList();
 
-                    Modelo selModelo = db.Modelos.Include(m => m.VehiculoMarca).Where(x => x.IdModelo.Equals(vehiculo.IdModelo)).AsEnumerable().Select(m => new Modelo
+                foreach (var insumo in insumos)
+                {
+                    if (insumo.IdInsumo.Equals(0))
                     {
-                        Nombre = m.Nombre,
+                        newVeh.Insumos.Add(insumo);
+                    }
+                }
+
+                db.SaveChanges();
+                vehiculo.Insumos = insumos.Select(i => new Insumo
+                {
+                    IdInsumo = i.IdInsumo,
+                    Nombre = i.Nombre
+                }).ToList();
+
+                Modelo selModelo = db.Modelos.Include(m => m.VehiculoMarca).Where(x => x.IdModelo.Equals(vehiculo.IdModelo)).AsEnumerable().Select(m => new Modelo
+                {
+                    Nombre = m.Nombre,
+                    IdMarca = m.IdMarca,
+                    VehiculoMarca = new VehiculoMarca()
+                    {
                         IdMarca = m.IdMarca,
-                        VehiculoMarca = new VehiculoMarca()
-                        {
-                            IdMarca = m.IdMarca,
-                            Nombre = m.VehiculoMarca.Nombre
-                        }
+                        Nombre = m.VehiculoMarca.Nombre
+                    }
 
-                    }).First();
-                    vehiculo.Modelo = selModelo;
-                    MEDECAWebApp.Models.VehiculoModel anew = new MEDECAWebApp.Models.VehiculoModel();
-                    anew.Info = string.Format("{0} {1} {2}", selModelo.VehiculoMarca.Nombre, selModelo.Nombre, vehiculo.Anio);
-                    anew.Anio = newVeh.Anio;
-                    anew.Color = newVeh.Color;
-                    anew.IdCliente = newVeh.IdCliente;
-                    anew.IdCombustible = newVeh.IdCombustible;
-                    anew.IdModelo = newVeh.IdModelo;
-                    anew.IdVehiculo = newVeh.IdVehiculo;
-                    anew.Insumos = insumos;
-                    anew.Kilometraje = newVeh.Kilometraje;
-                    anew.Modelo = selModelo;
-                    anew.NoChasis = newVeh.NoChasis;
-                    anew.Placa = newVeh.Placa;
+                }).First();
+                vehiculo.Modelo = selModelo;
+                MEDECAWebApp.Models.VehiculoModel anew = new MEDECAWebApp.Models.VehiculoModel();
+                anew.Info = string.Format("{0} {1} {2}", selModelo.VehiculoMarca.Nombre, selModelo.Nombre, vehiculo.Anio);
+                anew.Anio = newVeh.Anio;
+                anew.Color = newVeh.Color;
+                anew.IdCliente = newVeh.IdCliente;
+                anew.IdCombustible = newVeh.IdCombustible;
+                anew.IdModelo = newVeh.IdModelo;
+                anew.IdVehiculo = newVeh.IdVehiculo;
+                anew.Insumos = insumos;
+                anew.Kilometraje = newVeh.Kilometraje;
+                anew.Modelo = selModelo;
+                anew.NoChasis = newVeh.NoChasis;
+                anew.Placa = newVeh.Placa;
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, anew);
+                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = vehiculo.IdVehiculo }));
+                return response;
 
-                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, anew);
-                    response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = vehiculo.IdVehiculo }));
-                    return response;
-               
             }
             else
             {

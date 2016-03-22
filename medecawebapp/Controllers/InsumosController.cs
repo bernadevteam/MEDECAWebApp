@@ -16,9 +16,9 @@ namespace MEDECAWebApp.Controllers
         private MEDECAEntities db = new MEDECAEntities();
 
         // GET api/Insumos
-        public IEnumerable<Insumo> GetInsumoes()
+        public IEnumerable<object> GetInsumoes()
         {
-            return db.Insumos.AsEnumerable().Select(x => new Insumo { Activo = x.Activo, Nombre = x.Nombre, IdInsumo = x.IdInsumo});
+            return db.Insumos.AsEnumerable().Select(x => new { Activo = x.Activo, Nombre = x.Nombre, IdInsumo = x.IdInsumo, CanDelete = x.Vehiculos.Count.Equals(0)});
         }
 
         // GET api/Insumos/5

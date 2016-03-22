@@ -34,6 +34,7 @@ namespace MEDECAWebApp.Controllers
                 Fecha = ot.Fecha,
                 IdVehiculo = ot.IdVehiculo,
                 NoOrden = ot.NoOrden,
+                Diagnostico = ot.Diagnostico,
                 Reparaciones = ot.Reparaciones,
                 Servicios = ot.Servicios.Select(s => new Servicio { 
                     Nombre = s.Nombre,
