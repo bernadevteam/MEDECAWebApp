@@ -3,276 +3,332 @@
 }
   
 <div class="row">
-                <div class="col-lg-12">
+                <div class="col-md-10">
                     <div class="page-header">
                     <h1 >Ordenes Trabajos</h1>
                     <h5>En este modulo podr&aacute; crear y modificar ordenes de trabajos.</h5>
                         </div>
                 </div>
+    
             </div>
 <div class="row" ng-controller="OrdenesTrabajosController">
-    <div class="col-lg-12">
+    <div class="col-md-4 col-lg-3">
         <div class="row">
-            <div class="col-md-6">
-
-                <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Escriba aqu&iacute; Nombre de Cliente o Matricula del Veh&iacute;culo..." ng-disabled="!modelos"
-                           ng-model="filter" value="">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#manageClient" data-backdrop="static" data-keyboard="false"
-                                ng-click="addClient()">
-                            <i class="fa fa-plus-square"></i>
-                        </button>
-                    </span>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-12 client-box" ng-repeat="cliente in modelos | porclienteoplaca: filter.toLowerCase()">
-                    <span>
-                        <a class="page-header-edit" ng-click="editClient(cliente)"
-                           data-toggle="modal" data-target="#manageClient" >
-                            <i class="fa fa-edit fa-2x"></i>
-                        </a>
-
-                        <span class="huge editor" data-toggle="modal" data-target="#viewClient" data-backdrop="static" data-keyboard="false" ng-click="editClient(cliente)">{{cliente.Nombre}} <small>Tel.: {{cliente.Telefono}}</small></span>
-                    </span>
-                    <hr />
-                    <div class="row col-md-12 flex-box md-padding" layout-xs="column" layout="row">
-                        <div class="panel panel-default" flex-xs flex-gt-xs="22" layout="column" style="margin-right:5px" ng-repeat="vehiculo in cliente.Vehiculos | getAllByKey: (cliente.PorPlaca ? 'Placa' : null ) : filter">
-
-                            <div class="panel-heading panel-heading-veh" ng-click="editVeh(cliente, vehiculo)"
-                                 data-toggle="modal" data-target="#viewVehicle" data-backdrop="static" data-keyboard="false">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-car fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div>{{vehiculo.Modelo.VehiculoMarca.Nombre + ' ' +vehiculo.Modelo.Nombre+' '+vehiculo.Anio}}</div>
-                                        <div><strong>Placa {{vehiculo.Placa}}</strong> </div>
-                                        <div>{{cliente.Nombre}}</div>
-                                    </div>
+            <div class="panel-group" id="accordionProximoEntrega" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-red">
+                    <div class="panel-heading" role="tab">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordionProximoEntrega" href="#listProxEntrega" aria-expanded="true" aria-controls="collapseOne">
+                                Ordenes Activas
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="listProxEntrega" class="panel-collapse collapse in" role="tabpanel">
+                        <div class="list-group">
+                            <div style="cursor:pointer" class="list-group-item {{orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.DaysOverdue > 0 && orden.DaysOverdue < 3? 'list-group-item-warning' : ''}}" ng-repeat="orden in modelos | ordenesactivas">
+                                <div data-toggle="modal" data-target="#viewOrder" ng-click="editar(orden.Cliente, orden.VehiculoOrden, orden)">
+                                    <h4 class="list-group-item-heading"><strong>{{orden.Cliente.Nombre}}</strong></h4>
+                                    <div class=""></div>
+                                    <h3 class="list-group-item-heading"> {{orden.VehiculoOrden.Info}}</h3>
+                                    <h4 class="list-group-item-heading">Placa: {{orden.VehiculoOrden.Placa}}</h4>
+                                    <p class="list-group-item-text">
+                                        <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
+                                        <br />
+                                        Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
+                                    </p>
                                 </div>
-                            </div>
-                            <div class="panel-body">
-                                <button type="button" class="btn btn-default btn-block" ng-if="vehiculo.OrdenesTrabajos.length == 0" disabled>Sin servicios</button>
-                                <div class="dropdown" ng-if="vehiculo.OrdenesTrabajos.length > 0">
-                                    <button class="btn btn-default dropdown-toggle btn-block" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Ordenes
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li ng-repeat="ordenTrabajo in vehiculo.OrdenesTrabajos">
-                                            <a href="#" class="" data-toggle="modal" data-target="#nuevaOrdenTrabajo" data-backdrop="static" data-keyboard="false" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
-                                                <i class="fa fa-comment fa-sticky-note"></i> {{ordenTrabajo.NoOrden}}
-                                                <span class="pull-right text-muted small">
-                                                    <em>{{ordenTrabajo.Fecha | date: 'dd/MM/yyyy'}}</em>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer panel-green" 
-                                    data-toggle="modal" data-target="#nuevaOrdenTrabajo" ng-click="editar(cliente, vehiculo)">
-                                        <span class="pull-left">Crear Orden</span>
-                                        <span class="pull-right"><i class="fa fa-plus"></i></span>
-                                        <div class="clearfix"></div>
-                                </div>
-                                </a>
-                            <a href="#">
-                                <div class="panel-footer panel-green" ng-click="editVeh(cliente, vehiculo)"
-                                     data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false">
+                                <div style="display:none" class="panel-footer panel-primary" data-toggle="modal" data-target="#nuevaOrdenTrabajo" data-backdrop="static"
+                                     data-keyboard="false" ng-click="editar(orden.Cliente, orden.VehiculoOrden, orden)">
 
                                     <span class="pull-left">Editar</span>
-                                    <span class="pull-right"><i class="fa fa-car"></i> <i class="fa fa-pencil"></i> </span>
+                                    <span class="pull-right"><i class="fa fa-sticky-note-o"></i> <i class="fa fa-pencil"></i> </span>
                                     <div class="clearfix"></div>
                                 </div>
-                            </a>
+                            </div>
+                            <div class="panel-footer"></div>
                         </div>
-                        <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false" ng-click="addVeh(cliente)"> <i class="fa fa-plus-square"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+</div>
+        <div class="col-md-8 col-lg-9">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group custom-search-form">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#manageClient" data-backdrop="static" data-keyboard="false"
+                                    ng-click="addClient()">
+                                <i class="fa fa-plus-square"></i>
+                            </button>
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+
+                        <input type="text" class="form-control" placeholder="Escriba aqu&iacute; Nombre de Cliente o Matricula del Veh&iacute;culo..." ng-disabled="!modelos"
+                               ng-model="filter" value="">
 
                     </div>
 
                 </div>
-               
+                </div>
+                <div class="row">
+           
+                    <div class="col-md-12 client-box" ng-repeat="cliente in modelos | porclienteoplaca: filter.toLowerCase()">
+                        <span>
+                            <a class="page-header-edit" ng-click="editClient(cliente)"
+                               data-toggle="modal" data-target="#manageClient">
+                                <i class="fa fa-edit fa-2x"></i>
+                            </a>
+
+                            <span class="huge editor" data-toggle="modal" data-target="#viewClient" data-backdrop="static" data-keyboard="false" ng-click="editClient(cliente)">{{cliente.Nombre}} <small>Tel.: {{cliente.Telefono}}</small></span>
+                        </span>
+                        <hr />
+                        <div class="row col-md-12 flex-box md-padding" layout-xs="column" layout="row">
+                            <div class="panel panel-red" flex-xs flex-gt-xs="22" layout="column" style="margin-right:5px" ng-repeat="vehiculo in cliente.Vehiculos | getAllByKey: (cliente.PorPlaca ? 'Placa' : null ) : filter">
+
+                                <div class="panel-heading panel-heading-veh" ng-click="editVeh(cliente, vehiculo)"
+                                     data-toggle="modal" data-target="#viewVehicle" data-backdrop="static" data-keyboard="false">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-car fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div>{{vehiculo.Modelo.VehiculoMarca.Nombre + ' ' +vehiculo.Modelo.Nombre+' '+vehiculo.Anio}}</div>
+                                            <div><strong>Placa {{vehiculo.Placa}}</strong> </div>
+                                            <div>{{cliente.Nombre}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <button type="button" class="btn btn-default btn-block" ng-if="vehiculo.OrdenesTrabajos.length == 0" disabled>Sin servicios</button>
+                                    <div class="dropdown" ng-if="vehiculo.OrdenesTrabajos.length > 0">
+                                        <button class="btn btn-default dropdown-toggle btn-block" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Ordenes
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <li ng-repeat="ordenTrabajo in vehiculo.OrdenesTrabajos">
+                                                <a href="#" data-toggle="modal" data-target="#viewOrder" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
+                                                    <div class="panel-body">
+                                                        <i class="fa fa-comment fa-sticky-note"></i> {{parseOrden(ordenTrabajo.NoOrden.toString())}}
+                                                        <span class="pull-right text-muted small">
+                                                            <em>{{ordenTrabajo.Fecha | date: 'dd/MM/yyyy'}}</em>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="panel-footer panel-green" data-toggle="modal" data-target="#nuevaOrdenTrabajo" data-backdrop="static"
+                                                     data-keyboard="false" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
+
+                                                    <span class="pull-left">Editar</span>
+                                                    <span class="pull-right"><i class="fa fa-sticky-note-o"></i> <i class="fa fa-pencil"></i> </span>
+                                                    <div class="clearfix"></div>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                    <div class="panel-footer panel-green"
+                                         data-toggle="modal" data-target="#nuevaOrdenTrabajo" ng-click="editar(cliente, vehiculo)">
+                                        <span class="pull-left">Crear Orden</span>
+                                        <span class="pull-right"><i class="fa fa-plus"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                                <a href="#">
+                                    <div class="panel-footer panel-green" ng-click="editVeh(cliente, vehiculo)"
+                                         data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false">
+
+                                        <span class="pull-left">Editar</span>
+                                        <span class="pull-right"><i class="fa fa-car"></i> <i class="fa fa-pencil"></i> </span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                            </div>
+                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false" ng-click="addVeh(cliente)"> <i class="fa fa-plus-square"></i></button>
+
+                        </div>
+
+                    </div>
             </div>
         </div>
+        <div ng-controller="VehiculosController">
+            <manage-vehiculo></manage-vehiculo>
+            <view-vehicle></view-vehicle>
+        </div>
+        <div ng-controller="ClientesController">
+            <manage-client></manage-client>
+            <view-client></view-client>
+        </div>
+    <view-order></view-order>
+        @* *******************************  OT FORM ******************************* *@
+        <form name="modelForm">
+            <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="star" ng-show="SelectedCliente.Favorito"></span>
+                            <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <ul id="otTabs" class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
+                                <li role="presentation"><a href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
+                                <li role="presentation"><a href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                @* ========> OT INFO <======== *@
+                                <div role="tabpanel" class="tab-pane fade in active" id="otinfo">
+                                    <div class="form-group row">
+
+                                        <div class="col-md-4">
+                                            <label>Cliente</label>
+                                            <div>
+                                                {{SelectedCliente.Nombre}}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label>Veh&iacute;culo</label>
+                                            <div>
+                                                {{SelectedVehiculo.Info}}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Estado</label> <span class="required"> *</span>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" ng-model="nuevoModel.Entregado" ng-value=false checked name="Entregado" ng-required="!nuevoModel.Entregado">
+                                                    Recibido
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" ng-model="nuevoModel.Entregado" ng-value=true name="Entregado" ng-required="!nuevoModel.Entregado">
+                                                    Entregado
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <h3>Fechas</h3>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label>Recibido el:</label> <span class="required"> *</span>
+                                            <br />
+                                            <md-datepicker ng-model="nuevoModel.Fecha" required></md-datepicker>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Prometido para:</label>
+                                            <br />
+                                            <md-datepicker ng-model="nuevoModel.FechaPrometida"></md-datepicker>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Entregado el:</label>
+                                            <br />
+                                            <md-datepicker ng-model="nuevoModel.FechaEntrega"></md-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                @* ========> OT MAINTENANCE <======== *@
+                                <div role="tabpanel" class="tab-pane fade" id="otMant">
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <div>
+                                                <label>Servicios</label>
+                                            </div>
+                                            <label class="checkbox-inline" ng-repeat="servicio in servicios">
+                                                <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
+                                                {{servicio.Nombre}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Aver&iacute;as</label>
+                                        <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Diagn&oacute;stico</label>
+                                        <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Reparaciones</label>
+                                        <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
+                                    </div>
+                                </div>
+                                @* ========> OT INSUMOS <======== *@
+                                <div role="tabpanel" class="tab-pane fade" id="otInsumos">
+                                    <div class="form-group ">
+                                        <div layout="column" ng-cloak="">
+                                            <md-chips ng-model="selInsumosProvs" md-autocomplete-snap="" md-require-match="true">
+                                                <md-autocomplete md-selected-item="selInsumo" md-search-text="buscarInsumo" md-items="item in querySearch(buscarInsumo, SelectedVehiculo.Insumos)"
+                                                                 md-item-text="item.Nombre" placeholder="Buscar insumo">
+                                                    <span md-highlight-text="buscarInsumo">{{item.Nombre}} </span>
+                                                </md-autocomplete>
+                                                <md-chip-template>
+                                                    <span>
+                                                        <span>test</span>
+                                                        <strong>{{$chip.Nombre}}</strong>
+                                                    </span>
+                                                </md-chip-template>
+                                            </md-chips>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-show="selInsumosProvs.length > 0">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-md-4">Insumo</th>
+                                                    <th>Proveedor <span class="required"> *</span></th>
+                                                    <th class="col-md-2">Cantidad <span class="required"> *</span></th>
+                                                    <th class="col-md-2">Precio <span class="required"> *</span></th>
+                                                    <th class="col-md-1">Sub Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="insumo in selInsumosProvs">
+                                                    <td>{{insumo.Nombre}}</td>
+                                                    <td>
+                                                        <select class="form-control" ng-model="insumo.IdProveedor" required ng-options="prov.IdProveedor as prov.Nombre for prov in proveedores"></select>
+                                                    </td>
+                                                    <td>  <input type="number" ng-model="insumo.Cantidad" class="form-control" required /></td>
+                                                    <td>  <input type="text" pattern="[0-9]+(\.[0-9][0-9]?)?" ng-model="insumo.Precio" class="form-control" required /></td>
+                                                    <td>{{(insumo.Precio * insumo.Cantidad) | currency}} RD$</td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span class="pull-right">
+                                                            <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad']| currency}} RD$
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</button>
+                            <button type="submit" class="btn btn-success" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </form>
+
     </div>
-    <div ng-controller="VehiculosController">
-        <manage-vehiculo></manage-vehiculo>
-        <view-vehicle></view-vehicle>
-    </div>
-    <div ng-controller="ClientesController">
-        <manage-client ></manage-client>
-        <view-client></view-client>
-    </div>
-    @* *******************************  OT FORM ******************************* *@
-    <form name="modelForm">
-    <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-          <span class="star" ng-show="SelectedCliente.Favorito"></span> 
-        <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo</h4> 
-      </div>
-      <div class="modal-body">
-          <ul id="otTabs" class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-              <li role="presentation"><a href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
-              <li role="presentation" ><a href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
-              </ul>
-          <div class="tab-content">
-              @* ========> OT INFO <======== *@
-              <div role="tabpanel" class="tab-pane fade in active" id="otinfo">
-                  <div class="form-group row">
-
-                      <div class="col-md-5">
-                          <label>Cliente</label>
-                          <div>
-                              {{SelectedCliente.Nombre}}
-                          </div>
-                      </div>
-
-                      <div class="col-md-7">
-                          <label>Veh&iacute;culo</label>
-                          <div>
-                              {{SelectedVehiculo.Modelo.VehiculoMarca.Nombre + ' '+SelectedVehiculo.Modelo.Nombre+' Año '+SelectedVehiculo.Anio}}
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <div class="col-md-4">
-                          <label>No. Orden</label> <span class="required"> *</span>
-                          <input type="number" required ng-unique="/api/OrdenesTrabajos/ExisteNoOrden" ng-modid="{{nuevoModel.Id}}" ng-model="nuevoModel.NoOrden" ng-prevValue="{{editingModel.NoOrden}}"
-                                 class="form-control" ng-minlength="3" ng-maxlength="4" ng-class="{'required-dirty' : modelForm.NoOrden.$dirty && modelForm.NoOrden.$invalid}" name="NoOrden" />
-                      </div>
-                      <div class="col-md-4">
-                          <label>Fecha</label> <span class="required"> *</span>
-                          <md-datepicker ng-model="nuevoModel.Fecha" required></md-datepicker>
-                      </div>
-                      <div class="col-md-4">
-                          <label>Estado</label> <span class="required"> *</span>
-                          <div class="radio">
-                              <label>
-                                  <input type="radio" ng-model="nuevoModel.Entregado" ng-value=false checked name="Entregado" ng-required="!nuevoModel.Entregado">
-                                  Recibido
-                              </label>
-                          </div>
-                          <div class="radio">
-                              <label>
-                                  <input type="radio" ng-model="nuevoModel.Entregado" ng-value=true name="Entregado" ng-required="!nuevoModel.Entregado">
-                                  Entregado
-                              </label>
-                          </div>
-                      </div>
-
-                  </div>
-                  <div class="form-group row">
-                      <div class="col-md-12">
-
-                          <div ng-show="modelForm.NoOrden.$error.unique && modelForm.NoOrden.$dirty" class="alert alert-danger" role="alert">
-                              Este n&uacute;mero de orden ya est&aacute; en uso.
-                          </div>
-                      </div>
-                  </div>
-
-              </div>
-              @* ========> OT MAINTENANCE <======== *@
-              <div role="tabpanel" class="tab-pane fade" id="otMant">
-                  <div class="form-group row">
-                      <div class="col-md-12">
-                          <div>
-                              <label>Servicios</label>
-                          </div>
-                          <label class="checkbox-inline" ng-repeat="servicio in servicios">
-                              <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
-                              {{servicio.Nombre}}
-                          </label>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label>Aver&iacute;as</label>
-                      <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
-                  </div>
-                  <div class="form-group">
-                      <label>Diagn&oacute;stico</label>
-                      <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
-                  </div>
-                  <div class="form-group">
-                      <label>Reparaciones</label>
-                      <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
-                  </div>
-              </div>
-              @* ========> OT INSUMOS <======== *@
-              <div role="tabpanel" class="tab-pane fade" id="otInsumos">
-                  <div class="form-group ">
-                      <div layout="column" ng-cloak="">
-                          <md-chips ng-model="selInsumosProvs" md-autocomplete-snap="" md-require-match="true">
-                              <md-autocomplete md-selected-item="selInsumo" md-search-text="buscarInsumo" md-items="item in querySearch(buscarInsumo, SelectedVehiculo.Insumos)"
-                                               md-item-text="item.Nombre" placeholder="Buscar insumo">
-                                  <span md-highlight-text="buscarInsumo">{{item.Nombre}} </span>
-                              </md-autocomplete>
-                              <md-chip-template>
-                                  <span>
-                                      <span>test</span>
-                                      <strong>{{$chip.Nombre}}</strong>
-                                  </span>
-                              </md-chip-template>
-                          </md-chips>
-                      </div>
-                  </div>
-                  <div class="form-group" ng-show="selInsumosProvs.length > 0">
-                      <table class="table table-striped">
-                          <thead>
-                              <tr>
-                                  <th>Insumo</th>
-                                  <th>Proveedor <span class="required"> *</span></th>
-                                  <th>Precio <span class="required"> *</span></th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr ng-repeat="insumo in selInsumosProvs">
-                                  <td>{{insumo.Nombre}}</td>
-                                  <td>
-                                      <md-select ng-model="insumo.IdProveedor" required>
-                                          <md-option ng-repeat="prov in proveedores" value="{{prov.IdProveedor}}">
-                                              {{prov.Nombre}}
-                                          </md-option>
-                                      </md-select>
-                                  </td>
-                                  <td>  <input type="number" ng-model="insumo.Precio" class="form-control" required /></td>
-                              </tr>
-                          </tbody>
-                          <tfoot>
-                              <tr>
-                                  <td colspan="3">
-                                      <b>Total</b> {{selInsumosProvs | sumByKey: 'Precio'}}
-                                  </td>
-                              </tr>
-                          </tfoot>
-                      </table>
-
-                  </div>
-
-              </div>
-          </div>
-          
-          </div>
-      <div class="modal-footer">
-        <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()" >Cerrar</button>
-          <button type="submit" class="btn btn-success" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-</form>
-
-             </div>
 <script>
-
+    
 </script>

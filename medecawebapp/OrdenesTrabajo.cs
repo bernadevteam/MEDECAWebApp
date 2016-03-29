@@ -21,13 +21,15 @@ namespace MEDECAWebApp
         }
     
         public int Id { get; set; }
-        public int NoOrden { get; set; }
+        public Nullable<int> NoOrden { get; set; }
         public string Fallas { get; set; }
         public string Reparaciones { get; set; }
         public System.DateTime Fecha { get; set; }
         public int IdVehiculo { get; set; }
         public bool Entregado { get; set; }
         public string Diagnostico { get; set; }
+        public Nullable<System.DateTime> FechaEntrega { get; set; }
+        public Nullable<System.DateTime> FechaPrometida { get; set; }
     
         public virtual Vehiculo Vehiculo { get; set; }
         public virtual ICollection<Servicio> Servicios { get; set; }

@@ -60,7 +60,7 @@ app.filter('getByKey', function () {
             return arrayToReturn;
         };
     })
-.filter('sumByKey', function() {
+    .filter('sumByKey', function() {
          return function(data, key) {
              if (typeof(data) === 'undefined' || typeof(key) === 'undefined') {
                  return 0;
@@ -73,7 +73,23 @@ app.filter('getByKey', function () {
 
              return sum;
          };
-     })
+    })
+    .filter('totalCal', function () {
+        return function (data, props) {
+            if (typeof (data) === 'undefined' || typeof (props) === 'undefined') {
+                return 0;
+            }
+
+            var sum = 0;
+
+            for (var i = data.length - 1; i >= 0; i--) {
+                sum += parseFloat(data[i][props[0]]) * parseFloat(data[i][props[1]]);
+            }
+
+            return sum.toFixed(2);
+        };
+    })
+
 .filter('orderObjectBy', function () {
     return function (items, field, reverse) {
         var filtered = [];
@@ -122,6 +138,22 @@ app.filter('getByKey', function () {
 
             });
         }
+        return items;
+    };
+})
+.filter('ordenesactivas', function () {
+    return function (model, clienteoplaca) {
+        var items = [];
+        angular.forEach(model, function (cliente) {
+            angular.forEach(cliente.Vehiculos, function (vehiculo) {
+                angular.forEach(vehiculo.OrdenesTrabajos, function (ordenTrabajo) {
+                    if (!ordenTrabajo.Entregado) {
+                        ordenTrabajo.DaysOverdue = Math.floor((new Date(ordenTrabajo.FechaPrometida) - new Date()) / (1000 * 60 * 60 * 24));
+                        items.push(ordenTrabajo);
+                    }
+                });
+            });
+        });
         return items;
     };
 })

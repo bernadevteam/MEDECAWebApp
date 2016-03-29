@@ -36,7 +36,8 @@
                 {{cliente.Telefono}}
             </td>
             <td>
-               <button type="submit" class="btn btn-warning" ng-click="editar(cliente)" data-toggle="modal" data-target="#manageClient"> <i class="fa fa-edit"></i></button>
+                <button type="submit" class="btn btn-warning" ng-click="editar(cliente)" data-toggle="modal" data-target="#manageClient"> <i class="fa fa-edit"></i></button>
+               <button type="submit" class="btn btn-danger" ng-click="eliminarCliente(cliente)" data-toggle="modal" data-target="#confirmDelete" ng-if="cliente.CanDelete"> <i class="fa fa-trash-o"></i></button>
             </td>
         </tr>
             </tbody>
@@ -47,4 +48,25 @@
                <button  class="btn btn-success" data-toggle="modal" data-target="#manageClient" > <i class="fa fa-plus-square"></i></button>
 </div>
     <manage-client></manage-client>
+    <div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmaci&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+                    Desea eliminar este Cliente?
+                    <div>
+                        <strong>{{deleteCliente.Nombre}}</strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="eliminar()">Eliminar</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    </div>
+

@@ -42,7 +42,10 @@ span.star:before {
     z-index:2000 !important;
 
 }
-
+.panel-red{
+    border-color:#ED1C24;
+    background-color: #eee;
+}
 .modal-header {
     padding:9px 15px;
     border-bottom:1px solid #eee;
@@ -55,7 +58,10 @@ span.star:before {
      border-top-left-radius: 5px;
      border-top-right-radius: 5px;
  }
-
+.panel-title a{
+    color:#fff !important;
+    font-weight:500 !important;
+}
 body {
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;

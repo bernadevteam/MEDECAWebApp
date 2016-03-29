@@ -63,9 +63,36 @@
                                 <div class="clearfix"></div>
                             </div>
                         </a>
+                         <a href="#" ng-if="vehiculo.CanDelete">
+    <div class="panel-footer panel-green" data-toggle="modal" data-target="#confirmDelete" ng-click="eliminarVehiculo(cliente, vehiculo)">
+        <span class="pull-left">Eliminar</span>
+        <span class="pull-right"><i class="fa fa-trash-o"></i></span>
+        <div class="clearfix"></div>
+    </div>
+</a>
                     </div>
             </div>
                 </div>
         </div>
     <manage-vehiculo></manage-vehiculo>
+    <div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmaci&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+                    Desea eliminar este Veh&iacute;culo?
+                    <div>
+                        <strong>{{deleteVehiculo.Info}} Placa: {{deleteVehiculo.Placa}}</strong>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="eliminar()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>

@@ -18,6 +18,7 @@ namespace MEDECAWebApp
         public int IdInsumo { get; set; }
         public int IdOrdenServicio { get; set; }
         public decimal Precio { get; set; }
+        public short Cantidad { get; set; }
     
         public virtual Insumo Insumo { get; set; }
         public virtual OrdenesTrabajo OrdenesTrabajo { get; set; }

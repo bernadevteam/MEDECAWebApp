@@ -53,6 +53,7 @@ namespace MEDECAWebApp.Controllers
                         }
                     },
                     Anio = v.Anio,
+                    Motor = v.Motor,
                     Color = v.Color,
                     Combustible = new Combustible
                     {

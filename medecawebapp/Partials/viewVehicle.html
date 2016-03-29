@@ -13,26 +13,32 @@
                     </div>
                     <div class="form-group row">
 
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <label>Vehiculo:</label>
-                            {{nuevoModel.Info}}
+                            {{nuevoModel.Info}} {{nuevoModel.Color}}
                         </div>
-
+                        <div class="col-md-6">
+                            <label>Motor:</label>
+                            {{nuevoModel.Motor}}
+                        </div>
+                      
+                    </div>
+                    <div class="form-group row">
                         <div class="col-md-4">
                             <label>Combustible:</label>
                             {{nuevoModel.Combustible.Nombre}}
                         </div>
                         <div class="col-md-3">
-                            <label>Color:</label>
-                            {{nuevoModel.Color}}
+                            <label>{{nuevoModel.UnidadDistancia == 'Km' ? 'Kilometraje' : 'Millaje' }}:</label> {{nuevoModel.Kilometraje}}
+                        </div>
+                      
+                        <div class="col-md-5">
+                            <label>Placa:</label> {{nuevoModel.Placa}} 
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-md-5">
                             <label>No. Chasis:</label> {{nuevoModel.NoChasis}}
-                        </div>
-                        <div class="col-md-4">
-                            <label>Placa:</label> {{nuevoModel.Placa}} 
                         </div>
                     </div>
                         <div class="form-group row">

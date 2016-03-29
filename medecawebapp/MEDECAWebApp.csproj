@@ -339,6 +339,7 @@
     <Content Include="MEDECAModel.edmx.diagram">
       <DependentUpon>MEDECAModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Partials\viewOrder.html" />
     <Content Include="Partials\viewVehicle.html" />
     <Content Include="Partials\viewClient.html" />
     <Content Include="Partials\manageClient.html" />

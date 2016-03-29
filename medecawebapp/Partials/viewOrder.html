@@ -1,0 +1,67 @@
+﻿
+    <div class="modal fade" tabindex="-1" role="dialog" id="viewOrder">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="star" ng-show="SelectedCliente.Favorito"></span>
+                    <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
+                </div>
+                <div class="modal-body">
+                   <h4><strong>{{SelectedCliente.Nombre}}</strong> <small>Tel. {{SelectedCliente.Telefono}}</small></h4>
+                    <h3>{{SelectedVehiculo.Info}} <small>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</small></h3>
+                    <hr />
+                    <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
+                    <p class="">Prometido para: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
+                    <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
+                    <hr />
+
+                    <h4><strong>Aver&iacute;as</strong></h4>
+                    <p>
+                        {{nuevoModel.Fallas}}
+                    </p>
+                    <h4><strong>Diagn&oacute;stico</strong></h4>
+                    <p>
+                        {{nuevoModel.Diagnostico}}
+                    </p>
+                    <h4><strong>Reparaciones</strong></h4>
+                    <p>
+                        {{nuevoModel.Reparaciones}}
+                    </p>
+                    <hr />
+                    <h4><strong>Insumos</strong> <span class="badge">{{selInsumosProvs.length}}</span></h4>
+                    <p >
+                        <table class="table table-striped" ng-show="selInsumosProvs.length != 0">
+                            <tbody>
+                                <tr ng-repeat="insumo in selInsumosProvs">
+                                    <td>
+                                        <strong>{{insumo.Cantidad}}</strong> {{insumo.Nombre}}
+                                    </td>
+                                    <td>
+                                        {{insumo.NombreProveedor}}
+                                    </td>
+                                    <td>
+                                        <span class="pull-right">
+                                            {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <span class="pull-right">
+                                                        <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad'] | currency}} RD$</span>
+</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                       
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

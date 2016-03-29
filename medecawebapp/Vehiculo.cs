@@ -30,6 +30,8 @@ namespace MEDECAWebApp
         public string Color { get; set; }
         public Nullable<double> Kilometraje { get; set; }
         public string Placa { get; set; }
+        public string Motor { get; set; }
+        public string UnidadDistancia { get; set; }
     
         public virtual Cliente Cliente { get; set; }
         public virtual Combustible Combustible { get; set; }

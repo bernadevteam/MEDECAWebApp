@@ -20,8 +20,8 @@
           </Key>
           <Property Name="IDCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="Identificacion" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="TipoIdentificacion" Type="char" MaxLength="3" Nullable="false" />
+          <Property Name="Identificacion" Type="varchar" MaxLength="25" />
+          <Property Name="TipoIdentificacion" Type="char" MaxLength="3" />
           <Property Name="Direccion" Type="varchar" MaxLength="100" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Telefono" Type="varchar" MaxLength="50" />
@@ -52,6 +52,7 @@
           <Property Name="IdInsumo" Type="int" Nullable="false" />
           <Property Name="IdOrdenServicio" Type="int" Nullable="false" />
           <Property Name="Precio" Type="money" Nullable="false" />
+          <Property Name="Cantidad" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="Modelos">
           <Key>
@@ -74,13 +75,15 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NoOrden" Type="int" Nullable="false" />
           <Property Name="Fallas" Type="varchar(max)" />
           <Property Name="Reparaciones" Type="varchar(max)" />
           <Property Name="Fecha" Type="datetime" Nullable="false" />
           <Property Name="IdVehiculo" Type="int" Nullable="false" />
           <Property Name="Entregado" Type="bit" Nullable="false" />
           <Property Name="Diagnostico" Type="varchar(max)" />
+          <Property Name="FechaEntrega" Type="datetime" />
+          <Property Name="NoOrden" Type="int" />
+          <Property Name="FechaPrometida" Type="datetime" />
         </EntityType>
         <EntityType Name="Proveedores">
           <Key>
@@ -124,13 +127,15 @@
           </Key>
           <Property Name="IdVehiculo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdCliente" Type="int" Nullable="false" />
-          <Property Name="Placa" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Placa" Type="varchar" MaxLength="50" />
           <Property Name="NoChasis" Type="varchar" MaxLength="50" />
           <Property Name="IdModelo" Type="int" Nullable="false" />
           <Property Name="Anio" Type="int" Nullable="false" />
           <Property Name="IdCombustible" Type="int" Nullable="false" />
           <Property Name="Color" Type="varchar" MaxLength="25" />
           <Property Name="Kilometraje" Type="float" />
+          <Property Name="Motor" Type="varchar" MaxLength="150" />
+          <Property Name="UnidadDistancia" Type="varchar" MaxLength="2" />
         </EntityType>
         <EntityType Name="VehiculosInsumos">
           <Key>
@@ -221,18 +226,6 @@
             </Principal>
             <Dependent Role="OrdenesServicios">
               <PropertyRef Name="IdServicio" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrdenesTrabajos_Vehiculos">
-          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
-          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vehiculos">
-              <PropertyRef Name="IdVehiculo" />
-            </Principal>
-            <Dependent Role="OrdenesTrabajos">
-              <PropertyRef Name="IdVehiculo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -362,10 +355,6 @@
             <End Role="Servicios" EntitySet="Servicios" />
             <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrdenesTrabajos_Vehiculos" Association="Self.FK_OrdenesTrabajos_Vehiculos">
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
-          </AssociationSet>
           <AssociationSet Name="FK_Vehiculos_Clientes" Association="Self.FK_Vehiculos_Clientes">
             <End Role="Clientes" EntitySet="Clientes" />
             <End Role="Vehiculos" EntitySet="Vehiculos" />
@@ -477,8 +466,8 @@
             <PropertyRef Name="IDCliente" />
           </Key>
           <Property Name="IDCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Identificacion" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
-          <Property Name="TipoIdentificacion" Type="String" Nullable="false" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Name="Identificacion" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="TipoIdentificacion" Type="String" MaxLength="3" Unicode="false" FixedLength="true" />
           <Property Name="Direccion" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
           <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Vehiculos" Relationship="MEDECAModel.FK_Vehiculos_Clientes" FromRole="Clientes" ToRole="Vehiculos" />
@@ -548,9 +537,11 @@
           <NavigationProperty Name="Combustible" Relationship="MEDECAModel.FK_Vehiculos_Combustibles" FromRole="Vehiculos" ToRole="Combustibles" />
           <NavigationProperty Name="Modelo" Relationship="MEDECAModel.FK_Vehiculos_Modelos" FromRole="Vehiculos" ToRole="Modelos" />
           <NavigationProperty Name="Insumos" Relationship="MEDECAModel.VehiculosInsumos" FromRole="Vehiculos" ToRole="Insumos" />
-          <Property Type="String" Name="Placa" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Placa" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrdenesTrabajos" Relationship="MEDECAModel.FK_OrdenesTrabajos_Vehiculos" FromRole="Vehiculo" ToRole="OrdenesTrabajo" />
           <NavigationProperty Name="Citas" Relationship="MEDECAModel.FK_Cita_Vehiculos" FromRole="Vehiculo" ToRole="Cita" />
+          <Property Name="Motor" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="UnidadDistancia" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_Vehiculos_Clientes">
           <End Role="Clientes" Type="MEDECAModel.Cliente" Multiplicity="1" />
@@ -619,7 +610,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="NoOrden" Nullable="false" />
+          <Property Type="Int32" Name="NoOrden" />
           <Property Type="String" Name="Fallas" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Reparaciones" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="Fecha" Nullable="false" Precision="3" />
@@ -629,6 +620,8 @@
           <NavigationProperty Name="Servicios" Relationship="MEDECAModel.OrdenesServicios" FromRole="OrdenesTrabajo" ToRole="Servicio" />
           <NavigationProperty Name="InsumosProveedores" Relationship="MEDECAModel.FK_InsumosProveedores_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosProveedore" />
           <Property Name="Diagnostico" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaEntrega" Type="DateTime" Precision="3" />
+          <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -689,6 +682,7 @@
           <NavigationProperty Name="Insumo" Relationship="MEDECAModel.FK_InsumosProveedores_Insumos" FromRole="InsumosProveedore" ToRole="Insumo" />
           <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_InsumosProveedores_OrdenesTrabajos" FromRole="InsumosProveedore" ToRole="OrdenesTrabajo" />
           <NavigationProperty Name="Proveedore" Relationship="MEDECAModel.FK_InsumosProveedores_Proveedores" FromRole="InsumosProveedore" ToRole="Proveedore" />
+          <Property Name="Cantidad" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="Proveedore">
           <Key>
@@ -859,6 +853,8 @@
           <EntitySetMapping Name="Vehiculos">
             <EntityTypeMapping TypeName="MEDECAModel.Vehiculo">
               <MappingFragment StoreEntitySet="Vehiculos">
+                <ScalarProperty Name="UnidadDistancia" ColumnName="UnidadDistancia" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
                 <ScalarProperty Name="Placa" ColumnName="Placa" />
                 <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
                 <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
@@ -892,6 +888,8 @@
           <EntitySetMapping Name="OrdenesTrabajos">
             <EntityTypeMapping TypeName="MEDECAModel.OrdenesTrabajo">
               <MappingFragment StoreEntitySet="OrdenesTrabajos">
+                <ScalarProperty Name="FechaPrometida" ColumnName="FechaPrometida" />
+                <ScalarProperty Name="FechaEntrega" ColumnName="FechaEntrega" />
                 <ScalarProperty Name="Diagnostico" ColumnName="Diagnostico" />
                 <ScalarProperty Name="Entregado" ColumnName="Entregado" />
                 <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
@@ -956,6 +954,7 @@
           <EntitySetMapping Name="InsumosProveedores">
             <EntityTypeMapping TypeName="MEDECAModel.InsumosProveedore">
               <MappingFragment StoreEntitySet="InsumosProveedores">
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
                 <ScalarProperty Name="Precio" ColumnName="Precio" />
                 <ScalarProperty Name="IdOrdenServicio" ColumnName="IdOrdenServicio" />
                 <ScalarProperty Name="IdInsumo" ColumnName="IdInsumo" />

@@ -27,13 +27,13 @@
                     <div class="row">
                         <div class="form-group col-md-6">
 
-                            <label>Identificacion</label> <span class="required"> *</span>
+                            <label>Identificacion</label>
                             <div class="form-group row">
                                 <div class="col-md-4">
-                                    <select class="form-control" ng-model="nuevoModel.TipoIdentificacion" required ng-options="tipoIdentificacion.Tipo as tipoIdentificacion.Tipo for tipoIdentificacion in tiposIdentificacion"></select>
+                                    <select class="form-control" ng-model="nuevoModel.TipoIdentificacion" ng-options="tipoIdentificacion.Tipo as tipoIdentificacion.Tipo for tipoIdentificacion in tiposIdentificacion"></select>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" required ng-unique="/api/Clientes/ExisteCliente" ng-modid="{{nuevoModel.IDCliente}}" ng-model="nuevoModel.Identificacion" class="form-control"
+                                    <input type="text" ng-unique="/api/Clientes/ExisteCliente" ng-modid="{{nuevoModel.IDCliente}}" ng-model="nuevoModel.Identificacion" class="form-control"
                                            ng-minlength="8" ng-maxlength="12" ng-class="{'required-dirty' : clientForm.Identificacion.$dirty && clientForm.Identificacion.$invalid}" name="Identificacion"
                                            ng-prevValue="{{editingModel.Identificacion}}" ng-disabled="!nuevoModel.TipoIdentificacion" placeholder="RNC o Cedula" />
 

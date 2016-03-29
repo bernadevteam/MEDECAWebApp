@@ -22,11 +22,11 @@ namespace MEDECAWebApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Cliente> Clientes()
+        public IEnumerable<object> Clientes()
         {
-            return db.Clientes.AsEnumerable().Select(x => new Cliente { Direccion = x.Direccion, Email = x.Email, IDCliente = x.IDCliente, 
+            return db.Clientes.AsEnumerable().Select(x => new  { Direccion = x.Direccion, Email = x.Email, IDCliente = x.IDCliente, 
                 Identificacion = x.Identificacion , TipoIdentificacion = x.TipoIdentificacion,
-            Nombre = x.Nombre, Telefono = x.Telefono, Favorito = x.Favorito});
+            Nombre = x.Nombre, Telefono = x.Telefono, Favorito = x.Favorito, CanDelete = x.Vehiculos.Count.Equals(0)});
         }
 
         [HttpGet]
@@ -61,6 +61,7 @@ namespace MEDECAWebApp.Controllers
                         Nombre = v.Combustible.Nombre
                     },
                     Kilometraje = v.Kilometraje,
+                    UnidadDistancia = v.UnidadDistancia,
                     Insumos = v.Insumos.Where( i => i.Activo).Select( i => new Insumo{
                         Nombre = i.Nombre,
                         IdInsumo = i.IdInsumo
@@ -70,9 +71,11 @@ namespace MEDECAWebApp.Controllers
                     Cliente = new Cliente { 
                     Nombre = x.Nombre},
                     IdVehiculo = v.IdVehiculo,
+                    Motor = v.Motor,
                     IdCliente = v.IdCliente,
                     IdModelo = v.IdModelo,
-                    IdCombustible = v.IdCombustible
+                    IdCombustible = v.IdCombustible,
+                    CanDelete = v.OrdenesTrabajos.Count.Equals(0)
                 }).ToList()
             });
         }
@@ -110,6 +113,7 @@ namespace MEDECAWebApp.Controllers
                         Nombre = v.Combustible.Nombre
                     },
                     Kilometraje = v.Kilometraje,
+                    UnidadDistancia = v.UnidadDistancia,
                     Insumos = v.Insumos.Where(i => i.Activo).Select(i => new Insumo
                     {
                         Nombre = i.Nombre,
@@ -122,15 +126,28 @@ namespace MEDECAWebApp.Controllers
                         Nombre = x.Nombre
                     },
                     IdVehiculo = v.IdVehiculo,
+                    Motor = v.Motor,
                     IdCliente = v.IdCliente,
                     IdModelo = v.IdModelo,
                     IdCombustible = v.IdCombustible,
-                    OrdenesTrabajos = v.OrdenesTrabajos.Select(ot => new OrdenesTrabajo
+                    OrdenesTrabajos = v.OrdenesTrabajos.Select(ot => new
                     {
                         Fallas = ot.Fallas,
                         Fecha = ot.Fecha,
+                        FechaEntrega = ot.FechaEntrega,
+                        FechaPrometida = ot.FechaPrometida,
                         Id = ot.Id,
                         Entregado = ot.Entregado,
+                        VehiculoOrden = new {
+                            Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
+                            IdVehiculo = v.IdVehiculo,
+                            Placa = v.Placa
+                        },
+                        Cliente = new Cliente {
+                            Nombre = x.Nombre,
+                            Favorito = x.Favorito,
+                            Telefono = x.Telefono
+                        },
                         NoOrden = ot.NoOrden,
                         Reparaciones = ot.Reparaciones,
                         Diagnostico = ot.Diagnostico,
@@ -140,7 +157,9 @@ namespace MEDECAWebApp.Controllers
                             Precio = ip.Precio,
                             IdInsumo = ip.IdInsumo,
                             IdOrdenServicio = ip.IdOrdenServicio,
+                            Proveedore = new Proveedore { Nombre = ip.Proveedore.Nombre},
                             IdProveedor = ip.IdProveedor,
+                            Cantidad = ip.Cantidad,
                             Insumo = new Insumo { 
                                 Activo = ip.Insumo.Activo,
                                 Nombre = ip.Insumo.Nombre,

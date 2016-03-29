@@ -54,6 +54,13 @@ angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial',
              templateUrl: '/partials/viewVehicle.html'
          }
      })
+       .directive('viewOrder', function () {
+           return {
+               restrict: 'E',
+               scope: false,
+               templateUrl: '/partials/viewOrder.html'
+           }
+       })
     .directive('loading', ['$http', function ($http) {
     return {
         restrict: 'A',

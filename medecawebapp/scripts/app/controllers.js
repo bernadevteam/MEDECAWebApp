@@ -326,6 +326,7 @@ angular.module('medecaApp')
         $scope.tiposIdentificacion = [{ Tipo: 'RNC' }, { Tipo: 'CED' }];
         $scope.isOrden = $scope.$parent.isOrden;
         $scope.ordenClients = null;
+        $scope.deleteCliente = {};
 
         if (!$scope.isOrden) {
             modelosFactory.get().then(function (response) {
@@ -334,6 +335,7 @@ angular.module('medecaApp')
         }
         $scope.agregar = function () {
             modelosFactory.agregar($scope.nuevoModel).then(function (response) {
+                response.data.CanDelete = true;
                 if ($scope.isOrden) {
                     $scope.ordenClients.push(response.data);
                 } else {
@@ -370,6 +372,17 @@ angular.module('medecaApp')
             model.editar = false;
         };
 
+        $scope.eliminarCliente = function (model) {
+            $scope.deleteCliente = model;
+        };
+
+        $scope.eliminar = function () {
+            modelosFactory.eliminar($scope.deleteCliente).then(function () {
+                var i = $scope.modelos.indexOf($scope.deleteCliente);
+                $scope.modelos.splice(i, 1);
+            });
+        };
+
         $scope.restablecerNuevo = function () {
             reset();
         };
@@ -388,13 +401,15 @@ angular.module('medecaApp')
             $scope.insumos = {};
             $scope.models = {};
             $scope.marcas = {};
+            $scope.deleteVehiculo = {};
+            $scope.deleteCliente = {};
+
             $scope.buscarInsumo = null;
             $scope.selInsumo = null;
             $scope.SelCliente = null;
             $scope.isOrden = $scope.$parent.isOrden;
-
             $scope.editingModel = {};
-            $scope.combustibles = [{ IdCombustible: 1, Nombre: 'Gas Natural' }, { IdCombustible: 2, Nombre: 'GLP' }, { IdCombustible: 3, Nombre: 'Gasolina' }];
+            $scope.combustibles = [{ IdCombustible: 1, Nombre: 'GLP' }, { IdCombustible: 2, Nombre: 'Gasolina' }, { IdCombustible: 3, Nombre: 'Gas Natural' }, { IdCombustible: 4, Nombre: 'Diesel' }];
             $scope.nuevoModel = { Insumos: [] };
             if (!$scope.isOrden) {
                 clientesFact.getVehiculos().then(function (response) {
@@ -460,6 +475,18 @@ angular.module('medecaApp')
                 $scope.SelectedMarca = $filter('getByKey')($scope.marcas, 'IdMarca', model.Modelo.IdMarca);
                 angular.extend($scope.nuevoModel, $scope.editingModel);
                 $scope.nuevoModel.editar = true;
+            };
+
+            $scope.eliminarVehiculo = function (cl, model) {
+                $scope.deleteCliente = cl;
+                $scope.deleteVehiculo = model;
+            };
+
+            $scope.eliminar = function () {
+                modelosFactory.eliminar($scope.deleteVehiculo).then(function () {
+                    var i = $scope.deleteCliente.Vehiculos.indexOf($scope.deleteVehiculo);
+                    $scope.deleteCliente.Vehiculos.splice(i, 1);
+                });
             };
 
             $scope.restablecerNuevo = function () {
@@ -554,7 +581,6 @@ angular.module('medecaApp')
         $scope.selInsumosProvs = [];
         $scope.selInsumo = null;
         $scope.selProveedor = null;
-        $scope.test = 'test';
 
         clientesFact.getWithVeh().then(function (response) {
             $scope.modelos = response.data;
@@ -567,6 +593,9 @@ angular.module('medecaApp')
             });
         });
 
+        $scope.parseOrden = function (noorden) {
+            return noorden ? "No. " + "00000".slice(0, -noorden.length) + noorden : "";
+        };
         $scope.totalPreciosInsumos = function () {
             var total = 0;
             for (var ins in $scope.nuevoModel.InsumosProveedores) {
@@ -588,11 +617,15 @@ angular.module('medecaApp')
             angular.extend($scope.nuevoModel, model);
             if (model != null) {
                 $scope.nuevoModel.Fecha = new Date(model.Fecha);
+                $scope.nuevoModel.FechaEntrega = model.FechaEntrega ? new Date(model.FechaEntrega) : null;
+                $scope.nuevoModel.FechaPrometida = model.FechaPrometida ? new Date(model.FechaPrometida) : null;
                 $scope.nuevoModel.editar = true;
                 for (var i in model.InsumosProveedores) {
                     var ins = model.InsumosProveedores[i].Insumo;
                     ins.IdProveedor = model.InsumosProveedores[i].IdProveedor;
                     ins.Precio = model.InsumosProveedores[i].Precio;
+                    ins.Cantidad = model.InsumosProveedores[i].Cantidad;
+                    ins.NombreProveedor = model.InsumosProveedores[i].Proveedore.Nombre
                     $scope.selInsumosProvs.push(ins);
                 }
             } else {
@@ -626,7 +659,7 @@ angular.module('medecaApp')
 
             for (var i in $scope.selInsumosProvs) {
                 var selInsProv = $scope.selInsumosProvs[i];
-                var newItem = { IdInsumo: selInsProv.IdInsumo, IdProveedor: selInsProv.IdProveedor, Precio: selInsProv.Precio, Insumo: selInsProv };
+                var newItem = { IdInsumo: selInsProv.IdInsumo, IdProveedor: selInsProv.IdProveedor, Precio: selInsProv.Precio, Cantidad: selInsProv.Cantidad, Insumo: selInsProv };
 
                 $scope.nuevoModel.InsumosProveedores.push(newItem);
             }
@@ -645,7 +678,7 @@ angular.module('medecaApp')
         }
 
         $scope.querySearch = function (query, items) {
-            var results = query ? items.filter(createFilterFor(query)) : [];
+            var results = query && items ? items.filter(createFilterFor(query)) : [];
             return results;
         }
 

@@ -36,6 +36,8 @@ namespace MEDECAWebApp.Controllers
                 IdVehiculo = x.IdVehiculo,
                 Insumos = x.Insumos.Select(i => new Insumo { IdInsumo = i.IdInsumo, Nombre = i.Nombre, Activo = i.Activo}).ToList(),
                 Kilometraje = x.Kilometraje,
+                UnidadDistancia = x.UnidadDistancia,
+
                 NoChasis = x.NoChasis,
                 Placa = x.Placa,
                 Info = Models.VehiculoModel.GetInfo(x)
@@ -109,6 +111,7 @@ namespace MEDECAWebApp.Controllers
                 }).ToList();
                 vehiculo.Info = string.Format("{0} {1} {2}", selModelo.VehiculoMarca.Nombre, selModelo.Nombre, vehiculo.Anio);
                 vehiculo.Modelo = selModelo;
+                vehiculo.Combustible.Nombre = vh.Combustible.Nombre;
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, vehiculo);
 
@@ -178,9 +181,13 @@ namespace MEDECAWebApp.Controllers
                 anew.IdVehiculo = newVeh.IdVehiculo;
                 anew.Insumos = insumos;
                 anew.Kilometraje = newVeh.Kilometraje;
+                anew.UnidadDistancia = newVeh.UnidadDistancia;
                 anew.Modelo = selModelo;
                 anew.NoChasis = newVeh.NoChasis;
                 anew.Placa = newVeh.Placa;
+                anew.CanDelete = true;
+                anew.Combustible.Nombre = newVeh.Combustible.Nombre;
+
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, anew);
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = vehiculo.IdVehiculo }));
                 return response;
@@ -200,6 +207,8 @@ namespace MEDECAWebApp.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
+
+            vehiculo.Insumos.Clear();
 
             db.Vehiculos.Remove(vehiculo);
 

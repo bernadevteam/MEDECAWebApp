@@ -60,13 +60,16 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.OrdenesTrabajos.AddOrUpdate(ordenestrabajo);
+                try
+                {
+                    db.OrdenesTrabajos.AddOrUpdate(ordenestrabajo);
 
                 var ot = db.OrdenesTrabajos.Find(ordenestrabajo.Id);
                 ot.Servicios.Clear();
                 ot.InsumosProveedores.Clear();
+                    db.SaveChanges();
 
-                foreach (var servicio in db.Servicios)
+                    foreach (var servicio in db.Servicios)
                 {
                     if (ordenestrabajo.Servicios.Any(s => s.Id.Equals(servicio.Id)))
                     {
@@ -79,14 +82,13 @@ namespace MEDECAWebApp.Controllers
                     var ins = db.Insumos.Find(insProv.IdInsumo);
                     var prov = db.Proveedores.Find(insProv.IdProveedor);
 
-                    ot.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio});
+                    ot.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad});
                 }
                 
-                try
-                {
+                
                     db.SaveChanges();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
@@ -124,9 +126,9 @@ namespace MEDECAWebApp.Controllers
                     var ins = db.Insumos.Find(insProv.IdInsumo);
                     var prov = db.Proveedores.Find(insProv.IdProveedor);
 
-                    ordenestrabajo.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio });
+                    ordenestrabajo.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad });
                 }
-
+                ordenestrabajo.NoOrden = db.OrdenesTrabajos.Max(ot => ot.NoOrden).Value + 1;
                 db.OrdenesTrabajos.Add(ordenestrabajo);
                 db.SaveChanges();
 
@@ -141,6 +143,7 @@ namespace MEDECAWebApp.Controllers
                             IdInsumo = ip.IdInsumo,
                             IdOrdenServicio = ip.IdOrdenServicio,
                             IdProveedor = ip.IdProveedor,
+                            Cantidad = ip.Cantidad,
                             Insumo = new Insumo
                             {
                                 Activo = ip.Insumo.Activo,

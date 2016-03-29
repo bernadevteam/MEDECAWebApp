@@ -139,6 +139,10 @@ angular.module('medecaApp')
             return $http.put(url, model);
         };
 
+        modelFact.eliminar = function (model) {
+            return $http.delete(url + '?id=' + model.IdVehiculo);
+        };
+
         return modelFact;
     }])
     .factory('clientesFactory', ['$http', function ($http, baseURL)  {
@@ -162,6 +166,10 @@ angular.module('medecaApp')
 
         modelFact.editar = function (model) {
             return $http.put(url, model);
+        };
+
+        modelFact.eliminar = function (model) {
+            return $http.delete(url + '?id=' + model.IDCliente);
         };
 
         return modelFact;
