@@ -1,0 +1,49 @@
+﻿<form name="modeloForm">
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="manageModelo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Marcas & Modelos</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Marca</label><span class="required"> *</span>
+                    <input type="text" required ng-model="nuevoModel.Nombre" class="form-control"/>
+                    <hr />
+                    <label>Modelos</label>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="modelo in nuevoModel.Modelos">
+                          <span ng-show="!modelo.Deleting">
+                              <input type="text" class="form-control" ng-model="modelo.Nombre" />
+                              <span class="pull-right"><a class="btn btn-danger" ng-if="modelo.CanDelete" ng-click="modelo.Deleting = true"><i class="fa fa-trash-o"></i></a></span>
+                          </span>
+                            <div ng-show="modelo.Deleting" class="confirm-delete-section">
+                                <strong>{{modelo.Nombre}}</strong> <span><a href="#" ng-click="eliminarModelo(nuevoModel, modelo)">Eliminar <i class="fa fa-trash-o"></i></a> <a href="#" ng-click="modelo.Deleting = false">Cancelar</a></span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-repeat="modelo in nuevosModelos">
+                            <input type="text" class="form-control" ng-model="modelo.Nombre" />
+                            <span class="pull-right"><a class="btn btn-danger" ng-if="modelo.CanDelete" ng-click="eliminarTempModelo(modelo)"><i class="fa fa-trash-o"></i></a></span>
+                        </li>
+                        </ul>
+                    <div class="row">
+                        <div class="col-sm-8 col-md-10">
+                            <input type="text" class="form-control" ng-model="nuevoModelo.Nombre" placeholder="Agregar modelo"/>
+                        </div><div class="col-sm-4 col-md-2">
+                            <button type="button" class="btn btn-success" ng-click="agregarModelo()"
+                                    ng-disabled="!nuevoModelo.Nombre || nuevoModelo.Nombre.length < 3">
+                                <i class="fa fa-plus-square"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal" ng-if="nuevoModel.Modelos.length < 1" ng-click="eliminarMarca(nuevoModel)">Eliminar</a>
+                    <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo('#manageModelo .modal-footer')" >Cerrar</a>
+                    <a class="btn btn-success" ng-disabled="modeloForm.$invalid" ng-click="nuevoModel.IdMarca ? guardar('#manageModelo .modal-footer') : agregar('#manageModelo .modal-footer')" data-dismiss="modal">Guardar</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>

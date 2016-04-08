@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Clientes";
+    ViewBag.Title = "Proveedores";
 }
 
 <div class="row">
@@ -11,6 +11,7 @@
                 </div>
             </div>
 <div class="row" ng-controller="ProveedoresController">
+    <manage-provider></manage-provider>
                 <div class="col-lg-5 col-sm-5 col-xs-8">
 
     <table class="table table-striped">
@@ -25,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="proveedor in modelos">
+        <tr ng-repeat="proveedor in proveedores">
             <td>
                 {{proveedor.Nombre}}
             </td>
@@ -36,7 +37,7 @@
                 {{proveedor.Telefono}}
             </td>
             <td>
-               <button type="submit" class="btn btn-warning" ng-click="editar(proveedor)" data-toggle="modal" data-target="#modelForm"> <i class="fa fa-edit"></i></button>
+               <button type="submit" class="btn btn-warning" ng-click="editar(proveedor)" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-edit"></i></button>
             </td>
         </tr>
             </tbody>
@@ -44,65 +45,6 @@
 
                     </div>
                 <div class="col-lg-5 col-sm-5 col-xs-8">
-               <button  class="btn btn-success" data-toggle="modal" data-target="#modelForm" > <i class="fa fa-plus-square"></i></button>
+               <button  class="btn btn-success" data-toggle="modal" data-target="#proveedoresForm" > <i class="fa fa-plus-square"></i></button>
 </div>
-            <form name="modelForm">
-
-                    <div class="modal fade" tabindex="-1" role="dialog" id="modelForm">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="star" ng-show="nuevoModel.Favorito"></span> 
-        <h4 class="modal-title">{{nuevoModel.editar ? 'Modificar' : 'Agregar'}} Proveedor </h4> 
-      </div>
-      <div class="modal-body">
-
-  <div class="form-group">
-    <label>Proveedor</label>  <span class="required"> *</span>
-    <input type="text" class="form-control" placeholder="Nombre del proveedor" required ng-model="nuevoModel.Nombre" min-length="4">
-  </div>
-                  <div class="checkbox">
-    <label>
-      <input type="checkbox" ng-model="nuevoModel.Activo"> Activo
-    </label>
-  </div>
-          <div class="row">
-              <div class="col-md-6">
-  <div class="form-group ">
-
-        <label>RNC</label>
-                
-                       <input type="text" ng-unique="/api/Proveedores/ExisteRNC" ng-modid="{{nuevoModel.IdProveedor}}" ng-model="nuevoModel.RNC" class="form-control" 
-                           ng-minlength="8" ng-maxlength="12" ng-class="{'required-dirty' : modelForm.RNC.$dirty && modelForm.RNC.$invalid}" name="RNC" 
-                           ng-prevValue="{{editingModel.RNC}}"/>
-
-  </div>
-
-              </div>
-              <div class="col-md-6">
-          <div class="form-group ">
-    <label>Tel&eacute;fono</label>
-    <input type="tel" class="form-control" placeholder="xxx-xxx-xxxxx" ng-model="nuevoModel.Telefono">
-  </div>
-          </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-
-              <div ng-show="modelForm.RNC.$error.unique && modelForm.RNC.$dirty" class="alert alert-danger" role="alert">
-    Este n&uacute;mero de <strong>RNC</strong> ya esta asociado al proveedor <strong>{{uniquemsg}}</strong>.
-  </div>
-  </div>
-</div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()" >Cerrar</button>
-          <button type="submit" class="btn btn-success" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar(nuevoModel)" data-dismiss="modal">Guardar</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-</form>
-
     </div>

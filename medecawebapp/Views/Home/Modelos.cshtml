@@ -1,75 +1,42 @@
 ﻿@{
-    ViewBag.Title = "Modelos";
+    ViewBag.Title = "Marcas & Modelos";
 }
 
   <div class="row">
                 <div class="col-lg-12">
                     <div class="page-header">
-                    <h1 >Modelos de Vehiculos</h1>
-                    <h5>En este modulo podra añadir y editar modelos de Vehiculos.</h5>
+                    <h1 >Marcas & Modelos de Vehiculos</h1>
+                    <h5>En este modulo podra añadir / editar marcas y modelos de Vehiculos.</h5>
                         </div>
                 </div>
             </div>
 <div class="row" ng-controller="ModelosController">
-                <div class="col-lg-5 col-sm-5 col-xs-8">
-    <table class="table table-striped">
-        <thead>
-          <tr>
-              <th>Marca</th>  
+        <div class="col-md-12">
+            <div class="input-group custom-search-form">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#manageModelo" data-backdrop="static" data-keyboard="false"
+                            ng-click="addModel()">
+                        <i class="fa fa-plus-square"></i>
+                    </button>
+                    <button class="btn btn-default" type="button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
 
-                 <th>
-            Modelo
-        </th>
-           </tr>
-            <tr>
-                <th></th>
-                <th>
-                    <input type="text" class="form-control" placeholder="Buscar Modelo" ng-model="filtrarNombre"/>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="modelo in modelos | orderObjectBy : 'Nombre' | filter: {Nombre: filtrarNombre}">
-            <td>
-                 <span ng-show="!modelo.editar">
-                {{modelo.VehiculoMarca.Nombre}}
-                    </span>
-                 <select class="form-control" ng-model="nuevoModel.VehiculoMarca" ng-options="marca.Nombre for marca in marcas"
-                     ng-show="modelo.editar"
-                     ></select>
-            </td>
-            <td>
-                <span ng-show="!modelo.editar">
-                {{modelo.Nombre}}
-                    </span>
-                <input class="form-control" type="text" name="Modelo" ng-model="nuevoModel.Nombre" ng-show="modelo.editar"/>
-            </td>
-            <td>
-               <button type="submit" class="btn btn-warning" ng-click="editar(modelo)" ng-show="!modelo.editar"> <i class="fa fa-edit"></i></button>
-               <button type="submit" class="btn btn-success" ng-click="guardar(modelo)" ng-show="modelo.editar" 
-                   ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3 || !nuevoModel.IdMarca"
-                   > 
-                   <i class="fa fa-check-square-o"></i></button>
-               <button type="submit" class="btn btn-danger" ng-click="cancelarEdicion(modelo)" ng-show="modelo.editar"> <i class="fa fa-close"></i></button>
-            </td>
-        </tr>
-            </tbody>
-        <tfoot ng-show="!nuevoModel.editar">
-        <tr>
-            <td>
-                 <select class="form-control" ng-model="nuevoModel.VehiculoMarca" ng-options="marca as marca.Nombre for marca in marcas"></select>
-            </td>
+                <input type="text" class="form-control" placeholder="Escriba aqu&iacute; la marca que desea buscar..." ng-disabled="!marcas"
+                       ng-model="filter" >
 
-               <td>
-                <input class="form-control" type="text" name="Nombre" ng-model="nuevoModel.Nombre" placeholder="Escriba aqu&iacute; el nombre del Modelo " />
-            </td>
-            <td>
-               <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3 || !nuevoModel.VehiculoMarca"> <i class="fa fa-plus-square" ></i></button>
-            </td>
-        </tr>
-        </tfoot>
-    </table>
+            </div>
 
+        </div>
+
+                <div class="col-md-12">
+                    <div style="display:inline-block" class="panel panel-red flex-item" ng-repeat="marca in marcas | filter: filter">
+                        <div class="panel-heading" role="tab" data-toggle="modal"
+                             data-backdrop="static" data-keyboard="false" data-target="#manageModelo" style="cursor:pointer" ng-click="editar(marca)">
+                            <h4 class="panel-title">{{marca.Nombre}}</h4>
+                        </div>
                     </div>
-    </div>
+                    </div>
+<manage-model></manage-model>    
+</div>
