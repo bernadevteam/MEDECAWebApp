@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -61,15 +62,16 @@ namespace MEDECAWebApp.Controllers
         }
 
         // POST api/Servicios
-        public HttpResponseMessage PostServicio(Servicio servicio)
+        public HttpResponseMessage PostServicios(Servicio[] servicios)
         {
             if (ModelState.IsValid)
             {
-                db.Servicios.Add(servicio);
+                foreach (Servicio serv in servicios) {
+                    db.Servicios.AddOrUpdate(serv);
+                }
                 db.SaveChanges();
-
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, servicio);
-                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = servicio.Id }));
+                var serviciosRes = db.Servicios.Select(s => new Servicio { Id = s.Id, Nombre = s.Nombre});
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, serviciosRes);
                 return response;
             }
             else

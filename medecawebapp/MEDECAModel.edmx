@@ -229,6 +229,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrdenesTrabajos_Vehiculos">
+          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculos">
+              <PropertyRef Name="IdVehiculo" />
+            </Principal>
+            <Dependent Role="OrdenesTrabajos">
+              <PropertyRef Name="IdVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vehiculos_Clientes">
           <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
           <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="*" />
@@ -354,6 +366,10 @@
           <AssociationSet Name="FK_OrdenesServicios_Servicios" Association="Self.FK_OrdenesServicios_Servicios">
             <End Role="Servicios" EntitySet="Servicios" />
             <End Role="OrdenesServicios" EntitySet="OrdenesServicios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdenesTrabajos_Vehiculos" Association="Self.FK_OrdenesTrabajos_Vehiculos">
+            <End Role="Vehiculos" EntitySet="Vehiculos" />
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
           </AssociationSet>
           <AssociationSet Name="FK_Vehiculos_Clientes" Association="Self.FK_Vehiculos_Clientes">
             <End Role="Clientes" EntitySet="Clientes" />

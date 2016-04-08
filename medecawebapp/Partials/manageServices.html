@@ -1,0 +1,47 @@
+﻿<form name="serviciosForm">
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="manageServices">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Servicios</h4>
+                </div>
+                <div class="modal-body">
+                   
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="servicio in serviciosPivot">
+                          <span ng-show="!servicio.Deleting">
+                              <input type="text" class="form-control" ng-model="servicio.Nombre" />
+                              <span class="pull-right"><a class="btn btn-danger" ng-if="servicio.CanDelete" ng-click="servicio.Deleting = true"><i class="fa fa-trash-o"></i></a></span>
+                          </span>
+                            <div ng-show="servicio.Deleting" class="confirm-delete-section">
+                                <strong>{{servicio.Nombre}}</strong> <span><a href="#" ng-click="eliminarservicio(servicio)">Eliminar <i class="fa fa-trash-o"></i></a> <a href="#" ng-click="modelo.Deleting = false">Cancelar</a></span>
+                            </div>
+                        </li>
+                        <li class="list-group-item" ng-repeat="servicio in serviciosTemp">
+                            <input type="text" class="form-control" ng-model="servicio.Nombre" />
+                            <span class="pull-right"><a class="btn btn-danger" ng-click="eliminarServicioTemp(servicio)"><i class="fa fa-trash-o"></i></a></span>
+                        </li>
+
+                        </ul>
+                    <div class="row">
+                        <div class="col-sm-8 col-md-10">
+                            <input type="text" class="form-control" ng-model="servicioTemp.Nombre" placeholder="Agregar Servicio" />
+                        </div><div class="col-sm-4 col-md-2">
+                            <button type="button" class="btn btn-success" ng-click="agregarServicio()"
+                                    ng-disabled="!servicioTemp.Nombre || servicioTemp.Nombre.length < 3">
+                                <i class="fa fa-plus-square"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal" ng-if="nuevoModel.servicios.length < 1" ng-click="eliminarMarca(nuevoModel)">Eliminar</a>
+                    <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerServicio('#manageServices .modal-footer')" >Cerrar</a>
+                    <a class="btn btn-success" ng-disabled="serviciosForm.$invalid" ng-click="guardarServicios('#manageServices .modal-footer')" data-dismiss="modal">Guardar</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>

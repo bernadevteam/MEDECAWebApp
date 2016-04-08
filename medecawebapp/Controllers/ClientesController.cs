@@ -141,7 +141,12 @@ namespace MEDECAWebApp.Controllers
                         VehiculoOrden = new {
                             Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
                             IdVehiculo = v.IdVehiculo,
-                            Placa = v.Placa
+                            Placa = v.Placa,
+                            Insumos = v.Insumos.Where(i => i.Activo).Select(i => new Insumo
+                            {
+                                Nombre = i.Nombre,
+                                IdInsumo = i.IdInsumo
+                            })
                         },
                         Cliente = new Cliente {
                             Nombre = x.Nombre,

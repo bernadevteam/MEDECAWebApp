@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link href="~/Content/Site.css?V1.0.3" rel="stylesheet" />
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/img/icon.png" rel="icon" type="image/png"  />
     <link href="~/Content/metisMenu.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
@@ -85,7 +86,7 @@
                 </li>
                 <!-- /.dropdown -->
                 <li>
-                   <strong> V1.0.1</strong>
+                   <strong> V1.0.3</strong>
                 </li>
             </ul>
             <!-- /.navbar-top-links -->
@@ -110,10 +111,7 @@
 
                                 </li>
                                 <li>
-                                    @Html.ActionLink("Marcas", "VehiculosMarcas", "Home")
-                                </li>
-                                <li>
-                                                                        @Html.ActionLink("Modelos", "Modelos", "Home")
+                                                                        @Html.ActionLink("Marcas & Modelos", "Modelos", "Home")
                                 </li>
                                  <li>
                             <a href="@Url.Action("Proveedores")">Proveedores</a>
@@ -174,11 +172,12 @@
     <script src="~/Scripts/angular-ui/dirPagination.js"></script>
 
 
-    <script src="~/Scripts/app/app.js"></script>
+    <script src="~/Scripts/app/app.js?V1.0.3"></script>
     <script src="~/Scripts/app/checklist-model.js"></script>
-    <script src="~/Scripts/app/filters.js"></script>
+    <script src="~/Scripts/app/filters.js?V1.0.2"></script>
     <script src="~/Scripts/app/ng-order-object-by.js.js"></script>
-    <script src="~/Scripts/app/services.js"></script>
-    <script src="~/Scripts/app/controllers.js"></script>
+    <script src="~/Scripts/app/services.js?V1.0.3"></script>
+    <script src="~/Scripts/app/controllers.js?V1.0.3.1"></script>
+    <script src="~/Scripts/app/directives.js?V1.0.3"></script>
 </body>
 </html>

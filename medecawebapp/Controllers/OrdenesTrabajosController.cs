@@ -143,6 +143,10 @@ namespace MEDECAWebApp.Controllers
                             IdInsumo = ip.IdInsumo,
                             IdOrdenServicio = ip.IdOrdenServicio,
                             IdProveedor = ip.IdProveedor,
+                            Proveedore = new Proveedore
+                            {
+                                Nombre = ip.Proveedore.Nombre
+                            },
                             Cantidad = ip.Cantidad,
                             Insumo = new Insumo
                             {

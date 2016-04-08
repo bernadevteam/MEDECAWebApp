@@ -20,6 +20,11 @@ angular.module('medecaApp')
 	    vehMarcFact.editar = function (marca) {
 	        return $http.put('/api/VehiculoMarcas/', marca);
 	    };
+
+	    vehMarcFact.eliminar = function (model) {
+	        return $http.delete('/api/VehiculoMarcas/' + '?id=' + model);
+	    };
+
 	    return vehMarcFact;
 	}])
     .factory('citasFactory', ['$http', function ($http, baseURL) {
@@ -63,6 +68,10 @@ angular.module('medecaApp')
 
     modelFact.editar = function (model) {
         return $http.put(url, model);
+    };
+
+    modelFact.eliminar = function (model) {
+        return $http.delete(url + '?id=' + model.IdModelo);
     };
 
     return modelFact;

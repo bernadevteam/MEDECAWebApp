@@ -11,7 +11,7 @@
                     <h3>{{SelectedVehiculo.Info}} <small>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</small></h3>
                     <hr />
                     <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
-                    <p class="">Prometido para: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
+                    <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
                     <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
                     <hr />
 
@@ -32,7 +32,7 @@
                     <p >
                         <table class="table table-striped" ng-show="selInsumosProvs.length != 0">
                             <tbody>
-                                <tr ng-repeat="insumo in selInsumosProvs">
+                                <tr ng-repeat="insumo in selInsumosProvs ">
                                     <td>
                                         <strong>{{insumo.Cantidad}}</strong> {{insumo.Nombre}}
                                     </td>
@@ -61,7 +61,10 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                    <a class="btn btn-warning" onclick="switchModal(this, '#nuevaOrdenTrabajo')">Modificar</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+<script>
+</script>

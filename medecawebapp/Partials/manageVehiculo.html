@@ -17,12 +17,22 @@
 
                         <div class="col-md-4">
                             <label>Marca</label><span class="required"> *</span>
-                            <select class="form-control" ng-model="SelectedMarca" ng-options="marca as marca.Nombre for marca in marcas"></select>
+                            <div>
+                                <button type="button" class="btn btn-success" onclick="switchModal(this, '#manageModelo')" ng-click="setMarca({})">
+                                    <i class="fa fa-plus-square"></i>
+                                </button>
+                                <select class="form-control" ng-model="SelectedMarca" ng-options="marca as marca.Nombre for marca in marcas"></select>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label>Modelo</label><span class="required"> *</span>
-                            <select class="form-control" ng-model="nuevoModel.IdModelo" required ng-options="modelo.IdModelo as modelo.Nombre for modelo in SelectedMarca.Modelos"></select>
-                        </div>
+                            <div>
+                                <button type="button" class="btn btn-success" ng-click="setMarca(SelectedMarca)" onclick="switchModal(this, '#manageModelo')">
+                                    <i class="fa fa-plus-square"></i>
+                                </button>
+                                <select class="form-control" ng-model="nuevoModel.IdModelo" required ng-options="modelo.IdModelo as modelo.Nombre for modelo in SelectedMarca.Modelos"></select>
+                            </div>
+                            </div>
                         <div class="col-md-2">
                             <label>A&ntilde;o</label><span class="required"> *</span>
                             <input type="number" required ng-model="nuevoModel.Anio" class="form-control" ng-maxlength="4" ng-minlength="4" ng-class="{'required-dirty' : vehiculoForm.Anio.$dirty && vehiculoForm.Anio.$invalid}" name="Anio" />
@@ -118,3 +128,5 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </form>
+{{modalCaller='#manageVehiculo';""}}
+<manage-model ng-controller="ModelosController"></manage-model>

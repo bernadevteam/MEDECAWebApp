@@ -339,6 +339,9 @@
     <Content Include="MEDECAModel.edmx.diagram">
       <DependentUpon>MEDECAModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Partials\manageServices.html" />
+    <Content Include="Partials\manageModel.html" />
+    <Content Include="Partials\manageProviders.html" />
     <Content Include="Partials\viewOrder.html" />
     <Content Include="Partials\viewVehicle.html" />
     <Content Include="Partials\viewClient.html" />
@@ -811,6 +814,7 @@
     <Content Include="Scripts\angular\angular.min.js" />
     <Content Include="Scripts\app\checklist-model.js" />
     <Content Include="Scripts\app\controllers.js" />
+    <Content Include="Scripts\app\directives.js" />
     <Content Include="Scripts\app\filters.js" />
     <Content Include="Scripts\app\ng-order-object-by.js.js" />
     <Content Include="Scripts\app\services.js" />

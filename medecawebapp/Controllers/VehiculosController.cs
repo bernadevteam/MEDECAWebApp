@@ -134,7 +134,9 @@ namespace MEDECAWebApp.Controllers
 
 
                 db.SaveChanges();
-                var newVeh = db.Vehiculos.Find(vehiculo.IdVehiculo);
+                var newVeh = db.Vehiculos
+                    .Include(vehi => vehi.Combustible)
+                    .First(veh => veh.IdVehiculo.Equals(vehiculo.IdVehiculo));
 
                 foreach (var insumo in db.Insumos)
                 {
@@ -186,7 +188,10 @@ namespace MEDECAWebApp.Controllers
                 anew.NoChasis = newVeh.NoChasis;
                 anew.Placa = newVeh.Placa;
                 anew.CanDelete = true;
-                anew.Combustible.Nombre = newVeh.Combustible.Nombre;
+                anew.Combustible = new Combustible {
+                    IdCombustible = newVeh.Combustible.IdCombustible,
+                    Nombre = newVeh.Combustible.Nombre
+                };
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, anew);
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = vehiculo.IdVehiculo }));

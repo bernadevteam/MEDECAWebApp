@@ -23,7 +23,7 @@ namespace MEDECAWebApp
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css",
+            bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css", "~/Content/sb-admin-2.css", "~/Content/timeline.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

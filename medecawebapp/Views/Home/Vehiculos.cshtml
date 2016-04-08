@@ -6,7 +6,7 @@
                     <div class="page-header">
                     <h1 >Veh&iacute;culos</h1>
                     <h5>En este modulo podra añadir y editar Veh&iacute;culos.</h5>
-                        </div>
+                        </div> 
                 </div>
             </div>
 <div class="row" ng-controller="VehiculosController">
@@ -25,7 +25,6 @@
                             </div>
             </div>
              <div class="col-md-2">
-               <button  class="btn btn-success" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false"> <i class="fa fa-plus-square"></i></button>
             </div>
         </div>
     </div>
@@ -33,7 +32,6 @@
             <div class="col-md-12" style="margin-top:5px;margin-left:1px;">
         <div class="col-md-12 flex-box md-padding" ng-repeat="cliente in clientes | porclienteoplaca: filter.toLowerCase()" layout-xs="column" layout="row">
                      <div class="panel panel-default" flex-xs flex-gt-xs="22" layout="column" style="margin-right:5px"  ng-repeat="vehiculo in cliente.Vehiculos | getAllByKey: (cliente.PorPlaca ? 'Placa' : null ) : filter">
-
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
@@ -71,8 +69,10 @@
     </div>
 </a>
                     </div>
-            </div>
-                </div>
+            <button class="btn btn-success" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false"> <i class="fa fa-plus-square"></i></button>
+        </div>
+              
+              </div>
         </div>
     <manage-vehiculo></manage-vehiculo>
     <div class="modal fade" tabindex="-1" role="dialog" id="confirmDelete">

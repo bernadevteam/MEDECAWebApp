@@ -46,6 +46,11 @@ span.star:before {
     border-color:#ED1C24;
     background-color: #eee;
 }
+.flex-item {
+   flex-grow:1;
+   width: 18%;
+   margin: 10px;
+}
 .modal-header {
     padding:9px 15px;
     border-bottom:1px solid #eee;
@@ -74,7 +79,7 @@ header, footer, nav, section {
 }
 
 .flex-box {
-    display:flexbox;flex-wrap:wrap;
+    display:flex;flex-wrap:wrap;
 }
 /* Styles for basic forms
 -----------------------------------------------------------*/
@@ -124,4 +129,29 @@ textarea {
 
 .validation-summary-valid {
     display: none;
+}
+
+.dropdown-marcas {
+    display: inline-block;
+    padding:25px 15px 15px 0;
+}
+
+.modal-huge-area{
+    height:450px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+}
+
+.list-group-item .form-control{
+    width:80%;
+    display:inline;
+}
+
+.confirm-delete-section{
+    text-align:center;
+}
+
+.btn-success ~ .form-control{
+    width:83.25%;
+    display:inline;
 }
