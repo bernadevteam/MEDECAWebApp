@@ -12,6 +12,8 @@
             </div>
 <div class="row" ng-controller="ProveedoresController">
     <manage-provider></manage-provider>
+    <confirm-delete elementname="Proveedor" objectelement="editingModel.Nombre" eliminar="eliminar()"></confirm-delete>
+
                 <div class="col-lg-5 col-sm-5 col-xs-8">
 
     <table class="table table-striped">
@@ -37,7 +39,8 @@
                 {{proveedor.Telefono}}
             </td>
             <td>
-               <button type="submit" class="btn btn-warning" ng-click="editar(proveedor)" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-edit"></i></button>
+               <button type="button" class="btn btn-warning" ng-click="editar(proveedor)" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-edit"></i></button>
+                <button type="button" class="btn btn-danger" ng-click="editar(proveedor)" data-toggle="modal" data-target="#confirmDelete" ng-if="proveedor.CanDelete"> <i class="fa fa-trash-o"></i></button>
             </td>
         </tr>
             </tbody>

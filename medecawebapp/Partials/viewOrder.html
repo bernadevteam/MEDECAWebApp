@@ -9,6 +9,9 @@
                 <div class="modal-body">
                    <h4><strong>{{SelectedCliente.Nombre}}</strong> <small>Tel. {{SelectedCliente.Telefono}}</small></h4>
                     <h3>{{SelectedVehiculo.Info}} <small>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</small></h3>
+                    <h5><label>VIN:</label> {{SelectedVehiculo.NoChasis}}
+                    </h5>
+                    <label>{{SelectedVehiculo.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.DistanciaRecorrida}}
                     <hr />
                     <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
                     <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
@@ -16,17 +19,11 @@
                     <hr />
 
                     <h4><strong>Aver&iacute;as</strong></h4>
-                    <p>
-                        {{nuevoModel.Fallas}}
-                    </p>
+                    <pre>{{nuevoModel.Fallas}}</pre>
                     <h4><strong>Diagn&oacute;stico</strong></h4>
-                    <p>
-                        {{nuevoModel.Diagnostico}}
-                    </p>
+                    <pre>{{nuevoModel.Diagnostico}}</pre>
                     <h4><strong>Reparaciones</strong></h4>
-                    <p>
-                        {{nuevoModel.Reparaciones}}
-                    </p>
+                    <pre>{{nuevoModel.Reparaciones}}</pre>
                     <hr />
                     <h4><strong>Insumos</strong> <span class="badge">{{selInsumosProvs.length}}</span></h4>
                     <p >

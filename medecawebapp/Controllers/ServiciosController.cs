@@ -17,11 +17,13 @@ namespace MEDECAWebApp.Controllers
         private MEDECAEntities db = new MEDECAEntities();
 
         // GET api/Servicios
-        public IEnumerable<Servicio> GetServicios()
+        public IEnumerable<object> GetServicios()
         {
-            return db.Servicios.AsEnumerable().Select( s => new Servicio(){
+            return db.Servicios.AsEnumerable().Select( s => new{
                 Id = s.Id,
-                Nombre = s.Nombre
+                Nombre = s.Nombre,
+                CanDelete = s.OrdenesTrabajos.Count.Equals(0),
+                Activo = s.Activo
             });
         }
 
@@ -38,9 +40,9 @@ namespace MEDECAWebApp.Controllers
         }
 
         // PUT api/Servicios/5
-        public HttpResponseMessage PutServicio(int id, Servicio servicio)
+        public HttpResponseMessage PutServicio( Servicio servicio)
         {
-            if (ModelState.IsValid && id == servicio.Id)
+            if (ModelState.IsValid)
             {
                 db.Entry(servicio).State = EntityState.Modified;
 
@@ -62,15 +64,13 @@ namespace MEDECAWebApp.Controllers
         }
 
         // POST api/Servicios
-        public HttpResponseMessage PostServicios(Servicio[] servicios)
+        public HttpResponseMessage PostServicios(Servicio servicio)
         {
             if (ModelState.IsValid)
             {
-                foreach (Servicio serv in servicios) {
-                    db.Servicios.AddOrUpdate(serv);
-                }
+                    db.Servicios.AddOrUpdate(servicio);
                 db.SaveChanges();
-                var serviciosRes = db.Servicios.Select(s => new Servicio { Id = s.Id, Nombre = s.Nombre});
+                var serviciosRes = servicio;
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, serviciosRes);
                 return response;
             }

@@ -60,6 +60,9 @@ namespace MEDECAWebApp.Controllers
             return View();
         }
 
-
+        public ActionResult Servicios()
+        {
+            return View();
+        }
     }
 }

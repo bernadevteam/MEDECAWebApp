@@ -12,38 +12,38 @@ app.filter('getByKey', function () {
         }
         return null;
     }
-}).filter('propsFilter', function() {
-  return function(items, props) {
-    var out = [];
+}).filter('propsFilter', function () {
+    return function (items, props) {
+        var out = [];
 
-    if (angular.isArray(items)) {
-      var keys = Object.keys(props);
-        
-      items.forEach(function(item) {
-        var itemMatches = false;
+        if (angular.isArray(items)) {
+            var keys = Object.keys(props);
 
-        for (var i = 0; i < keys.length; i++) {
-          var prop = keys[i];
-          var text = props[prop].toLowerCase();
-          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-            itemMatches = true;
-            break;
-          }
+            items.forEach(function (item) {
+                var itemMatches = false;
+
+                for (var i = 0; i < keys.length; i++) {
+                    var prop = keys[i];
+                    var text = props[prop].toLowerCase();
+                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                        itemMatches = true;
+                        break;
+                    }
+                }
+
+                if (itemMatches) {
+                    out.push(item);
+                }
+            });
+        } else {
+            // Let the output be the input untouched
+            out = items;
         }
 
-        if (itemMatches) {
-          out.push(item);
-        }
-      });
-    } else {
-      // Let the output be the input untouched
-      out = items;
-    }
-
-    return out;
-  };
+        return out;
+    };
 })
-    .filter("dataRangeFilter", function() {
+    .filter("dataRangeFilter", function () {
         return function (items, from, to) {
 
             var arrayToReturn = [];
@@ -60,19 +60,33 @@ app.filter('getByKey', function () {
             return arrayToReturn;
         };
     })
-    .filter('sumByKey', function() {
-         return function(data, key) {
-             if (typeof(data) === 'undefined' || typeof(key) === 'undefined') {
-                 return 0;
-             }
+        .filter('distanceUnit', function () {
+            return function (data) {
+                if (typeof (data) === 'undefined') {
+                    return '';
+                }
 
-             var sum = 0;
-             for (var i = data.length - 1; i >= 0; i--) {
-                 sum += parseFloat(data[i][key]);
-             }
+                return data == 'Km' ? 'Kilometraje' : 'Millaje';
+            };
+        })
+    .filter('vehicleInfo', function () {
+        return function (vehicle) {
+            return vehicle.Modelo.VehiculoMarca.Nombre + ' ' + vehicle.Modelo.Nombre + ' ' + vehicle.Anio;
+        };
+    })
+    .filter('sumByKey', function () {
+        return function (data, key) {
+            if (typeof (data) === 'undefined' || typeof (key) === 'undefined') {
+                return 0;
+            }
 
-             return sum;
-         };
+            var sum = 0;
+            for (var i = data.length - 1; i >= 0; i--) {
+                sum += parseFloat(data[i][key]);
+            }
+
+            return sum;
+        };
     })
     .filter('totalCal', function () {
         return function (data, props) {
@@ -163,7 +177,7 @@ app.filter('getByKey', function () {
         if (clienteoplaca != null && clienteoplaca.length > 2) {
             angular.forEach(model, function (cliente) {
                 if (cliente.Nombre.toLowerCase().indexOf(clienteoplaca) != -1) {
-                    items = [{exists:true}];
+                    items = [{ exists: true }];
                     return;
                 }
                 angular.forEach(cliente.Vehiculos, function (vehiculo) {

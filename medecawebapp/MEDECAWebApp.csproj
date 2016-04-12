@@ -339,6 +339,7 @@
     <Content Include="MEDECAModel.edmx.diagram">
       <DependentUpon>MEDECAModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Partials\confirmDelete.html" />
     <Content Include="Partials\manageServices.html" />
     <Content Include="Partials\manageModel.html" />
     <Content Include="Partials\manageProviders.html" />
@@ -1529,7 +1530,9 @@
     <Content Include="Scripts\sb-admin-2.js" />
     <Content Include="Scripts\select.js" />
     <Content Include="Scripts\select.min.js" />
+    <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="underscore-min.js" />
     <Content Include="Views\Home\Clientes.cshtml" />
     <Content Include="Views\Home\Vehiculos.cshtml" />
     <Content Include="Web.config">
@@ -1554,6 +1557,7 @@
     <Content Include="Views\Home\Reportes.cshtml" />
     <Content Include="Views\Home\Citas.cshtml" />
     <Content Include="Views\Home\Proveedores.cshtml" />
+    <Content Include="Views\Home\Servicios.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

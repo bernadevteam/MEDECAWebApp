@@ -29,7 +29,7 @@ angular.module('medecaApp')
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: '/partials/manageVehiculo.html?V1.0.3'
+             templateUrl: '/partials/manageVehiculo.html?V1.0.4'
          }
      })
        .directive('manageClient', function () {
@@ -57,7 +57,7 @@ angular.module('medecaApp')
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: '/partials/viewOrder.html?V1.0.3'
+               templateUrl: '/partials/viewOrder.html?V1.0.4'
            }
        })
          .directive('manageModel', function () {
@@ -74,6 +74,22 @@ angular.module('medecaApp')
               templateUrl: '/partials/manageProviders.html?V1.0.3'
           }
       })
+     .directive('confirmDelete', function () {
+         return {
+             restrict: 'EA',
+             scope: {
+                 objectname: '@elementname',
+                 objectelement: '=objectelement',
+                 'eliminar':'&'
+             },
+             controller: function ($scope) {
+                 $scope.deleteEl = function () {
+                     $scope.delete()();
+                 };
+             },
+             templateUrl: '/partials/confirmDelete.html?V1.0.4'
+         }
+     })
           .directive('manageServices', function () {
               return {
                   restrict: 'E',

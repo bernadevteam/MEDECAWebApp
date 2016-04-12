@@ -30,6 +30,7 @@ namespace MEDECAWebApp
         public string Diagnostico { get; set; }
         public Nullable<System.DateTime> FechaEntrega { get; set; }
         public Nullable<System.DateTime> FechaPrometida { get; set; }
+        public Nullable<double> DistanciaRecorrida { get; set; }
     
         public virtual Vehiculo Vehiculo { get; set; }
         public virtual ICollection<Servicio> Servicios { get; set; }

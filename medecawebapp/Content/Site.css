@@ -48,7 +48,6 @@ span.star:before {
 }
 .flex-item {
    flex-grow:1;
-   width: 18%;
    margin: 10px;
 }
 .modal-header {
@@ -154,4 +153,8 @@ textarea {
 .btn-success ~ .form-control{
     width:83.25%;
     display:inline;
+}
+
+pre{
+    padding:13px !important;
 }

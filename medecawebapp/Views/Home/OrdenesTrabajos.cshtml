@@ -27,11 +27,11 @@
                     <div class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
 
                         <div style="cursor:pointer" class="">
-                            <div data-toggle="modal" data-target="#viewOrder" ng-click="editar(orden.Cliente, orden.VehiculoOrden, orden)">
-                                <h4 class="list-group-item-heading"><strong>{{orden.Cliente.Nombre}}</strong></h4>
+                            <div data-toggle="modal" data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)">
+                                <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
                                 <div class=""></div>
-                                <h3 class="list-group-item-heading"> {{orden.VehiculoOrden.Info}}</h3>
-                                <h4 class="list-group-item-heading">Placa: {{orden.VehiculoOrden.Placa}}</h4>
+                                <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
+                                <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
                                 <p class="list-group-item-text">
                                     <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
                                     <br />
@@ -89,7 +89,7 @@
                                     <div class="col-xs-9 text-right">
                                         <div>{{vehiculo.Modelo.VehiculoMarca.Nombre + ' ' +vehiculo.Modelo.Nombre+' '+vehiculo.Anio}}</div>
                                         <div><strong>Placa {{vehiculo.Placa}}</strong> </div>
-                                        <div>{{cliente.Nombre}}</div>
+                                        <div>{{vehiculo.Cliente.Nombre}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +148,6 @@
             <view-client></view-client>
         </div>
         <manage-provider ng-controller="ProveedoresController"></manage-provider>
-        <manage-services></manage-services>
         <view-order></view-order>
 {{modalCaller='#nuevaOrdenTrabajo';""}}
         @* *******************************  OT FORM ******************************* *@
@@ -178,13 +177,17 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <label>Veh&iacute;culo</label>
                                             <div>
-                                                {{SelectedVehiculo.Info}}
+                                                {{SelectedVehiculo.Info}} VIN: {{SelectedVehiculo.NoChasis}}
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
+                                            <label>{{SelectedVehiculo.UnidadDistancia == 'Km' ? 'Kilometraje' : 'Millaje' }}:</label>
+                                            <input type="text" ng-model="nuevoModel.DistanciaRecorrida" class="form-control" pattern="[0-9]+(\.[0-9][0-9]?)?" />
+                                        </div>
+                                        <div class="col-md-3">
                                             <label>Estado</label> <span class="required"> *</span>
                                             <div class="radio">
                                                 <label>
@@ -199,8 +202,10 @@
                                                 </label>
                                             </div>
                                         </div>
-
+                                        
                                     </div>
+                                    <div class="row">
+                                     </div>
                                     <h3>Fechas</h3>
                                     <hr />
                                     <div class="form-group row">
@@ -230,12 +235,6 @@
                                                 <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
                                                 {{servicio.Nombre}}
                                             </label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <button class="btn btn-success" data-toggle="modal" onclick="switchModal(this, '#manageServices')" ng-click="manageServices()">
-                                                Administar Servicios
-                                                <i class="fa fa-pencil-square-o fa-lg"></i>
-                                            </button>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -320,6 +319,9 @@
     </div>
 @section scripts{
     <script>
-        
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href");
+            $(target).find("input:first").focus();
+        });
 </script>}
 </div>

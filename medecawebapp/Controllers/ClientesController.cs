@@ -121,10 +121,6 @@ namespace MEDECAWebApp.Controllers
                     }),
                     NoChasis = v.NoChasis,
                     Placa = v.Placa,
-                    Cliente = new Cliente
-                    {
-                        Nombre = x.Nombre
-                    },
                     IdVehiculo = v.IdVehiculo,
                     Motor = v.Motor,
                     IdCliente = v.IdCliente,
@@ -138,21 +134,6 @@ namespace MEDECAWebApp.Controllers
                         FechaPrometida = ot.FechaPrometida,
                         Id = ot.Id,
                         Entregado = ot.Entregado,
-                        VehiculoOrden = new {
-                            Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
-                            IdVehiculo = v.IdVehiculo,
-                            Placa = v.Placa,
-                            Insumos = v.Insumos.Where(i => i.Activo).Select(i => new Insumo
-                            {
-                                Nombre = i.Nombre,
-                                IdInsumo = i.IdInsumo
-                            })
-                        },
-                        Cliente = new Cliente {
-                            Nombre = x.Nombre,
-                            Favorito = x.Favorito,
-                            Telefono = x.Telefono
-                        },
                         NoOrden = ot.NoOrden,
                         Reparaciones = ot.Reparaciones,
                         Diagnostico = ot.Diagnostico,

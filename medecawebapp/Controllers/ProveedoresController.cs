@@ -16,14 +16,15 @@ namespace MEDECAWebApp.Controllers
         private MEDECAEntities db = new MEDECAEntities();
 
         [HttpGet]
-        public IEnumerable<Proveedore> GetProveedores()
+        public IEnumerable<object> GetProveedores()
         {
-            return db.Proveedores.AsEnumerable().Select(x => new Proveedore { 
+            return db.Proveedores.AsEnumerable().Select(x => new  { 
                 Activo = x.Activo,
                 IdProveedor = x.IdProveedor,
                 Nombre = x.Nombre,
                 RNC = x.RNC,
-                Telefono = x.Telefono
+                Telefono = x.Telefono,
+                CanDelete = x.InsumosProveedores.Count.Equals(0)
             });
         }
 

@@ -29,7 +29,7 @@
                             {{nuevoModel.Combustible.Nombre}}
                         </div>
                         <div class="col-md-3">
-                            <label>{{nuevoModel.UnidadDistancia == 'Km' ? 'Kilometraje' : 'Millaje' }}:</label> {{nuevoModel.Kilometraje}}
+                            <label>{{nuevoModel.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.Kilometraje}}
                         </div>
                       
                         <div class="col-md-5">

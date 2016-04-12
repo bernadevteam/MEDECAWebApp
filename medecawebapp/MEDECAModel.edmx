@@ -84,6 +84,7 @@
           <Property Name="FechaEntrega" Type="datetime" />
           <Property Name="NoOrden" Type="int" />
           <Property Name="FechaPrometida" Type="datetime" />
+          <Property Name="DistanciaRecorrida" Type="float" />
         </EntityType>
         <EntityType Name="Proveedores">
           <Key>
@@ -133,9 +134,9 @@
           <Property Name="Anio" Type="int" Nullable="false" />
           <Property Name="IdCombustible" Type="int" Nullable="false" />
           <Property Name="Color" Type="varchar" MaxLength="25" />
-          <Property Name="Kilometraje" Type="float" />
           <Property Name="Motor" Type="varchar" MaxLength="150" />
           <Property Name="UnidadDistancia" Type="varchar" MaxLength="2" />
+          <Property Name="Kilometraje" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="VehiculosInsumos">
           <Key>
@@ -638,6 +639,7 @@
           <Property Name="Diagnostico" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="FechaEntrega" Type="DateTime" Precision="3" />
           <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
+          <Property Name="DistanciaRecorrida" Type="Double" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -904,6 +906,7 @@
           <EntitySetMapping Name="OrdenesTrabajos">
             <EntityTypeMapping TypeName="MEDECAModel.OrdenesTrabajo">
               <MappingFragment StoreEntitySet="OrdenesTrabajos">
+                <ScalarProperty Name="DistanciaRecorrida" ColumnName="DistanciaRecorrida" />
                 <ScalarProperty Name="FechaPrometida" ColumnName="FechaPrometida" />
                 <ScalarProperty Name="FechaEntrega" ColumnName="FechaEntrega" />
                 <ScalarProperty Name="Diagnostico" ColumnName="Diagnostico" />

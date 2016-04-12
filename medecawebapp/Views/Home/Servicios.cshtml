@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "Servicios";
+}
+<div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                    <h1 >Servicios</h1>
+                    <h5>En este modulo podra añadir y editar Servicios.</h5>
+                        </div>
+                </div>
+            </div>
+<div class="row" ng-controller="ServiciosController">
+    <div class="col-lg-5 col-sm-5 col-xs-8">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>Activo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="servicio in modelos | orderObjectBy : 'Nombre' | filter: {Nombre: filtrarNombre}">
+                    <td>
+                        <span ng-show="!servicio.editar">
+                            {{servicio.Nombre}}
+                        </span>
+                        <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" ng-show="servicio.editar" class="form-control" />
+                    </td>
+                    <td>
+                        <span ng-show="!servicio.editar">
+                            {{ servicio.Activo ? 'Si' : 'No'}}
+                        </span>
+                        <input type="checkbox" name="Activo" ng-model="nuevoModel.Activo" ng-show="servicio.editar"  />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-warning" ng-click="editar(servicio)" ng-show="!servicio.editar"> <i class="fa fa-edit"></i></button>
+                        <button type="submit" class="btn btn-danger" ng-click="cancelarEdicion(servicio)" ng-show="servicio.editar"> <i class="fa fa-close"></i></button>
+                        <button type="submit" class="btn btn-success" ng-click="guardar(servicio)" ng-show="servicio.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-check-square-o"></i></button>
+                        <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" ng-show="servicio.CanDelete && !servicio.editar"
+                                ng-click="eliminarservicio(servicio)">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot ng-show="!nuevoModel.editar">
+
+                <tr>
+                    <td>
+                        <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" class="form-control" required placeholder="Escriba aqu&iacute; el nombre del servicio nuevo..." />
+                    </td>
+                    <td>
+                        <input type="checkbox" data-toggle="toggle" ng-model="nuevoModel.Activo" />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-plus-square"></i></button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <confirm-delete elementname="Servicio" objectelement="deleteServicio.Nombre" eliminar="eliminar()"></confirm-delete>
+
+</div>
+
+
+
