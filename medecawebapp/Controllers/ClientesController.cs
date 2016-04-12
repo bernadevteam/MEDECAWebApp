@@ -135,6 +135,7 @@ namespace MEDECAWebApp.Controllers
                         Id = ot.Id,
                         Entregado = ot.Entregado,
                         NoOrden = ot.NoOrden,
+                        DistanciaRecorrida = ot.DistanciaRecorrida,
                         Reparaciones = ot.Reparaciones,
                         Diagnostico = ot.Diagnostico,
                         IdVehiculo = v.IdVehiculo,

@@ -13,14 +13,14 @@
 </div>
 <div class="row" ng-controller="OrdenesTrabajosController">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#tabActiveOrders" aria-controls="tabActiveOrders" role="tab" data-toggle="tab">Ordenes Activas</a></li>
+        <li role="presentation" class="active"><a href="#tabActiveOrders" aria-controls="tabActiveOrders" role="tab" data-toggle="tab"><span class="badge">{{filtered.length}}</span> Ordenes Activas </a></li>
         <li role="presentation"><a href="#tabSearch" aria-controls="tabSearch" role="tab" data-toggle="tab">B&uacute;squeda</a></li>
     </ul>
     <div class="tab-content">
         @* ========> ORDENES ACTIVAS <======== *@
         <div role="tabpanel" class="tab-pane fade in active" id="tabActiveOrders">
             <div class="flex-box">
-                <div class="panel panel-red flex-item" ng-repeat="orden in modelos | ordenesactivas">
+                <div class="panel panel-red flex-item" ng-repeat="orden in modelos | ordenesactivas as filtered">
                     <div class="panel-heading" role="tab">
                         <h4 class="panel-title"></h4>
                     </div>
@@ -180,7 +180,7 @@
                                         <div class="col-md-3">
                                             <label>Veh&iacute;culo</label>
                                             <div>
-                                                {{SelectedVehiculo.Info}} VIN: {{SelectedVehiculo.NoChasis}}
+                                                {{SelectedVehiculo.Info}} <br /> <strong>VIN:</strong> {{SelectedVehiculo.NoChasis}}
                                             </div>
                                         </div>
                                         <div class="col-md-2">

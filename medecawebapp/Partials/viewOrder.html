@@ -24,6 +24,10 @@
                     <pre>{{nuevoModel.Diagnostico}}</pre>
                     <h4><strong>Reparaciones</strong></h4>
                     <pre>{{nuevoModel.Reparaciones}}</pre>
+                    <h4 ng-if="nuevoModel.Servicios.length > 0"><strong>Servicios</strong></h4>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="servicio in nuevoModel.Servicios">{{servicio.Nombre}}</li>
+                    </ul>
                     <hr />
                     <h4><strong>Insumos</strong> <span class="badge">{{selInsumosProvs.length}}</span></h4>
                     <p >
