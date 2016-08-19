@@ -12,7 +12,9 @@
           <Property Name="IdCita" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
           <Property Name="Hora" Type="varchar" MaxLength="8" Nullable="false" />
-          <Property Name="IdVehiculo" Type="int" Nullable="false" />
+          <Property Name="IdVehiculo" Type="int" />
+          <Property Name="Cliente" Type="varchar" MaxLength="250" />
+          <Property Name="Vehiculo" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Clientes">
           <Key>
@@ -33,6 +35,23 @@
           </Key>
           <Property Name="IdCombustible" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DiagnosticoEstados">
+          <Key>
+            <PropertyRef Name="IdDiagnosticoEstado" />
+          </Key>
+          <Property Name="IdDiagnosticoEstado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diagnosticos">
+          <Key>
+            <PropertyRef Name="IdDiagnostico" />
+          </Key>
+          <Property Name="IdDiagnostico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
+          <Property Name="IdOrden" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="250" Nullable="false" />
         </EntityType>
         <EntityType Name="Insumos">
           <Key>
@@ -101,7 +120,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="IntervaloDias" Type="int" />
         </EntityType>
@@ -134,9 +153,9 @@
           <Property Name="Anio" Type="int" Nullable="false" />
           <Property Name="IdCombustible" Type="int" Nullable="false" />
           <Property Name="Color" Type="varchar" MaxLength="25" />
+          <Property Name="Kilometraje" Type="float" />
           <Property Name="Motor" Type="varchar" MaxLength="150" />
           <Property Name="UnidadDistancia" Type="varchar" MaxLength="2" />
-          <Property Name="Kilometraje" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="VehiculosInsumos">
           <Key>
@@ -146,15 +165,27 @@
           <Property Name="IdVehiculo" Type="int" Nullable="false" />
           <Property Name="IdInsumo" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Cita_Vehiculos">
-          <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="1" />
-          <End Role="Cita" Type="Self.Cita" Multiplicity="*" />
+        <Association Name="FK_Diagnosticos_DiagnosticoEstados">
+          <End Role="DiagnosticoEstados" Type="Self.DiagnosticoEstados" Multiplicity="1" />
+          <End Role="Diagnosticos" Type="Self.Diagnosticos" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Vehiculos">
-              <PropertyRef Name="IdVehiculo" />
+            <Principal Role="DiagnosticoEstados">
+              <PropertyRef Name="IdDiagnosticoEstado" />
             </Principal>
-            <Dependent Role="Cita">
-              <PropertyRef Name="IdVehiculo" />
+            <Dependent Role="Diagnosticos">
+              <PropertyRef Name="IdEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Diagnosticos_OrdenesTrabajos">
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
+          <End Role="Diagnosticos" Type="Self.Diagnosticos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diagnosticos">
+              <PropertyRef Name="IdOrden" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -329,6 +360,8 @@
           <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Combustibles" EntityType="Self.Combustibles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiagnosticoEstados" EntityType="Self.DiagnosticoEstados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Diagnosticos" EntityType="Self.Diagnosticos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Insumos" EntityType="Self.Insumos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InsumosProveedores" EntityType="Self.InsumosProveedores" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modelos" EntityType="Self.Modelos" Schema="dbo" store:Type="Tables" />
@@ -340,9 +373,13 @@
           <EntitySet Name="VehiculoMarcas" EntityType="Self.VehiculoMarcas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vehiculos" EntityType="Self.Vehiculos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VehiculosInsumos" EntityType="Self.VehiculosInsumos" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Cita_Vehiculos" Association="Self.FK_Cita_Vehiculos">
-            <End Role="Vehiculos" EntitySet="Vehiculos" />
-            <End Role="Cita" EntitySet="Cita" />
+          <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="Self.FK_Diagnosticos_DiagnosticoEstados">
+            <End Role="DiagnosticoEstados" EntitySet="DiagnosticoEstados" />
+            <End Role="Diagnosticos" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="Self.FK_Diagnosticos_OrdenesTrabajos">
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+            <End Role="Diagnosticos" EntitySet="Diagnosticos" />
           </AssociationSet>
           <AssociationSet Name="FK_InsumosProveedores_Insumos" Association="Self.FK_InsumosProveedores_Insumos">
             <End Role="Insumos" EntitySet="Insumos" />
@@ -453,11 +490,6 @@
             <End Role="Proveedore" EntitySet="Proveedores" />
             <End Role="InsumosProveedore" EntitySet="InsumosProveedores" />
           </AssociationSet>
-          <EntitySet Name="Citas" EntityType="MEDECAModel.Cita" />
-          <AssociationSet Name="FK_Cita_Vehiculos" Association="MEDECAModel.FK_Cita_Vehiculos">
-            <End Role="Vehiculo" EntitySet="Vehiculos" />
-            <End Role="Cita" EntitySet="Citas" />
-          </AssociationSet>
           <FunctionImport Name="ValidarCedORNC" ReturnType="Collection(MEDECAModel.ValidarCedORNC_Result)">
             <Parameter Name="Identificacion" Mode="In" Type="String" />
             <Parameter Name="Id" Mode="In" Type="Int32" />
@@ -477,7 +509,18 @@
           </FunctionImport>
           <FunctionImport Name="ObtenerHistoricoServiciosMesesConteo" ReturnType="Collection(MEDECAModel.ObtenerHistoricoServiciosMesesConteo_Result)" />
           <FunctionImport Name="ObtenerVehiculosCambioAceiteProximo" ReturnType="Collection(MEDECAModel.ObtenerVehiculosCambioAceiteProximo_Result)" />
-        </EntityContainer>
+          <EntitySet Name="DiagnosticoEstados" EntityType="MEDECAModel.DiagnosticoEstado" />
+          <EntitySet Name="Diagnosticos" EntityType="MEDECAModel.Diagnostico" />
+          <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados">
+            <End Role="DiagnosticoEstado" EntitySet="DiagnosticoEstados" />
+            <End Role="Diagnostico" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos">
+            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
+            <End Role="Diagnostico" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <EntitySet Name="Citas" EntityType="MEDECAModel.Cita" />
+          </EntityContainer>
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="IDCliente" />
@@ -556,7 +599,6 @@
           <NavigationProperty Name="Insumos" Relationship="MEDECAModel.VehiculosInsumos" FromRole="Vehiculos" ToRole="Insumos" />
           <Property Type="String" Name="Placa" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrdenesTrabajos" Relationship="MEDECAModel.FK_OrdenesTrabajos_Vehiculos" FromRole="Vehiculo" ToRole="OrdenesTrabajo" />
-          <NavigationProperty Name="Citas" Relationship="MEDECAModel.FK_Cita_Vehiculos" FromRole="Vehiculo" ToRole="Cita" />
           <Property Name="Motor" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="UnidadDistancia" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
         </EntityType>
@@ -617,7 +659,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="Activo" Nullable="false" />
           <Property Type="Int32" Name="IntervaloDias" />
           <NavigationProperty Name="OrdenesTrabajos" Relationship="MEDECAModel.OrdenesServicios" FromRole="Servicio" ToRole="OrdenesTrabajo" />
@@ -640,6 +682,7 @@
           <Property Name="FechaEntrega" Type="DateTime" Precision="3" />
           <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
           <Property Name="DistanciaRecorrida" Type="Double" />
+          <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -749,28 +792,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Cita">
-          <Key>
-            <PropertyRef Name="IdCita" />
-          </Key>
-          <Property Type="Int32" Name="IdCita" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="DateTime" Name="Fecha" Nullable="false" Precision="0" />
-          <Property Type="String" Name="Hora" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
-          <Property Type="Int32" Name="IdVehiculo" Nullable="false" />
-          <NavigationProperty Name="Vehiculo" Relationship="MEDECAModel.FK_Cita_Vehiculos" FromRole="Cita" ToRole="Vehiculo" />
-        </EntityType>
-        <Association Name="FK_Cita_Vehiculos">
-          <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
-          <End Type="MEDECAModel.Cita" Role="Cita" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vehiculo">
-              <PropertyRef Name="IdVehiculo" />
-            </Principal>
-            <Dependent Role="Cita">
-              <PropertyRef Name="IdVehiculo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="ValidarCedORNC_Result">
         <Property Type="Int32" Name="Existe" Nullable="true" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
@@ -803,7 +824,62 @@
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
           <Property Type="String" Name="Vehiculo" Nullable="true" MaxLength="136" />
         </ComplexType>
-      </Schema>
+        <EntityType Name="DiagnosticoEstado">
+          <Key>
+            <PropertyRef Name="IdDiagnosticoEstado" />
+          </Key>
+          <Property Name="IdDiagnosticoEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="DiagnosticoEstado" ToRole="Diagnostico" />
+        </EntityType>
+        <EntityType Name="Diagnostico">
+          <Key>
+            <PropertyRef Name="IdDiagnostico" />
+          </Key>
+          <Property Name="IdDiagnostico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEstado" Type="Int32" Nullable="false" />
+          <Property Name="IdOrden" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DiagnosticoEstado" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="Diagnostico" ToRole="DiagnosticoEstado" />
+          <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="Diagnostico" ToRole="OrdenesTrabajo" />
+        </EntityType>
+        <Association Name="FK_Diagnosticos_DiagnosticoEstados">
+          <End Type="MEDECAModel.DiagnosticoEstado" Role="DiagnosticoEstado" Multiplicity="1" />
+          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiagnosticoEstado">
+              <PropertyRef Name="IdDiagnosticoEstado" />
+            </Principal>
+            <Dependent Role="Diagnostico">
+              <PropertyRef Name="IdEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Diagnosticos_OrdenesTrabajos">
+          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
+          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diagnostico">
+              <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Cita">
+          <Key>
+            <PropertyRef Name="IdCita" />
+          </Key>
+          <Property Name="IdCita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Hora" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="IdVehiculo" Type="Int32" />
+          <Property Name="Cliente" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Vehiculo" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -992,16 +1068,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Citas">
-            <EntityTypeMapping TypeName="MEDECAModel.Cita">
-              <MappingFragment StoreEntitySet="Cita">
-                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
-                <ScalarProperty Name="Hora" ColumnName="Hora" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-                <ScalarProperty Name="IdCita" ColumnName="IdCita" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ValidarCedORNC" FunctionName="MEDECAModel.Store.ValidarCedORNC" >
             <ResultMapping>
               <ComplexTypeMapping TypeName="MEDECAModel.ValidarCedORNC_Result">
@@ -1065,6 +1131,37 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="DiagnosticoEstados">
+            <EntityTypeMapping TypeName="MEDECAModel.DiagnosticoEstado">
+              <MappingFragment StoreEntitySet="DiagnosticoEstados">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdDiagnosticoEstado" ColumnName="IdDiagnosticoEstado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Diagnosticos">
+            <EntityTypeMapping TypeName="MEDECAModel.Diagnostico">
+              <MappingFragment StoreEntitySet="Diagnosticos">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="IdDiagnostico" ColumnName="IdDiagnostico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Citas">
+            <EntityTypeMapping TypeName="MEDECAModel.Cita">
+              <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="Vehiculo" ColumnName="Vehiculo" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+                <ScalarProperty Name="Hora" ColumnName="Hora" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdCita" ColumnName="IdCita" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

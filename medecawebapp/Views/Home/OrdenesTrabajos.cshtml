@@ -19,29 +19,36 @@
     <div class="tab-content">
         @* ========> ORDENES ACTIVAS <======== *@
         <div role="tabpanel" class="tab-pane fade in active" id="tabActiveOrders">
-            <div class="flex-box">
-                <div class="panel panel-red flex-item" ng-repeat="orden in modelos | ordenesactivas as filtered">
-                    <div class="panel-heading" role="tab">
-                        <h4 class="panel-title"></h4>
-                    </div>
-                    <div class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'Fecha':true as filtered ">
+                    <div class="panel panel-red">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title"></h4>
+                        </div>
+                        <div data-toggle="modal"
+                             data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)"
+                             style="cursor:pointer"
+                             class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
 
-                        <div style="cursor:pointer" class="">
-                            <div data-toggle="modal" data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)">
-                                <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
-                                <div class=""></div>
-                                <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
-                                <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
-                                <p class="list-group-item-text">
-                                    <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
-                                    <br />
-                                    Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
-                                </p>
+                            <div class="">
+                                <div>
+                                    <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
+                                    <div class=""></div>
+                                    <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
+                                    <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
+                                    <p class="list-group-item-text">
+                                        <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
+                                        <br />
+                                        Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
+                                    </p>
+                                    <p class="list-group-item-text">
+                                        Reparaciones pendientes? <span class="pull-right"><strong>{{orden.Diagnosticos.some(tienePendientes) ? 'Si' : 'No'}}</strong></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="tabSearch">
@@ -149,7 +156,7 @@
         </div>
         <manage-provider ng-controller="ProveedoresController"></manage-provider>
         <view-order></view-order>
-{{modalCaller='#nuevaOrdenTrabajo';""}}
+        {{modalCaller='#nuevaOrdenTrabajo';""}}
         @* *******************************  OT FORM ******************************* *@
         <form name="modelForm">
             <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
@@ -202,52 +209,106 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
-                                    <div class="row">
-                                     </div>
+                                    
                                     <h3>Fechas</h3>
                                     <hr />
                                     <div class="form-group row">
                                         <div class="col-md-4">
                                             <label>Recibido el:</label> <span class="required"> *</span>
                                             <br />
-                                            <md-datepicker ng-model="nuevoModel.Fecha" required></md-datepicker>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                       ng-model="nuevoModel.Fecha" is-open="fechaRecibidoPopUp" datepicker-options="dateOptions"
+                                                       ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="fechaRecibidoPopUp = true">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Prometido para:</label>
                                             <br />
-                                            <md-datepicker ng-model="nuevoModel.FechaPrometida"></md-datepicker>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                       ng-model="nuevoModel.FechaPrometida" is-open="fechaPrometidoPopUp" datepicker-options="dateOptions"
+                                                       close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="fechaPrometidoPopUp = true">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Entregado el:</label>
                                             <br />
-                                            <md-datepicker ng-model="nuevoModel.FechaEntrega"></md-datepicker>
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                       ng-model="nuevoModel.FechaEntrega" is-open="fechaEntregadoPopUp" datepicker-options="dateOptions"
+                                                       close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="fechaEntregadoPopUp = true">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 @* ========> OT MAINTENANCE <======== *@
                                 <div role="tabpanel" class="tab-pane fade" id="otMant">
+                                    <h3>Servicios</h3>
                                     <div class="form-group row">
                                         <div class="col-md-9">
-                                                <label>Servicios</label>
                                             <label class="checkbox-inline" ng-repeat="servicio in servicios">
                                                 <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
                                                 {{servicio.Nombre}}
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Aver&iacute;as</label>
-                                        <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
+                                    <h3>Diagn&oacute;stico</h3>
+                                    {{mostrarViejo = (nuevoModel.Reparaciones + nuevoModel.Diagnostico + nuevoModel.Fallas).length > 0;""}}
+                                    <div ng-show="mostrarViejo">
+                                        <div class="form-group">
+                                            <label>Aver&iacute;as</label>
+                                            <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Diagn&oacute;stico</label>
+                                            <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Reparaciones</label>
+                                            <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Diagn&oacute;stico</label>
-                                        <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Reparaciones</label>
-                                        <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
+                                    @* NUEVO FORMATO *@
+                                    <div id="otDiagnosticos" ng-hide="mostrarViejo">
+                                            <div class="list-group">
+                                                @* Diagnosticos Pendientes *@
+                       <diagnostico-tpl idestado=1></diagnostico-tpl>
+                                            @* Diagnosticos Reparados *@
+                                                <diagnostico-tpl idestado=2></diagnostico-tpl>
+                                                @* Diagnosticos Cancelados *@
+                                                <diagnostico-tpl idestado=3></diagnostico-tpl>
+
+                                            </div>
+                                        <div class="row row-agregar-diagnostico">
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
+                                                          ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
+                                                          ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5" ng-click="agregarDiagnostico()" class="btn btn-success btn-block" type="button">
+                                                    <span class="glyphicon glyphicon-plus-sign"></span> Agregar
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 @* ========> OT INSUMOS <======== *@
@@ -304,24 +365,25 @@
                                     </div>
 
                                 </div>
+
                             </div>
 
-                        </div>
+                        </div><!-- /.modal-content -->
                         <div class="modal-footer">
-                            <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</button>
-                            <button type="submit" class="btn btn-success" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</button>
+                            <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar sin guardar</button>
+                            <button type="submit" class="btn btn-success" ng-hide="ocultarGuardar" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar modificaciones</button>
                         </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            </div>
         </form>
 
     </div>
-@section scripts{
-    <script>
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            var target = $(e.target).attr("href");
-            $(target).find("input:first").focus();
-        });
-</script>}
+    @section scripts{
+        <script>
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr("href");
+                $(target).find("input:first").focus();
+            });
+        </script>}
 </div>

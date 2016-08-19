@@ -87,21 +87,30 @@
       <div class="modal-body">
           <div class="row">
         
-               <div class="col-md-6">
+               <div class="col-sm-6">
                    <label>Cliente</label>
-     <select class="form-control" ng-model="nuevoModel.Cliente" ng-options="cliente as cliente.Nombre for cliente in clientes"></select>
+     <input type="text" class="form-control" ng-model="nuevoModel.Cliente" required />
                            </div>
-      <div class="col-md-6">
+      <div class="col-sm-6">
                    <label>Vehiculo</label>
-     <select class="form-control" ng-model="nuevoModel.Vehiculo" required ng-options="veh as veh.Modelo.VehiculoMarca.Nombre + ' ' + veh.Modelo.Nombre + ' Año ' + veh.Anio for veh in nuevoModel.Cliente.Vehiculos"></select>
-                           </div>
+          <input type="text" class="form-control" ng-model="nuevoModel.Vehiculo" required/>
+       </div>
         </div>
           <div class="row">
-            <div class="form-group col-md-6">
-                <label>Fecha </label>
-                 <md-datepicker ng-model="nuevoModel.Fecha" required ></md-datepicker>
+            <div class="col-sm-6">
+                <label>Fecha</label>
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                           ng-model="nuevoModel.Fecha" is-open="fechaPopUp" datepicker-options="dateOptions"
+                           close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="fechaPopUp = true">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </p>
             </div>
-            <div class="form-group  col-md-6" >
+            <div class="form-group col-sm-6" >
                 <label>Hora</label>
                 <div class="input-group bootstrap-timepicker timepicker">
             <input id="timepicker1" type="text" class="form-control input-small" required ng-model="nuevoModel.Hora" readonly> 

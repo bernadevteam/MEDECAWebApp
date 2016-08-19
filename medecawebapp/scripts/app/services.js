@@ -1,35 +1,36 @@
 ﻿'use strict';
-
+var medecaURL = $("#baseURL").val();
+ 
 angular.module('medecaApp')
 	.factory('vehiculoMarcasFactory', ['$http', function ($http, baseURL) {
 	    var vehMarcFact = {};
 	    var vehMarcas = [{ id: 1, nombre: 'Toyota' }, { id: 1, nombre: 'Honda' }];
 
 	    vehMarcFact.getMarcas = function () {
-	        return $http.get('/api/VehiculoMarcas');
+	        return $http.get(medecaURL + 'api/VehiculoMarcas');
 	    };
 
 	    vehMarcFact.get = function () {
-	        return $http.get('/api/VehiculoMarcas');
+	        return $http.get(medecaURL + 'api/VehiculoMarcas');
 	    };
 
 	    vehMarcFact.agregar = function (marca) {
-	        return $http.post('/api/VehiculoMarcas/', marca);
+	        return $http.post(medecaURL + 'api/VehiculoMarcas/', marca);
 	    };
 
 	    vehMarcFact.editar = function (marca) {
-	        return $http.put('/api/VehiculoMarcas/', marca);
+	        return $http.put(medecaURL + 'api/VehiculoMarcas/', marca);
 	    };
 
 	    vehMarcFact.eliminar = function (model) {
-	        return $http.delete('/api/VehiculoMarcas/' + '?id=' + model);
+	        return $http.delete(medecaURL + 'api/VehiculoMarcas/' + '?id=' + model);
 	    };
 
 	    return vehMarcFact;
 	}])
     .factory('citasFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Citas';
+        var url = medecaURL + 'api/Citas';
         modelFact.get = function () {
             return $http.get(url + '/Citas');
         };
@@ -50,35 +51,35 @@ angular.module('medecaApp')
         };
 
         modelFact.eliminar = function (model) {
-            return $http.delete(url+'?id='+model);
+            return $http.delete(url + '?id=' + model);
         };
 
         return modelFact;
     }])
     .factory('modelosFactory', ['$http', function ($http, baseURL) {
-    var modelFact = {};
-    var url = '/api/Modelos';
-    modelFact.get = function () {
-        return $http.get(url);
-    };
+        var modelFact = {};
+        var url = medecaURL + 'api/Modelos';
+        modelFact.get = function () {
+            return $http.get(url);
+        };
 
-    modelFact.agregar = function (model) {
-        return $http.post(url, model);
-    };
+        modelFact.agregar = function (model) {
+            return $http.post(url, model);
+        };
 
-    modelFact.editar = function (model) {
-        return $http.put(url, model);
-    };
+        modelFact.editar = function (model) {
+            return $http.put(url, model);
+        };
 
-    modelFact.eliminar = function (model) {
-        return $http.delete(url + '?id=' + model.IdModelo);
-    };
+        modelFact.eliminar = function (model) {
+            return $http.delete(url + '?id=' + model.IdModelo);
+        };
 
-    return modelFact;
+        return modelFact;
     }])
         .factory('proveedoresFactory', ['$http', function ($http, baseURL) {
             var modelFact = {};
-            var url = '/api/Proveedores';
+            var url = medecaURL + 'api/Proveedores';
             modelFact.get = function () {
                 return $http.get(url + '/GetProveedores');
             };
@@ -101,9 +102,9 @@ angular.module('medecaApp')
         }])
     .factory('reportesFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Reportes';
+        var url = medecaURL + 'api/Reportes';
         modelFact.getHist = function () {
-            return $http.get(url+'/Historico');
+            return $http.get(url + '/Historico');
         };
 
         modelFact.getHistCont = function () {
@@ -117,29 +118,29 @@ angular.module('medecaApp')
         return modelFact;
     }])
     .factory('insumosFactory', ['$http', function ($http, baseURL) {
-    var modelFact = {};
-    var url = '/api/Insumos';
-    modelFact.get = function () {
-        return $http.get(url);
-    };
+        var modelFact = {};
+        var url = medecaURL + 'api/Insumos';
+        modelFact.get = function () {
+            return $http.get(url);
+        };
 
-    modelFact.agregar = function (model) {
-        return $http.post(url, model);
-    };
+        modelFact.agregar = function (model) {
+            return $http.post(url, model);
+        };
 
-    modelFact.editar = function (model) {
-        return $http.put(url, model);
-    };
+        modelFact.editar = function (model) {
+            return $http.put(url, model);
+        };
 
-    modelFact.eliminar = function (model) {
-        return $http.delete(url + '?id=' + model.IdInsumo);
-    };
+        modelFact.eliminar = function (model) {
+            return $http.delete(url + '?id=' + model.IdInsumo);
+        };
 
-    return modelFact;
+        return modelFact;
     }])
     .factory('vehiculosFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Vehiculos';
+        var url = medecaURL + 'api/Vehiculos';
         modelFact.get = function () {
             return $http.get(url + '/GetVehiculos');
         };
@@ -158,11 +159,11 @@ angular.module('medecaApp')
 
         return modelFact;
     }])
-    .factory('clientesFactory', ['$http', function ($http, baseURL)  {
+    .factory('clientesFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Clientes';
+        var url = medecaURL + 'api/Clientes';
         modelFact.get = function () {
-            return $http.get(url+'/Clientes');
+            return $http.get(url + '/Clientes');
         };
 
         modelFact.getWithVeh = function () {
@@ -189,7 +190,7 @@ angular.module('medecaApp')
     }])
     .factory('serviciosFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Servicios';
+        var url = medecaURL + 'api/Servicios';
         modelFact.get = function () {
             return $http.get(url);
         };
@@ -210,28 +211,30 @@ angular.module('medecaApp')
     }])
     .factory('dashboardFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/Dashboard';
+        var url = medecaURL + 'api/Dashboard';
         modelFact.get = function () {
             return $http.get(url + '/GetDashboard');
         };
 
         modelFact.getServsCont = function () {
-            return $http.get(url+'/ServiciosContinuos');
+            return $http.get(url + '/ServiciosContinuos');
         };
 
         modelFact.getProxServsCont = function () {
             return $http.get(url + '/ProximosCambiosAceite');
         };
-       
+
         return modelFact;
     }])
     .factory('ordenesTrabajosFactory', ['$http', function ($http, baseURL) {
         var modelFact = {};
-        var url = '/api/OrdenesTrabajos';
+        var url = medecaURL + 'api/OrdenesTrabajos';
         modelFact.get = function () {
             return $http.get(url);
         };
-
+        modelFact.obtenerDiagnosticosEstados = function () {
+            return $http.get(url + '/ObtenerDiagnosticoEstados');
+        };
         modelFact.agregar = function (model) {
             return $http.post(url, model);
         };

@@ -24,7 +24,7 @@ app.filter('getByKey', function () {
 
                 for (var i = 0; i < keys.length; i++) {
                     var prop = keys[i];
-                    var text = props[prop].toLowerCase();
+                    var text = props[prop].toString().toLowerCase();
                     if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
                         itemMatches = true;
                         break;
@@ -117,6 +117,17 @@ app.filter('getByKey', function () {
         return filtered;
     };
 })
+    .filter('filtrarDiagnosticos', function () {
+        return function (items, estado) {
+            var filtered = [];
+            angular.forEach(items, function (item) {
+                if (item.IdEstado == estado) {
+                    filtered.push(item);
+                }
+            });
+            return filtered;
+        };
+    })
 .filter('getAllByKey', function () {
     return function (input, keyName, value) {
         if (keyName != null && value) {

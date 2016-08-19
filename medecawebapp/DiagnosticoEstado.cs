@@ -13,23 +13,28 @@ namespace MEDECAWebApp
 {
 
 using System;
+    using System.Collections.Generic;
     
-public partial class ObtenerVehiculosCambioAceite_Result
+public partial class DiagnosticoEstado
 {
 
-    public string Info { get; set; }
+    public DiagnosticoEstado()
+    {
 
-    public string Placa { get; set; }
+        this.Diagnosticos = new HashSet<Diagnostico>();
 
-    public string UltimoCambio { get; set; }
+    }
 
-    public string Cliente { get; set; }
 
-    public string Telefono { get; set; }
-
-    public string Vehiculo { get; set; }
+    public int IdDiagnosticoEstado { get; set; }
 
     public string Nombre { get; set; }
+
+    public bool Activo { get; set; }
+
+
+
+    public virtual ICollection<Diagnostico> Diagnosticos { get; set; }
 
 }
 

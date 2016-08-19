@@ -1,0 +1,31 @@
+﻿{{filtrados = (nuevoModel.Diagnosticos | filtrarDiagnosticos : Estado);""}}
+<div ng-show="filtrados.length > 0" class="list-group-item ng-class:{'list-group-item-warning' : (Estado == 1), 'list-group-item-success' : (Estado == 2), 'list-group-item-danger' : (Estado == 3)}; list-item-categoria">
+    <p ng-switch="Estado">
+    <label ng-switch-when=1>Pendientes</label>
+        <label ng-switch-when=2>Reparados</label>
+        <label ng-switch-when=3>Cancelados</label></p>
+</div>
+<div class="list-group-item" ng-repeat="diagnostico in filtrados">
+    <div class="row">
+        <div ng-class="EsDetalle ? 'col-sm-12' : 'col-sm-11'">
+            {{diagnostico.Descripcion}} 
+        </div>
+        <div class="col-sm-1" ng-hide="EsDetalle">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li class="dropdown-header">Marcar como</li>
+                    <li><a href="#" ng-click="diagnostico.IdEstado = 3" ng-show="Estado != 3">Cancelado</a></li>
+                    <li><a href="#" ng-click="diagnostico.IdEstado = 1" ng-show="Estado != 1">Pendiente</a></li>
+                    <li><a href="#" ng-click="diagnostico.IdEstado = 2" ng-show="Estado != 2">Reparado</a></li>
+                    <li class="divider"></li>
+                    <li class="dropdown-header">Acciones</li>
+                    <li><a href="#">Modificar</a></li>
+                    <li><a href="#">Eliminar</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

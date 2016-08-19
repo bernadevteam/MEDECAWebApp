@@ -1,5 +1,6 @@
 ﻿'use strict';
- 
+var medecaURL = $("#baseURL").val();
+
 angular.module('medecaApp')
   .directive('ngUnique', ['$http', function ($http) {
       return {
@@ -29,49 +30,49 @@ angular.module('medecaApp')
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: '/partials/manageVehiculo.html?V1.0.4'
+             templateUrl: medecaURL + 'partials/manageVehiculo.html?V1.0.4'
          }
      })
        .directive('manageClient', function () {
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: '/partials/manageClient.html?V1.0.3'
+               templateUrl: medecaURL + 'partials/manageClient.html?V1.0.3'
            }
        })
           .directive('viewClient', function () {
               return {
                   restrict: 'E',
                   scope: false,
-                  templateUrl: '/partials/viewClient.html?V1.0.3'
+                  templateUrl: medecaURL + 'partials/viewClient.html?V1.0.3'
               }
           })
      .directive('viewVehicle', function () {
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: '/partials/viewVehicle.html?V1.0.3'
+             templateUrl: medecaURL + 'partials/viewVehicle.html?V1.0.3'
          }
      })
        .directive('viewOrder', function () {
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: '/partials/viewOrder.html?V1.0.4'
+               templateUrl: medecaURL + 'partials/viewOrder.html?V1.0.4'
            }
        })
          .directive('manageModel', function () {
              return {
                  restrict: 'E',
                  scope: false,
-                 templateUrl: '/partials/manageModel.html?V1.0.3'
+                 templateUrl: medecaURL + 'partials/manageModel.html?V1.0.3'
              }
          })
       .directive('manageProvider', function () {
           return {
               restrict: 'E',
               scope: false,
-              templateUrl: '/partials/manageProviders.html?V1.0.3'
+              templateUrl: medecaURL + 'partials/manageProviders.html?V1.0.3'
           }
       })
      .directive('confirmDelete', function () {
@@ -87,14 +88,25 @@ angular.module('medecaApp')
                      $scope.delete()();
                  };
              },
-             templateUrl: '/partials/confirmDelete.html?V1.0.4'
+             templateUrl: medecaURL + 'partials/confirmDelete.html?V1.0.4'
          }
      })
           .directive('manageServices', function () {
               return {
                   restrict: 'E',
                   scope: false,
-                  templateUrl: '/partials/manageServices.html?V1.0.3'
+                  templateUrl: medecaURL + 'partials/manageServices.html?V1.0.3'
+              }
+          })
+          .directive('diagnosticoTpl', function () {
+              return {
+                  restrict: 'E',
+                  scope: true,
+                  link: function (scope, element, attrs) {
+                      scope.Estado = attrs.idestado;
+                      scope.EsDetalle = attrs.esdetalle;
+                  },
+                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.1.0'
               }
           })
     .directive('loading', ['$http', function ($http) {

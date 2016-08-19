@@ -23,6 +23,14 @@ namespace MEDECAWebApp.Controllers
             return db.ValidarNoOrden(field, id).First();
         }
 
+        [HttpGet]
+        public IEnumerable<DiagnosticoEstado> ObtenerDiagnosticoEstados()
+        {
+            return db.DiagnosticoEstados.AsEnumerable().Select(dg => new DiagnosticoEstado() {
+                IdDiagnosticoEstado = dg.IdDiagnosticoEstado,
+                Nombre = dg.Nombre
+            }).ToList();
+        }
         // GET api/OrdenesTrabajos
         public IEnumerable<OrdenesTrabajo> GetOrdenesTrabajoes()
         {
@@ -36,9 +44,10 @@ namespace MEDECAWebApp.Controllers
                 NoOrden = ot.NoOrden,
                 Diagnostico = ot.Diagnostico,
                 Reparaciones = ot.Reparaciones,
-                Servicios = ot.Servicios.Select(s => new Servicio { 
+                Servicios = ot.Servicios.Select(s => new Servicio
+                {
                     Nombre = s.Nombre,
-                    Id = s.Id                    
+                    Id = s.Id
                 }).ToList()
             });
         }
@@ -56,36 +65,45 @@ namespace MEDECAWebApp.Controllers
         }
 
         // PUT api/OrdenesTrabajos/5
-        public HttpResponseMessage PutOrdenesTrabajo(OrdenesTrabajo ordenestrabajo)
+        public HttpResponseMessage PutOrdenesTrabajo(OrdenesTrabajo ordentrabajo)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    db.OrdenesTrabajos.AddOrUpdate(ordenestrabajo);
+                    db.OrdenesTrabajos.AddOrUpdate(ordentrabajo);
 
-                var ot = db.OrdenesTrabajos.Find(ordenestrabajo.Id);
-                ot.Servicios.Clear();
-                ot.InsumosProveedores.Clear();
+                    var ot = db.OrdenesTrabajos.Find(ordentrabajo.Id);
+                    ot.Servicios.Clear();
+                    ot.InsumosProveedores.Clear();
+                    var dgIds = ot.Diagnosticos.Select(dg => dg.IdDiagnostico).ToArray();
+                    foreach (var diag in dgIds)
+                    {
+                        var dbDG = db.Diagnosticos.Find(diag);
+                        db.Diagnosticos.Remove(dbDG);
+                    }
+
                     db.SaveChanges();
 
                     foreach (var servicio in db.Servicios)
-                {
-                    if (ordenestrabajo.Servicios.Any(s => s.Id.Equals(servicio.Id)))
                     {
-                        ot.Servicios.Add(servicio);
+                        if (ordentrabajo.Servicios.Any(s => s.Id.Equals(servicio.Id)))
+                        {
+                            ot.Servicios.Add(servicio);
+                        }
                     }
-                }
 
-                foreach (var insProv in ordenestrabajo.InsumosProveedores)
-                {
-                    var ins = db.Insumos.Find(insProv.IdInsumo);
-                    var prov = db.Proveedores.Find(insProv.IdProveedor);
+                    foreach (var insProv in ordentrabajo.InsumosProveedores)
+                    {
+                        var ins = db.Insumos.Find(insProv.IdInsumo);
+                        var prov = db.Proveedores.Find(insProv.IdProveedor);
 
-                    ot.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad});
-                }
-                
-                
+                        ot.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad });
+                    }
+
+                    foreach (var dg in ordentrabajo.Diagnosticos) {
+                        db.Diagnosticos.Add(new Diagnostico() {IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion});
+                    }
                     db.SaveChanges();
                 }
                 catch (Exception ex)
@@ -138,23 +156,23 @@ namespace MEDECAWebApp.Controllers
                     Id = s.Id
                 }).ToList();
                 ordenestrabajo.InsumosProveedores = ordenestrabajo.InsumosProveedores.Select(ip => new InsumosProveedore
-                        {
-                            Precio = ip.Precio,
-                            IdInsumo = ip.IdInsumo,
-                            IdOrdenServicio = ip.IdOrdenServicio,
-                            IdProveedor = ip.IdProveedor,
-                            Proveedore = new Proveedore
-                            {
-                                Nombre = ip.Proveedore.Nombre
-                            },
-                            Cantidad = ip.Cantidad,
-                            Insumo = new Insumo
-                            {
-                                Activo = ip.Insumo.Activo,
-                                Nombre = ip.Insumo.Nombre,
-                                IdInsumo = ip.IdInsumo
-                            }
-                        }).ToList();
+                {
+                    Precio = ip.Precio,
+                    IdInsumo = ip.IdInsumo,
+                    IdOrdenServicio = ip.IdOrdenServicio,
+                    IdProveedor = ip.IdProveedor,
+                    Proveedore = new Proveedore
+                    {
+                        Nombre = ip.Proveedore.Nombre
+                    },
+                    Cantidad = ip.Cantidad,
+                    Insumo = new Insumo
+                    {
+                        Activo = ip.Insumo.Activo,
+                        Nombre = ip.Insumo.Nombre,
+                        IdInsumo = ip.IdInsumo
+                    }
+                }).ToList();
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ordenestrabajo);
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = ordenestrabajo.Id }));

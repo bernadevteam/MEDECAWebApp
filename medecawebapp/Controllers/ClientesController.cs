@@ -136,6 +136,12 @@ namespace MEDECAWebApp.Controllers
                         Entregado = ot.Entregado,
                         NoOrden = ot.NoOrden,
                         DistanciaRecorrida = ot.DistanciaRecorrida,
+                        Diagnosticos = ot.Diagnosticos.Select(dg => new Diagnostico {
+                            IdEstado = dg.IdEstado,
+                            Descripcion = dg.Descripcion,
+                            DiagnosticoEstado = new DiagnosticoEstado() { IdDiagnosticoEstado = dg.DiagnosticoEstado.IdDiagnosticoEstado,
+                            Nombre = dg.DiagnosticoEstado.Nombre}
+                        }),
                         Reparaciones = ot.Reparaciones,
                         Diagnostico = ot.Diagnostico,
                         IdVehiculo = v.IdVehiculo,

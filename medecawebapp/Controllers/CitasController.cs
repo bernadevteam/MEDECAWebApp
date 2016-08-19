@@ -16,17 +16,10 @@ namespace MEDECAWebApp.Controllers
         private MEDECAEntities db = new MEDECAEntities();
 
         [HttpGet]
-        public IEnumerable<MEDECAWebApp.Models.CitaModel> Citas()
+        public IEnumerable<Cita> Citas()
         {
-            var citas = db.Citas.Include(c => c.Vehiculo);
-            return citas.AsEnumerable().Select(c => new MEDECAWebApp.Models.CitaModel
-            {
-                IdVehiculo = c.IdVehiculo,
-                IdCita = c.IdCita,
-                Hora = c.Hora,
-                Fecha = c.Fecha,
-                IdCliente = c.Vehiculo.Cliente.IDCliente
-            });
+            var citas = db.Citas;
+            return citas.AsEnumerable();
         }
 
         [HttpGet]
@@ -90,9 +83,7 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid )
             {
-                cita.Vehiculo = null;
                 db.Entry(cita).State = EntityState.Modified;
-
                 try
                 {
                     db.SaveChanges();
@@ -115,7 +106,6 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                cita.Vehiculo = null;
                 db.Citas.Add(cita);
                 try { 
                 db.SaveChanges();

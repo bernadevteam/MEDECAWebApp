@@ -13,7 +13,6 @@ angular.module('medecaApp')
                 $scope.citasdehoy = response.data;
             });
         });
-
     }])
     .controller('DashboardController', ['$scope', 'dashboardFactory', 'citasFactory', function ($scope, modelosFactory, citasFact) {
         $scope.modelos = {};
@@ -226,9 +225,11 @@ angular.module('medecaApp')
             });
         };
     }])
-    .controller('CitasController', ['$scope', '$mdDialog', '$filter', 'citasFactory', 'clientesFactory', function ($scope, $mdDialog, $filter, modelosFactory, clientesFact) {
+    .controller('CitasController', ['$scope', '$mdDialog', '$filter', 'citasFactory', function ($scope, $mdDialog, $filter, modelosFactory) {
         $scope.modelos = {};
         $scope.clientes = [];
+        $scope.fechaPopUp = false;
+        $scope.format = 'dd/MM/yyyy';
         $scope.searchText = null;
         $scope.nuevoModel = {};
         $scope.calendarView = 'month';
@@ -236,20 +237,14 @@ angular.module('medecaApp')
         $scope.events = [
 
         ];
-        modelosFactory.getClientes().then(function (response) {
-            $scope.clientes = response.data;
-            modelosFactory.get().then(function (response) {
-                var dat = response.data;
+        modelosFactory.get().then(function (response) {
+            var dat = response.data;
 
-                for (var i in dat) {
-                    var event = dat[i];
-                    event.Cliente = $filter('getByKey')($scope.clientes, 'IDCliente', event.IdCliente);
-                    event.Vehiculo = $filter('getByKey')(event.Cliente.Vehiculos, 'IdVehiculo', event.IdVehiculo);
-                    parseDate(event);
-                    $scope.events.push(event);
-                }
-            });
-
+            for (var i in dat) {
+                var event = dat[i];
+                parseDate(event);
+                $scope.events.push(event);
+            }
         });
 
         $scope.agregar = function () {
@@ -318,7 +313,7 @@ angular.module('medecaApp')
                 nMod.Fecha = new Date(nMod.Fecha.split("T")[0].replace(/[^a-zA-Z0-9]/g, '/'));
             }
             var ndDate = new Date(nMod.Fecha.toDateString() + " " + nMod.Hora);
-            nMod.title = nMod.Cliente.Nombre + ", " + nMod.Vehiculo.Modelo.VehiculoMarca.Nombre + " " + nMod.Vehiculo.Modelo.Nombre + " Año " + nMod.Vehiculo.Anio,
+            nMod.title = nMod.Cliente + ", " + nMod.Vehiculo,
             nMod.type = 'info';
             nMod.startsAt = ndDate;
         }
@@ -691,16 +686,21 @@ angular.module('medecaApp')
     }])
     .controller('OrdenesTrabajosController', ['$scope', '$filter', '$mdDialog', 'serviciosFactory', 'ordenesTrabajosFactory', 'clientesFactory', 'proveedoresFactory',
         function ($scope, $filter, $mdDialog, serviciosFact, modelosFactory, clientesFact, provFact) {
+            //OT Variables
             $scope.modelos = {};
-
+            $scope.format = 'dd/MM/yyyy';
+            $scope.fechaRecibidoPopUp = $scope.fechaPrometidoPopUp = $scope.fechaEntregadoPopUp = false;
             $scope.proveedores = {};
             $scope.nuevoProveedor = {};
             $scope.nuevoModel = {};
             $scope.selectedClient = {};
             $scope.selectedVehiculo = {};
+            $scope.ocultarGuardar = false;
             $scope.isOrden = true;
+            $scope.diagnosticoPivot = {};
             $scope.buscarInsumo = null;
             $scope.buscarProveedor = null;
+            $scope.diagEstados = [];
             $scope.selInsumosProvs = [];
             $scope.selInsumo = null;
             $scope.selProveedor = null;
@@ -726,6 +726,10 @@ angular.module('medecaApp')
 
                     provFact.getActivos().then(function (response) {
                         $scope.proveedores = response.data;
+                        modelosFactory.obtenerDiagnosticosEstados().then(function (response) {
+                            $scope.diagEstados = response.data;
+                            resetDiagPivot();
+                        });
                     });
                 });
             });
@@ -750,7 +754,7 @@ angular.module('medecaApp')
             };
             $scope.editar = function (cliente, vehiculo, model, ev) {
                 $scope.editingModel = model;
-                angular.extend($scope.nuevoModel, model);
+                angular.merge($scope.nuevoModel, model);
                 $scope.selInsumosProvs = [];
                 if (model != null) {
                     $scope.nuevoModel.Fecha = new Date(model.Fecha);
@@ -766,7 +770,7 @@ angular.module('medecaApp')
                         $scope.selInsumosProvs.push(ins);
                     }
                 } else {
-                    $scope.nuevoModel = {};
+                    $scope.nuevoModel = {Diagnosticos : []};
                 }
                 $scope.nuevoModel.IdVehiculo = vehiculo.IdVehiculo;
                 $scope.SelectedVehiculo = vehiculo;
@@ -786,7 +790,7 @@ angular.module('medecaApp')
                 $scope.buscarProveedor = null;
                 $scope.selInsumo = null;
                 $scope.selProveedor = null;
-
+                resetDiagPivot();
                 $scope.modelForm.$setPristine();
             }
 
@@ -804,7 +808,7 @@ angular.module('medecaApp')
                 asignarInsumosProvs();
                 modelosFactory.editar($scope.nuevoModel).then(function () {
                     $scope.nuevoModel.editar = false;
-                    angular.extend($scope.editingModel, $scope.nuevoModel);
+                    angular.merge($scope.editingModel, $scope.nuevoModel);
                     reset();
                 });
             };
@@ -817,6 +821,27 @@ angular.module('medecaApp')
                 var results = query && items ? items.filter(createFilterFor(query)) : [];
                 return results;
             }
+            //Diagnosticos
+            function resetDiagPivot() {
+                var defEstado = angular.extend($scope.diagEstados[0]);
+                $scope.diagnosticoPivot = { Estado: defEstado, IdEstado: defEstado.IdDiagnosticoEstado };
+            };
+            //Funcion para evaluar si un diagnostico tiene reparaciones pendientes.
+            $scope.tienePendientes = function (diagnostico) {
+                return diagnostico.IdEstado == 1;
+            };
+
+            $scope.agregarDiagnostico = function () {
+                $scope.nuevoModel.Diagnosticos.push(angular.extend($scope.diagnosticoPivot));
+                resetDiagPivot();
+            };
+            $scope.cambiarDiagEstado = function (diagnostico) {
+                diagnostico.DiagnosticoEstado = $filter('propsFilter')($scope.diagEstados, { IdDiagnosticoEstado: diagnostico.IdEstado })[0];
+            };
+            $scope.removerDiagnostico = function (diagnostico) {
+                var i = $scope.nuevoModel.Diagnosticos.indexOf(diagnostico);
+                $scope.nuevoModel.Diagnosticos.splice(i, 1);
+            };
 
             function createFilterFor(query) {
                 var lowercaseQuery = angular.lowercase(query);

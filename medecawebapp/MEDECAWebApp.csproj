@@ -158,6 +158,12 @@
     <Compile Include="Dasboard.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Diagnostico.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DiagnosticoEstado.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -343,6 +349,7 @@
     <Content Include="Partials\manageServices.html" />
     <Content Include="Partials\manageModel.html" />
     <Content Include="Partials\manageProviders.html" />
+    <Content Include="Partials\tplDiagnostico.html" />
     <Content Include="Partials\viewOrder.html" />
     <Content Include="Partials\viewVehicle.html" />
     <Content Include="Partials\viewClient.html" />
@@ -1586,7 +1593,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51450/</IISUrl>
+          <IISUrl>http://localhost:50054/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
