@@ -51,7 +51,7 @@
           <Property Name="IdDiagnostico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdEstado" Type="int" Nullable="false" />
           <Property Name="IdOrden" Type="int" Nullable="false" />
-          <Property Name="Descripcion" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Insumos">
           <Key>
@@ -840,7 +840,7 @@
           <Property Name="IdDiagnostico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
           <Property Name="IdOrden" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="DiagnosticoEstado" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="Diagnostico" ToRole="DiagnosticoEstado" />
           <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="Diagnostico" ToRole="OrdenesTrabajo" />
         </EntityType>

@@ -211,7 +211,7 @@
                                         </div>
 
                                     </div>
-                                    
+
                                     <h3>Fechas</h3>
                                     <hr />
                                     <div class="form-group row">
@@ -288,25 +288,32 @@
                                     </div>
                                     @* NUEVO FORMATO *@
                                     <div id="otDiagnosticos" ng-hide="mostrarViejo">
-                                            <div class="list-group">
-                                                @* Diagnosticos Pendientes *@
-                       <diagnostico-tpl idestado=1></diagnostico-tpl>
+                                        <div class="list-group">
+                                            @* Diagnosticos Pendientes *@
+                                            <diagnostico-tpl idestado=1></diagnostico-tpl>
                                             @* Diagnosticos Reparados *@
-                                                <diagnostico-tpl idestado=2></diagnostico-tpl>
-                                                @* Diagnosticos Cancelados *@
-                                                <diagnostico-tpl idestado=3></diagnostico-tpl>
+                                            <diagnostico-tpl idestado=2></diagnostico-tpl>
+                                            @* Diagnosticos Cancelados *@
+                                            <diagnostico-tpl idestado=3></diagnostico-tpl>
 
-                                            </div>
+                                        </div>
                                         <div class="row row-agregar-diagnostico">
                                             <div class="col-md-8">
                                                 <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
-                                                          ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
+                                                          maxlength="250" ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
                                                           ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
                                             </div>
                                             <div class="col-md-4">
-                                                <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5" ng-click="agregarDiagnostico()" class="btn btn-success btn-block" type="button">
-                                                    <span class="glyphicon glyphicon-plus-sign"></span> Agregar
-                                                </button>
+                                                <div class="btn-group-vertical btn-block" role="group" aria-label="...">
+                                                    <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5" 
+                                                            ng-click="diagnosticoPivot.Editando ? guardarDiagnostico() : agregarDiagnostico();" 
+                                                            class="btn btn-success" type="button">
+                                                        <span class="glyphicon ng-class:{'glyphicon-ok' : diagnosticoPivot.Editando, 'glyphicon-plus-sign': !diagnosticoPivot.Editando};"></span> {{diagnosticoPivot.Editando ? "Guardar Cambio" : "Agregar Diagn&oacute;stico"}}
+                                                    </button>
+                                                    <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico" class="btn btn-default">
+                                                        No Modificar
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
