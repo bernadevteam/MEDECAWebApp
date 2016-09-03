@@ -1,7 +1,9 @@
 ﻿@{
     ViewBag.Title = "Ordenes Trabajos";
 }
-
+@section angularscripts{
+    <script src="~/Scripts/app/Controllers/OrdenesController.js"></script>
+}
 <div class="row">
     <div class="col-md-10">
         <div class="page-header">
@@ -9,18 +11,18 @@
             <h5>En este modulo podr&aacute; crear y modificar ordenes de trabajos.</h5>
         </div>
     </div>
-
 </div>
 <div class="row" ng-controller="OrdenesTrabajosController">
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#tabActiveOrders" aria-controls="tabActiveOrders" role="tab" data-toggle="tab"><span class="badge">{{filtered.length}}</span> Ordenes Activas </a></li>
-        <li role="presentation"><a href="#tabSearch" aria-controls="tabSearch" role="tab" data-toggle="tab">B&uacute;squeda</a></li>
+        <li role="presentation"><a href="#tabSearch" aria-controls="tabSearch" role="tab" data-toggle="tab"><i class="fa fa-search"></i> B&uacute;squeda</a></li>
+        <li role="presentation"><a href="#tabDirectorio" aria-controls="tabSearchtabDirectorio" role="tab" data-toggle="tab"><i class="fa fa-phone-square"></i> Directorio</a></li>
     </ul>
     <div class="tab-content">
         @* ========> ORDENES ACTIVAS <======== *@
         <div role="tabpanel" class="tab-pane fade in active" id="tabActiveOrders">
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'Fecha':true as filtered ">
+                <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'NoOrden':true as filtered ">
                     <div class="panel panel-red">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title"></h4>
@@ -30,19 +32,22 @@
                              style="cursor:pointer"
                              class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
 
-                            <div class="">
-                                <div>
-                                    <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
-                                    <div class=""></div>
-                                    <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
-                                    <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
-                                    <p class="list-group-item-text">
-                                        <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
-                                        <br />
-                                        Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
-                                    </p>
+                            <div class="orden-activa-cuerpo">
+                                <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
+                                <div class=""></div>
+                                <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
+                                <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
+                                <p class="list-group-item-text">
+                                    <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
+                                    <br />
+                                    Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
+                                </p>
+                                <div class="info-final">
                                     <p class="list-group-item-text">
                                         Reparaciones pendientes? <span class="pull-right"><strong>{{orden.Diagnosticos.some(tienePendientes) ? 'Si' : 'No'}}</strong></span>
+                                    </p>
+                                    <p class="list-group-item-text">
+                                        Cotizaciones pendientes? <span class="pull-right"><strong>{{orden.InsumosCotizados.some(tieneCotizacionesPendientes) ? 'Si' : 'No'}}</strong></span>
                                     </p>
                                 </div>
                             </div>
@@ -146,6 +151,22 @@
                 </div>
             </div>
         </div>
+        <div id="tabDirectorio" class="tab-pane" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-9">
+                    <input type="text" ng-model="busquedaProvDir" class="form-control" placeholder="Escribe aqu&iacute; el nombre del proveedor" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-9">
+                    <ul class="list-group" ng-show="busquedaProvDir">
+                        <li class="list-group-item" ng-repeat="prov in proveedores | filter:{Nombre : busquedaProvDir} | orderBy:'Nombre'">
+                            {{prov.Nombre}} <span class="pull-right">{{prov.Telefono}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div ng-controller="VehiculosController">
             <manage-vehiculo></manage-vehiculo>
             <view-vehicle></view-vehicle>
@@ -158,233 +179,7 @@
         <view-order></view-order>
         {{modalCaller='#nuevaOrdenTrabajo';""}}
         @* *******************************  OT FORM ******************************* *@
-        <form name="modelForm">
-            <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <span class="star" ng-show="SelectedCliente.Favorito"></span>
-                            <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <ul id="otTabs" class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
-                                <li role="presentation"><a href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
-                                <li role="presentation"><a href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                @* ========> OT INFO <======== *@
-                                <div role="tabpanel" class="tab-pane fade in active" id="otinfo">
-                                    <div class="form-group row">
-
-                                        <div class="col-md-4">
-                                            <label>Cliente</label>
-                                            <div>
-                                                {{SelectedCliente.Nombre}}
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <label>Veh&iacute;culo</label>
-                                            <div>
-                                                {{SelectedVehiculo.Info}} <br /> <strong>VIN:</strong> {{SelectedVehiculo.NoChasis}}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label>{{SelectedVehiculo.UnidadDistancia == 'Km' ? 'Kilometraje' : 'Millaje' }}:</label>
-                                            <input type="text" ng-model="nuevoModel.DistanciaRecorrida" class="form-control" pattern="[0-9]+(\.[0-9][0-9]?)?" />
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>Estado</label> <span class="required"> *</span>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" ng-model="nuevoModel.Entregado" ng-value=false checked name="Entregado" ng-required="!nuevoModel.Entregado">
-                                                    Recibido
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" ng-model="nuevoModel.Entregado" ng-value=true name="Entregado" ng-required="!nuevoModel.Entregado">
-                                                    Entregado
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <h3>Fechas</h3>
-                                    <hr />
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label>Recibido el:</label> <span class="required"> *</span>
-                                            <br />
-                                            <p class="input-group">
-                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
-                                                       ng-model="nuevoModel.Fecha" is-open="fechaRecibidoPopUp" datepicker-options="dateOptions"
-                                                       ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default" ng-click="fechaRecibidoPopUp = true">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
-                                                    </button>
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label>Prometido para:</label>
-                                            <br />
-                                            <p class="input-group">
-                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
-                                                       ng-model="nuevoModel.FechaPrometida" is-open="fechaPrometidoPopUp" datepicker-options="dateOptions"
-                                                       close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default" ng-click="fechaPrometidoPopUp = true">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
-                                                    </button>
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label>Entregado el:</label>
-                                            <br />
-                                            <p class="input-group">
-                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
-                                                       ng-model="nuevoModel.FechaEntrega" is-open="fechaEntregadoPopUp" datepicker-options="dateOptions"
-                                                       close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default" ng-click="fechaEntregadoPopUp = true">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
-                                                    </button>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                @* ========> OT MAINTENANCE <======== *@
-                                <div role="tabpanel" class="tab-pane fade" id="otMant">
-                                    <h3>Servicios</h3>
-                                    <div class="form-group row">
-                                        <div class="col-md-9">
-                                            <label class="checkbox-inline" ng-repeat="servicio in servicios">
-                                                <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
-                                                {{servicio.Nombre}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <h3>Diagn&oacute;stico</h3>
-                                    {{mostrarViejo = (nuevoModel.Reparaciones + nuevoModel.Diagnostico + nuevoModel.Fallas).length > 0;""}}
-                                    <div ng-show="mostrarViejo">
-                                        <div class="form-group">
-                                            <label>Aver&iacute;as</label>
-                                            <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Diagn&oacute;stico</label>
-                                            <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Reparaciones</label>
-                                            <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
-                                        </div>
-                                    </div>
-                                    @* NUEVO FORMATO *@
-                                    <div id="otDiagnosticos" ng-hide="mostrarViejo">
-                                        <div class="list-group">
-                                            @* Diagnosticos Pendientes *@
-                                            <diagnostico-tpl idestado=1></diagnostico-tpl>
-                                            @* Diagnosticos Reparados *@
-                                            <diagnostico-tpl idestado=2></diagnostico-tpl>
-                                            @* Diagnosticos Cancelados *@
-                                            <diagnostico-tpl idestado=3></diagnostico-tpl>
-
-                                        </div>
-                                        <div class="row row-agregar-diagnostico">
-                                            <div class="col-md-8">
-                                                <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
-                                                          maxlength="250" ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
-                                                          ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="btn-group-vertical btn-block" role="group" aria-label="...">
-                                                    <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5" 
-                                                            ng-click="diagnosticoPivot.Editando ? guardarDiagnostico() : agregarDiagnostico();" 
-                                                            class="btn btn-success" type="button">
-                                                        <span class="glyphicon ng-class:{'glyphicon-ok' : diagnosticoPivot.Editando, 'glyphicon-plus-sign': !diagnosticoPivot.Editando};"></span> {{diagnosticoPivot.Editando ? "Guardar Cambio" : "Agregar Diagn&oacute;stico"}}
-                                                    </button>
-                                                    <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico" class="btn btn-default">
-                                                        No Modificar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @* ========> OT INSUMOS <======== *@
-                                <div role="tabpanel" class="tab-pane fade" id="otInsumos">
-                                    <div class="form-group ">
-                                        <div layout="column" ng-cloak="">
-                                            <md-chips ng-model="selInsumosProvs" md-autocomplete-snap="" md-require-match="true">
-                                                <md-autocomplete md-selected-item="selInsumo" md-search-text="buscarInsumo" md-items="item in querySearch(buscarInsumo, SelectedVehiculo.Insumos)"
-                                                                 md-item-text="item.Nombre" placeholder="Buscar insumo">
-                                                    <span md-highlight-text="buscarInsumo">{{item.Nombre}} </span>
-                                                </md-autocomplete>
-                                                <md-chip-template>
-                                                    <span>
-                                                        <strong>{{$chip.Nombre}}</strong>
-                                                    </span>
-                                                </md-chip-template>
-                                            </md-chips>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" ng-show="selInsumosProvs.length > 0">
-                                        <button class="btn btn-success" data-toggle="modal" onclick="switchModal(this, '#proveedoresForm')">Agregar Proveedor <i class="fa fa-plus-square"></i></button>
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th class="col-md-4">Insumo</th>
-                                                    <th>Proveedor <span class="required"> *</span></th>
-                                                    <th class="col-md-2">Cantidad <span class="required"> *</span></th>
-                                                    <th class="col-md-2">Precio <span class="required"> *</span></th>
-                                                    <th class="col-md-1">Sub Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="insumo in selInsumosProvs track by $index">
-                                                    <td>{{insumo.Nombre}}</td>
-                                                    <td>
-                                                        <select class="form-control" ng-model="insumo.IdProveedor" required ng-options="prov.IdProveedor as prov.Nombre for prov in proveedores"></select>
-                                                    </td>
-                                                    <td>  <input type="number" ng-model="insumo.Cantidad" class="form-control" required /></td>
-                                                    <td>  <input type="text" pattern="[0-9]+(\.[0-9][0-9]?)?" ng-model="insumo.Precio" class="form-control" required /></td>
-                                                    <td>{{(insumo.Precio * insumo.Cantidad) | currency}} RD$</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="5">
-                                                        <span class="pull-right">
-                                                            <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad']| currency}} RD$
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div><!-- /.modal-content -->
-                        <div class="modal-footer">
-                            <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar sin guardar</button>
-                            <button type="submit" class="btn btn-success" ng-hide="ocultarGuardar" ng-disabled="modelForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar modificaciones</button>
-                        </div>
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
-            </div>
-        </form>
-
+        <manage-order></manage-order>
     </div>
     @section scripts{
         <script>
