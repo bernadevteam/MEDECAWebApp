@@ -4,7 +4,6 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span class="star" ng-show="nuevoModel.Favorito"></span>
                     <h4 class="modal-title">{{nuevoModel.editar ? 'Modificar' : 'Agregar'}} Proveedor </h4>
                 </div>
                 <div class="modal-body">
@@ -49,8 +48,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo('#proveedoresForm .modal-footer')">Cerrar</button>
-                    <button type="submit" class="btn btn-success" ng-disabled="proveedoresForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel, '#proveedoresForm .modal-footer') : agregar('#proveedoresForm .modal-footer')" data-dismiss="modal">Guardar</button>
+                    <button type="reset" onclick="regresarVentanaAnterior(this)" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">{{abiertoEnSecuencia ? 'Regresar' : 'Cerrar'}}</button>
+                    <button type="submit" onclick="regresarVentanaAnterior(this)" class="btn btn-success" ng-disabled="proveedoresForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar()" data-dismiss="modal">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

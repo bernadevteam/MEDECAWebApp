@@ -154,7 +154,7 @@ app.filter('getByKey', function () {
                     return;
                 }
                 angular.forEach(cliente.Vehiculos, function (vehiculo) {
-                    if (vehiculo.Placa.toLowerCase().indexOf(clienteoplaca) != -1) {
+                    if (vehiculo.Placa && vehiculo.Placa.toLowerCase().indexOf(clienteoplaca) != -1) {
                         cliente.PorPlaca = true;
                         items.Cliente = cliente;
                         return;

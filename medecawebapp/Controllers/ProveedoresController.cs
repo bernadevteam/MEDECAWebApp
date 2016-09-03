@@ -18,7 +18,8 @@ namespace MEDECAWebApp.Controllers
         [HttpGet]
         public IEnumerable<object> GetProveedores()
         {
-            return db.Proveedores.AsEnumerable().Select(x => new  { 
+            return db.Proveedores.OrderBy(p => p.Nombre).AsEnumerable().Select(x => new
+            {
                 Activo = x.Activo,
                 IdProveedor = x.IdProveedor,
                 Nombre = x.Nombre,
@@ -31,7 +32,7 @@ namespace MEDECAWebApp.Controllers
         [HttpGet]
         public IEnumerable<Proveedore> GetProveedoresActivos()
         {
-            return db.Proveedores.AsEnumerable().Where(x => x.Activo).Select(x => new Proveedore
+            return db.Proveedores.OrderBy(p => p.Nombre).AsEnumerable().Where(x => x.Activo).Select(x => new Proveedore
             {
                 Activo = x.Activo,
                 IdProveedor = x.IdProveedor,
@@ -60,12 +61,12 @@ namespace MEDECAWebApp.Controllers
         }
 
         // PUT api/Proveedores/5
-        public HttpResponseMessage PutProveedore( Proveedore proveedore)
+        public HttpResponseMessage PutProveedore(Proveedore proveedore)
         {
-            if (ModelState.IsValid )
+            if (ModelState.IsValid)
             {
                 db.Entry(proveedore).State = EntityState.Modified;
-                
+
                 try
                 {
                     db.SaveChanges();

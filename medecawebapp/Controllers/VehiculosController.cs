@@ -66,11 +66,11 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Vehiculos.AddOrUpdate(vehiculo);
+                var insumos = vehiculo.Insumos.ToList();
 
+                db.Vehiculos.AddOrUpdate(vehiculo);
                 var vh = db.Vehiculos.Find(vehiculo.IdVehiculo);
                 vh.Insumos.Clear();
-                var insumos = vehiculo.Insumos.ToList();
                 foreach(var insumo in db.Insumos){
                     if (insumos.Any(i => i.IdInsumo.Equals(insumo.IdInsumo))) { 
                         vh.Insumos.Add(insumo);
@@ -103,7 +103,7 @@ namespace MEDECAWebApp.Controllers
                     }
 
                 }).First();
-                vehiculo.Insumos = vehiculo.Insumos.Select(i => new Insumo
+                vehiculo.Insumos = vh.Insumos.Select(i => new Insumo
                 {
                     IdInsumo = i.IdInsumo,
                     Nombre = i.Nombre,
@@ -111,7 +111,7 @@ namespace MEDECAWebApp.Controllers
                 }).ToList();
                 vehiculo.Info = string.Format("{0} {1} {2}", selModelo.VehiculoMarca.Nombre, selModelo.Nombre, vehiculo.Anio);
                 vehiculo.Modelo = selModelo;
-                vehiculo.Combustible.Nombre = vh.Combustible.Nombre;
+                //vehiculo.Combustible.Nombre = vh.Combustible.Nombre;
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, vehiculo);
 

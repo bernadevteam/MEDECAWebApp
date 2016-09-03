@@ -4,54 +4,55 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span class="star" ng-show="SelCliente.Favorito"></span>
+                    <span class="star" ng-show="selectedClient.Favorito"></span>
                     <h4 class="modal-title">{{nuevoModel.editar ? 'Modificar' : 'Agregar'}} Veh&iacute;culo</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Propietario</label><span class="required" ng-if="!isOrden"> *</span>
-                        <select class="form-control" ng-model="nuevoModel.IdCliente" required ng-options="cliente.IDCliente as cliente.Nombre for cliente in clientes" ng-if="!isOrden"></select>
-                        <span ng-if="isOrden">{{SelCliente.Nombre}}</span>
+                        <select class="form-control" ng-model="nuevoModel.IdCliente" required ng-options="cliente.IDCliente as cliente.Nombre for cliente in clientes | orderBy:'Nombre'" ng-if="!isOrden"></select>
+                        <span ng-if="isOrden">{{selectedClient.Nombre}}</span>
                     </div>
                     <div class="form-group row">
 
                         <div class="col-md-4">
                             <label>Marca</label><span class="required"> *</span>
                             <div>
-                                <button type="button" class="btn btn-success" onclick="switchModal(this, '#manageModelo')" ng-click="setMarca({})">
+                                <button type="button" class="btn btn-success" ng-disabled="manageVehiculoDesabilitar"
+                                        onclick="switchModal(this, '#manageModelo')" ng-click="setMarca({})">
                                     <i class="fa fa-plus-square"></i>
                                 </button>
-                                <select class="form-control" ng-model="SelectedMarca" ng-options="marca as marca.Nombre for marca in marcas"></select>
+                                <select ng-disabled="manageVehiculoDesabilitar" class="form-control" ng-model="SelectedMarca" ng-options="marca as marca.Nombre for marca in marcas | orderBy:'Nombre'"></select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label>Modelo</label><span class="required"> *</span>
                             <div>
-                                <button type="button" class="btn btn-success" ng-click="setMarca(SelectedMarca)" onclick="switchModal(this, '#manageModelo')">
+                                <button ng-disabled="manageVehiculoDesabilitar" type="button" class="btn btn-success" ng-click="setMarca(SelectedMarca)" onclick="switchModal(this, '#manageModelo')">
                                     <i class="fa fa-plus-square"></i>
                                 </button>
-                                <select class="form-control" ng-model="nuevoModel.IdModelo" required ng-options="modelo.IdModelo as modelo.Nombre for modelo in SelectedMarca.Modelos"></select>
+                                <select ng-disabled="manageVehiculoDesabilitar" class="form-control" ng-model="nuevoModel.IdModelo" required ng-options="modelo.IdModelo as modelo.Nombre for modelo in SelectedMarca.Modelos | orderBy:'Nombre'"></select>
                             </div>
                             </div>
                         <div class="col-md-2">
                             <label>A&ntilde;o</label><span class="required"> *</span>
-                            <input type="number" required ng-model="nuevoModel.Anio" class="form-control" ng-maxlength="4" ng-minlength="4" ng-class="{'required-dirty' : vehiculoForm.Anio.$dirty && vehiculoForm.Anio.$invalid}" name="Anio" />
+                            <input ng-disabled="manageVehiculoDesabilitar" type="number" required ng-model="nuevoModel.Anio" class="form-control" ng-maxlength="4" ng-minlength="4" ng-class="{'required-dirty' : vehiculoForm.Anio.$dirty && vehiculoForm.Anio.$invalid}" name="Anio" />
                         </div>
 
                         <div class="col-md-2">
                             <label>Color</label>
-                            <input type="text" ng-model="nuevoModel.Color" class="form-control" />
+                            <input ng-disabled="manageVehiculoDesabilitar" type="text" ng-model="nuevoModel.Color" class="form-control" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <label>Motor</label>
-                            <input type="text" ng-model="nuevoModel.Motor" class="form-control" />
+                            <input ng-disabled="manageVehiculoDesabilitar" type="text" ng-model="nuevoModel.Motor" class="form-control" />
                         </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Combustible</label> <span class="required"> *</span>
-                                    <select class="form-control" name="IdCombustible" ng-model="nuevoModel.IdCombustible" required ng-options="com.IdCombustible as com.Nombre for com in combustibles | orderObjectBy: 'Nombre' : '-'"></select>
+                                    <select ng-disabled="manageVehiculoDesabilitar" class="form-control" name="IdCombustible" ng-model="nuevoModel.IdCombustible" required ng-options="com.IdCombustible as com.Nombre for com in combustibles | orderObjectBy: 'Nombre' : '-'"></select>
                                     
                                 </div>
                             </div>
@@ -61,7 +62,7 @@
                             <label>Unidad de Distancia</label>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <select class="form-control" ng-model="nuevoModel.UnidadDistancia">
+                                    <select ng-disabled="manageVehiculoDesabilitar" class="form-control" ng-model="nuevoModel.UnidadDistancia">
                                         <option>Km</option>
                                         <option>Mi</option>
                                     </select>
@@ -74,13 +75,13 @@
                         <div class="form-group">
                             <div class="col-md-4">
                                 <label>Placa </label>
-                                <input type="text" ng-unique="/api/Vehiculos/ExistePlaca" ng-modid="{{nuevoModel.IdVehiculo}}" ng-model="nuevoModel.Placa" ng-prevValue="{{editingModel.Placa}}"
+                                <input ng-disabled="manageVehiculoDesabilitar" type="text" ng-unique="/api/Vehiculos/ExistePlaca" ng-modid="{{nuevoModel.IdVehiculo}}" ng-model="nuevoModel.Placa" ng-prevValue="{{editingModel.Placa}}"
                                        class="form-control" ng-minlength="7" ng-maxlength="8" ng-class="{'required-dirty' : vehiculoForm.Placa.$dirty && vehiculoForm.Placa.$invalid}" name="Placa" />
 
                             </div>
                             <div class="col-md-8">
                                 <label>No. Chasis</label>
-                                <input type="text" ng-model="nuevoModel.NoChasis" class="form-control" />
+                                <input ng-disabled="manageVehiculoDesabilitar" type="text" ng-model="nuevoModel.NoChasis" class="form-control" />
                             </div>
 
                         </div>
@@ -116,13 +117,15 @@
                         </div>
                     </div>
                     </div>
+                {{esteModal = '#manageVehiculo .modal-footer';""}}
+
                 <div class="modal-footer">
-                    <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
-                    <a class="btn btn-success" ng-disabled="vehiculoForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</a>
+                    <a class="btn btn-default" onclick="regresarVentanaAnterior(this)" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                    <a class="btn btn-success" onclick="regresarVentanaAnterior(this)" ng-disabled="vehiculoForm.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar()" data-dismiss="modal">Guardar</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </form>
-{{modalCaller='#manageVehiculo';""}}
+{{modalCaller= '#manageVehiculo';""}}
 <manage-model ng-controller="ModelosController"></manage-model>

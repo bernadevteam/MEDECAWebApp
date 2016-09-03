@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MEDECAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="Actividades">
+          <Key>
+            <PropertyRef Name="IdActividad" />
+          </Key>
+          <Property Name="IdActividad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+        </EntityType>
         <EntityType Name="Cita">
           <Key>
             <PropertyRef Name="IdCita" />
@@ -60,6 +67,23 @@
           <Property Name="IdInsumo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Activo" Type="bit" Nullable="false" />
+          <Property Name="IdMarcaInsumo" Type="int" />
+        </EntityType>
+        <EntityType Name="InsumosCotizados">
+          <Key>
+            <PropertyRef Name="IdInsumoCotizado" />
+          </Key>
+          <Property Name="IdInsumoCotizado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdOrden" Type="int" Nullable="false" />
+          <Property Name="IdInsumo" Type="int" Nullable="false" />
+          <Property Name="IdProveedor" Type="int" />
+          <Property Name="Aprobado" Type="bit" />
+          <Property Name="Precio" Type="money" />
+          <Property Name="IdMarcaInsumo" Type="int" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="EsLocal" Type="bit" />
+          <Property Name="FechaCompra" Type="date" />
+          <Property Name="FechaAproxLlegada" Type="date" />
         </EntityType>
         <EntityType Name="InsumosProveedores">
           <Key>
@@ -72,6 +96,13 @@
           <Property Name="IdOrdenServicio" Type="int" Nullable="false" />
           <Property Name="Precio" Type="money" Nullable="false" />
           <Property Name="Cantidad" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MarcasInsumos">
+          <Key>
+            <PropertyRef Name="IdMarcaInsumo" />
+          </Key>
+          <Property Name="IdMarcaInsumo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
         <EntityType Name="Modelos">
           <Key>
@@ -114,6 +145,15 @@
           <Property Name="RNC" Type="varchar" MaxLength="12" />
           <Property Name="Activo" Type="bit" Nullable="false" />
           <Property Name="Telefono" Type="varchar" MaxLength="12" />
+          <Property Name="Correo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProveedoresActividades">
+          <Key>
+            <PropertyRef Name="IdActividad" />
+            <PropertyRef Name="IdProveedor" />
+          </Key>
+          <Property Name="IdActividad" Type="int" Nullable="false" />
+          <Property Name="IdProveedor" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Servicios">
           <Key>
@@ -186,6 +226,54 @@
             </Principal>
             <Dependent Role="Diagnosticos">
               <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_Insumos">
+          <End Role="Insumos" Type="Self.Insumos" Multiplicity="1" />
+          <End Role="InsumosCotizados" Type="Self.InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insumos">
+              <PropertyRef Name="IdInsumo" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdInsumo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_MarcasInsumos">
+          <End Role="MarcasInsumos" Type="Self.MarcasInsumos" Multiplicity="0..1" />
+          <End Role="InsumosCotizados" Type="Self.InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarcasInsumos">
+              <PropertyRef Name="IdMarcaInsumo" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdMarcaInsumo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_OrdenesTrabajos">
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
+          <End Role="InsumosCotizados" Type="Self.InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_Proveedores">
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="0..1" />
+          <End Role="InsumosCotizados" Type="Self.InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="IdProveedor" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdProveedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -273,6 +361,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ProveedoresActividades_Actividades">
+          <End Role="Actividades" Type="Self.Actividades" Multiplicity="1" />
+          <End Role="ProveedoresActividades" Type="Self.ProveedoresActividades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Actividades">
+              <PropertyRef Name="IdActividad" />
+            </Principal>
+            <Dependent Role="ProveedoresActividades">
+              <PropertyRef Name="IdActividad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProveedoresActividades_Proveedores">
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
+          <End Role="ProveedoresActividades" Type="Self.ProveedoresActividades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="IdProveedor" />
+            </Principal>
+            <Dependent Role="ProveedoresActividades">
+              <PropertyRef Name="IdProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vehiculos_Clientes">
           <End Role="Clientes" Type="Self.Clientes" Multiplicity="1" />
           <End Role="Vehiculos" Type="Self.Vehiculos" Multiplicity="*" />
@@ -357,17 +469,21 @@
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="MEDECAModelStoreContainer">
+          <EntitySet Name="Actividades" EntityType="Self.Actividades" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Combustibles" EntityType="Self.Combustibles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiagnosticoEstados" EntityType="Self.DiagnosticoEstados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Diagnosticos" EntityType="Self.Diagnosticos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Insumos" EntityType="Self.Insumos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InsumosCotizados" EntityType="Self.InsumosCotizados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InsumosProveedores" EntityType="Self.InsumosProveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarcasInsumos" EntityType="Self.MarcasInsumos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modelos" EntityType="Self.Modelos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenesServicios" EntityType="Self.OrdenesServicios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrdenesTrabajos" EntityType="Self.OrdenesTrabajos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Proveedores" EntityType="Self.Proveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProveedoresActividades" EntityType="Self.ProveedoresActividades" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Servicios" EntityType="Self.Servicios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VehiculoMarcas" EntityType="Self.VehiculoMarcas" Schema="dbo" store:Type="Tables" />
@@ -380,6 +496,22 @@
           <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="Self.FK_Diagnosticos_OrdenesTrabajos">
             <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
             <End Role="Diagnosticos" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_Insumos" Association="Self.FK_InsumosCotizados_Insumos">
+            <End Role="Insumos" EntitySet="Insumos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_MarcasInsumos" Association="Self.FK_InsumosCotizados_MarcasInsumos">
+            <End Role="MarcasInsumos" EntitySet="MarcasInsumos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_OrdenesTrabajos" Association="Self.FK_InsumosCotizados_OrdenesTrabajos">
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_Proveedores" Association="Self.FK_InsumosCotizados_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
           </AssociationSet>
           <AssociationSet Name="FK_InsumosProveedores_Insumos" Association="Self.FK_InsumosProveedores_Insumos">
             <End Role="Insumos" EntitySet="Insumos" />
@@ -408,6 +540,14 @@
           <AssociationSet Name="FK_OrdenesTrabajos_Vehiculos" Association="Self.FK_OrdenesTrabajos_Vehiculos">
             <End Role="Vehiculos" EntitySet="Vehiculos" />
             <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProveedoresActividades_Actividades" Association="Self.FK_ProveedoresActividades_Actividades">
+            <End Role="Actividades" EntitySet="Actividades" />
+            <End Role="ProveedoresActividades" EntitySet="ProveedoresActividades" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProveedoresActividades_Proveedores" Association="Self.FK_ProveedoresActividades_Proveedores">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="ProveedoresActividades" EntitySet="ProveedoresActividades" />
           </AssociationSet>
           <AssociationSet Name="FK_Vehiculos_Clientes" Association="Self.FK_Vehiculos_Clientes">
             <End Role="Clientes" EntitySet="Clientes" />
@@ -520,6 +660,29 @@
             <End Role="Diagnostico" EntitySet="Diagnosticos" />
           </AssociationSet>
           <EntitySet Name="Citas" EntityType="MEDECAModel.Cita" />
+          <EntitySet Name="Actividades" EntityType="MEDECAModel.Actividades" />
+          <EntitySet Name="MarcasInsumos" EntityType="MEDECAModel.MarcasInsumos" />
+          <AssociationSet Name="ProveedoresActividades" Association="MEDECAModel.ProveedoresActividades">
+            <End Role="Actividades" EntitySet="Actividades" />
+            <End Role="Proveedore" EntitySet="Proveedores" />
+          </AssociationSet>
+          <EntitySet Name="InsumosCotizados" EntityType="MEDECAModel.InsumosCotizados" />
+          <AssociationSet Name="FK_InsumosCotizados_Insumos" Association="MEDECAModel.FK_InsumosCotizados_Insumos">
+            <End Role="Insumo" EntitySet="Insumos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_MarcasInsumos" Association="MEDECAModel.FK_InsumosCotizados_MarcasInsumos">
+            <End Role="MarcasInsumos" EntitySet="MarcasInsumos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_OrdenesTrabajos" Association="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos">
+            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InsumosCotizados_Proveedores" Association="MEDECAModel.FK_InsumosCotizados_Proveedores">
+            <End Role="Proveedore" EntitySet="Proveedores" />
+            <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Cliente">
           <Key>
@@ -552,6 +715,8 @@
           <Property Name="Activo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Vehiculos" Relationship="MEDECAModel.VehiculosInsumos" FromRole="Insumos" ToRole="Vehiculos" />
           <NavigationProperty Name="InsumosProveedores" Relationship="MEDECAModel.FK_InsumosProveedores_Insumos" FromRole="Insumo" ToRole="InsumosProveedore" />
+          <Property Name="IdMarcaInsumo" Type="Int32" />
+          <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_Insumos" FromRole="Insumo" ToRole="InsumosCotizados" />
         </EntityType>
         <EntityType Name="Modelo">
           <Key>
@@ -683,6 +848,7 @@
           <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
           <Property Name="DistanciaRecorrida" Type="Double" />
           <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
+          <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosCotizados" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -755,6 +921,9 @@
           <Property Type="Boolean" Name="Activo" Nullable="false" />
           <NavigationProperty Name="InsumosProveedores" Relationship="MEDECAModel.FK_InsumosProveedores_Proveedores" FromRole="Proveedore" ToRole="InsumosProveedore" />
           <Property Type="String" Name="Telefono" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Actividades" Relationship="MEDECAModel.ProveedoresActividades" FromRole="Proveedore" ToRole="Actividades" />
+          <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_Proveedores" FromRole="Proveedore" ToRole="InsumosCotizados" />
         </EntityType>
         <Association Name="FK_InsumosProveedores_Insumos">
           <End Type="MEDECAModel.Insumo" Role="Insumo" Multiplicity="1" />
@@ -879,6 +1048,94 @@
           <Property Name="Cliente" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Vehiculo" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Actividades">
+          <Key>
+            <PropertyRef Name="IdActividad" />
+          </Key>
+          <Property Name="IdActividad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Proveedores" Relationship="MEDECAModel.ProveedoresActividades" FromRole="Actividades" ToRole="Proveedore" />
+        </EntityType>
+        <EntityType Name="MarcasInsumos">
+          <Key>
+            <PropertyRef Name="IdMarcaInsumo" />
+          </Key>
+          <Property Name="IdMarcaInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_MarcasInsumos" FromRole="MarcasInsumos" ToRole="InsumosCotizados" />
+        </EntityType>
+        <Association Name="ProveedoresActividades">
+          <End Type="MEDECAModel.Actividades" Role="Actividades" Multiplicity="*" />
+          <End Type="MEDECAModel.Proveedore" Role="Proveedore" Multiplicity="*" />
+        </Association>
+        <EntityType Name="InsumosCotizados">
+          <Key>
+            <PropertyRef Name="IdInsumoCotizado" />
+          </Key>
+          <Property Name="IdInsumoCotizado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdOrden" Type="Int32" Nullable="false" />
+          <Property Name="IdInsumo" Type="Int32" Nullable="false" />
+          <Property Name="IdProveedor" Type="Int32" />
+          <Property Name="Aprobado" Type="Boolean" />
+          <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IdMarcaInsumo" Type="Int32" />
+          <Property Name="Cantidad" Type="Int32" />
+          <Property Name="EsLocal" Type="Boolean" />
+          <Property Name="FechaCompra" Type="DateTime" Precision="0" />
+          <Property Name="FechaAproxLlegada" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Insumos" Relationship="MEDECAModel.FK_InsumosCotizados_Insumos" FromRole="InsumosCotizados" ToRole="Insumo" />
+          <NavigationProperty Name="MarcasInsumos" Relationship="MEDECAModel.FK_InsumosCotizados_MarcasInsumos" FromRole="InsumosCotizados" ToRole="MarcasInsumos" />
+          <NavigationProperty Name="OrdenesTrabajos" Relationship="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" FromRole="InsumosCotizados" ToRole="OrdenesTrabajo" />
+          <NavigationProperty Name="Proveedores" Relationship="MEDECAModel.FK_InsumosCotizados_Proveedores" FromRole="InsumosCotizados" ToRole="Proveedore" />
+        </EntityType>
+        <Association Name="FK_InsumosCotizados_Insumos">
+          <End Type="MEDECAModel.Insumo" Role="Insumo" Multiplicity="1" />
+          <End Type="MEDECAModel.InsumosCotizados" Role="InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Insumo">
+              <PropertyRef Name="IdInsumo" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdInsumo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_MarcasInsumos">
+          <End Type="MEDECAModel.MarcasInsumos" Role="MarcasInsumos" Multiplicity="0..1" />
+          <End Type="MEDECAModel.InsumosCotizados" Role="InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MarcasInsumos">
+              <PropertyRef Name="IdMarcaInsumo" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdMarcaInsumo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_OrdenesTrabajos">
+          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
+          <End Type="MEDECAModel.InsumosCotizados" Role="InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InsumosCotizados_Proveedores">
+          <End Type="MEDECAModel.Proveedore" Role="Proveedore" Multiplicity="0..1" />
+          <End Type="MEDECAModel.InsumosCotizados" Role="InsumosCotizados" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedore">
+              <PropertyRef Name="IdProveedor" />
+            </Principal>
+            <Dependent Role="InsumosCotizados">
+              <PropertyRef Name="IdProveedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -910,6 +1167,7 @@
           <EntitySetMapping Name="Insumos">
             <EntityTypeMapping TypeName="MEDECAModel.Insumo">
               <MappingFragment StoreEntitySet="Insumos">
+                <ScalarProperty Name="IdMarcaInsumo" ColumnName="IdMarcaInsumo" />
                 <ScalarProperty Name="IdInsumo" ColumnName="IdInsumo" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Activo" ColumnName="Activo" />
@@ -1060,6 +1318,7 @@
           <EntitySetMapping Name="Proveedores">
             <EntityTypeMapping TypeName="MEDECAModel.Proveedore">
               <MappingFragment StoreEntitySet="Proveedores">
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
                 <ScalarProperty Name="Telefono" ColumnName="Telefono" />
                 <ScalarProperty Name="Activo" ColumnName="Activo" />
                 <ScalarProperty Name="RNC" ColumnName="RNC" />
@@ -1162,6 +1421,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Actividades">
+            <EntityTypeMapping TypeName="MEDECAModel.Actividades">
+              <MappingFragment StoreEntitySet="Actividades">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarcasInsumos">
+            <EntityTypeMapping TypeName="MEDECAModel.MarcasInsumos">
+              <MappingFragment StoreEntitySet="MarcasInsumos">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdMarcaInsumo" ColumnName="IdMarcaInsumo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ProveedoresActividades" TypeName="MEDECAModel.ProveedoresActividades" StoreEntitySet="ProveedoresActividades">
+            <EndProperty Name="Proveedore">
+              <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+            </EndProperty>
+            <EndProperty Name="Actividades">
+              <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="InsumosCotizados">
+            <EntityTypeMapping TypeName="MEDECAModel.InsumosCotizados">
+              <MappingFragment StoreEntitySet="InsumosCotizados">
+                <ScalarProperty Name="FechaAproxLlegada" ColumnName="FechaAproxLlegada" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="EsLocal" ColumnName="EsLocal" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="IdMarcaInsumo" ColumnName="IdMarcaInsumo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Aprobado" ColumnName="Aprobado" />
+                <ScalarProperty Name="IdProveedor" ColumnName="IdProveedor" />
+                <ScalarProperty Name="IdInsumo" ColumnName="IdInsumo" />
+                <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
+                <ScalarProperty Name="IdInsumoCotizado" ColumnName="IdInsumoCotizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1176,7 +1476,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />

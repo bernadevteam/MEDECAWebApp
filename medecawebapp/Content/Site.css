@@ -192,9 +192,6 @@ pre {
     overflow-y: auto;
 }
 */
-.panel-heading {
-    padding: 3px 15px !important;
-}
 
 .row-agregar-diagnostico {
     padding-bottom: 25px;
@@ -202,6 +199,14 @@ pre {
 
 #nuevaOrdenTrabajo .modal-body {
     min-height: 365px;
+}
+
+#nuevaOrdenTrabajo .modal-footer {
+    clear:both;
+}
+
+#nuevaOrdenTrabajo .modal-body label {
+    margin-bottom:0;
 }
 
 #nuevaOrdenTrabajo h3, #viewOrder h3 {
@@ -215,6 +220,31 @@ pre {
 
 #otinfo h3 {
     margin: 0;
+}
+
+#otInsumos .panel-title{
+    min-height:45px;
+}
+
+#otInsumos .panel-insumo-cotizado .panel-footer{
+    min-height:65px;
+}
+
+#otInsumos .insumo-cotizado {
+    padding: 15px;
+    width: 300px;
+    display: inline-block;
+    height:420px;
+}
+#otInsumos .insumos-aprobados-empty{
+    padding:15px;
+}
+.btn-titulo{
+    width:120px;
+}
+
+.modal-lg{
+    width:1000px !important;
 }
 
 .hr-dashed {
@@ -235,6 +265,20 @@ margin-top:5px;
     text-align:center;
     font-size:17px;
     font-weight:600;
+    margin:0;
+}
+
+#tabActiveOrders .orden-activa-cuerpo{
+    height:170px;
+    position:relative;
+}
+#tabActiveOrders .orden-activa-cuerpo > .info-final{
+    position:absolute;
+    bottom:0;
+    width:98%;
+}
+
+#nuevaOrdenTrabajo .radio{
     margin:0;
 }
 

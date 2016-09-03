@@ -23,6 +23,10 @@ public partial class Proveedore
 
         this.InsumosProveedores = new HashSet<InsumosProveedore>();
 
+        this.Actividades = new HashSet<Actividades>();
+
+        this.InsumosCotizados = new HashSet<InsumosCotizados>();
+
     }
 
 
@@ -36,9 +40,15 @@ public partial class Proveedore
 
     public string Telefono { get; set; }
 
+    public string Correo { get; set; }
+
 
 
     public virtual ICollection<InsumosProveedore> InsumosProveedores { get; set; }
+
+    public virtual ICollection<Actividades> Actividades { get; set; }
+
+    public virtual ICollection<InsumosCotizados> InsumosCotizados { get; set; }
 
 }
 

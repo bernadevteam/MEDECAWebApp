@@ -30,7 +30,7 @@ angular.module('medecaApp')
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: medecaURL + 'partials/manageVehiculo.html?V1.0.4'
+             templateUrl: medecaURL + 'partials/manageVehiculo.html?V1.1.1'
          }
      })
        .directive('manageClient', function () {
@@ -51,14 +51,14 @@ angular.module('medecaApp')
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: medecaURL + 'partials/viewVehicle.html?V1.0.3'
+             templateUrl: medecaURL + 'partials/viewVehicle.html?V1.1.1'
          }
      })
        .directive('viewOrder', function () {
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: medecaURL + 'partials/viewOrder.html?V1.0.4'
+               templateUrl: medecaURL + 'partials/viewOrder.html?V1.1.1'
            }
        })
          .directive('manageModel', function () {
@@ -72,7 +72,7 @@ angular.module('medecaApp')
           return {
               restrict: 'E',
               scope: false,
-              templateUrl: medecaURL + 'partials/manageProviders.html?V1.0.3'
+              templateUrl: medecaURL + 'partials/manageProviders.html?V1.1.1'
           }
       })
      .directive('confirmDelete', function () {
@@ -98,6 +98,13 @@ angular.module('medecaApp')
                   templateUrl: medecaURL + 'partials/manageServices.html?V1.0.3'
               }
           })
+    .directive('manageOrder', function () {
+        return {
+            restrict: 'E',
+            scope: false,
+            templateUrl: medecaURL + 'partials/manageOrder.html?V1.1.0'
+        }
+    })
           .directive('diagnosticoTpl', function () {
               return {
                   restrict: 'E',
@@ -109,6 +116,12 @@ angular.module('medecaApp')
                   templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.1.0'
               }
           })
+      .directive('insumosCotizadosTpl', function () {
+          return {
+              restrict: 'E',
+              templateUrl: medecaURL + 'partials/tpl/InsumosCotizados.html?V1.1.1'
+          }
+      })
     .directive('loading', ['$http', function ($http) {
         return {
             restrict: 'A',

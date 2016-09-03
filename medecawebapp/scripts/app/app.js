@@ -12,7 +12,7 @@ angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial',
 
     $rootScope.$on('editingvehicle', function (event, args) {
         $rootScope.$broadcast('manageeditingvehicle', args);
-    }); 
+    });
     $rootScope.$on('cambiovehiculo', function (event, args) {
         $rootScope.$broadcast('managecambiovehiculo', args);
     });
@@ -26,6 +26,19 @@ angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial',
         $rootScope.$broadcast('manageeditingclient', args);
     });
 });;
+
+var ventanasAbiertas = [];
+function modalAbrirEnSecuencia(ventanaAnterior, ventanaAbrir) {
+    ventanasAbiertas.push($(ventanaAnterior).closest(".modal"));
+    switchModal(ventanaAnterior, ventanaAbrir);
+}
+
+function regresarVentanaAnterior(ventanaActual) {
+    var anterior = ventanasAbiertas.pop();
+    if (anterior) {
+        switchModal(ventanaActual, anterior);
+    }
+}
 
 function switchModal(el, modalTosSwitch) {
     var parentModal = $(el).closest(".modal");

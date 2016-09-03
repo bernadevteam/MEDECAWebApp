@@ -130,6 +130,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actividades.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -143,11 +146,13 @@
     <Compile Include="Combustible.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\ActividadesController.cs" />
     <Compile Include="Controllers\CitasController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsumosController.cs" />
+    <Compile Include="Controllers\InsumosMarcasController.cs" />
     <Compile Include="Controllers\ModelosController.cs" />
     <Compile Include="Controllers\OrdenesTrabajosController.cs" />
     <Compile Include="Controllers\ProveedoresController.cs" />
@@ -173,7 +178,13 @@
     <Compile Include="Insumo.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="InsumosCotizados.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="InsumosProveedore.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MarcasInsumos.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
     <Compile Include="MEDECAModel.Context.cs">
@@ -346,10 +357,12 @@
       <DependentUpon>MEDECAModel.edmx</DependentUpon>
     </Content>
     <Content Include="Partials\confirmDelete.html" />
+    <Content Include="Partials\manageOrder.html" />
     <Content Include="Partials\manageServices.html" />
     <Content Include="Partials\manageModel.html" />
     <Content Include="Partials\manageProviders.html" />
     <Content Include="Partials\tplDiagnostico.html" />
+    <Content Include="Partials\tpl\InsumosCotizados.html" />
     <Content Include="Partials\viewOrder.html" />
     <Content Include="Partials\viewVehicle.html" />
     <Content Include="Partials\viewClient.html" />
@@ -823,6 +836,9 @@
     <Content Include="Scripts\app\app.js" />
     <Content Include="Scripts\app\checklist-model.js" />
     <Content Include="Scripts\app\controllers.js" />
+    <Content Include="Scripts\app\Controllers\ActividadesController.js" />
+    <Content Include="Scripts\app\Controllers\InsumosMarcasController.js" />
+    <Content Include="Scripts\app\Controllers\OrdenesController.js" />
     <Content Include="Scripts\app\directives.js" />
     <Content Include="Scripts\app\filters.js" />
     <Content Include="Scripts\app\ng-order-object-by.js.js" />
@@ -1565,6 +1581,8 @@
     <Content Include="Views\Home\Citas.cshtml" />
     <Content Include="Views\Home\Proveedores.cshtml" />
     <Content Include="Views\Home\Servicios.cshtml" />
+    <Content Include="Views\Home\Actividades.cshtml" />
+    <Content Include="Views\Home\InsumosMarcas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -31,6 +31,14 @@
         <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" />
         <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" />
         <EntityTypeShape EntityType="MEDECAModel.Cita" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MEDECAModel.Actividades" Width="1.5" PointX="4" PointY="17.5" />
+        <EntityTypeShape EntityType="MEDECAModel.MarcasInsumos" Width="1.5" PointX="12.375" PointY="16.25" />
+        <AssociationConnector Association="MEDECAModel.ProveedoresActividades" />
+        <EntityTypeShape EntityType="MEDECAModel.InsumosCotizados" Width="1.5" PointX="14.625" PointY="12.125" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_Insumos" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_MarcasInsumos" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" />
+        <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_Proveedores" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -82,8 +82,26 @@ namespace MEDECAWebApp.Controllers
                         var dbDG = db.Diagnosticos.Find(diag);
                         db.Diagnosticos.Remove(dbDG);
                     }
+                    var cotizados = db.InsumosCotizados.Where(c => c.IdOrden.Equals(ordentrabajo.Id));
 
-                    db.SaveChanges();
+                    foreach(var cotizado in cotizados)
+                    {
+                        if (!ordentrabajo.InsumosCotizados.Any(ic => ic.IdInsumoCotizado.Equals(cotizado.IdInsumoCotizado)))
+                        {
+                            db.InsumosCotizados.Remove(cotizado);
+                        }
+                        else
+                        {
+                        }
+                        if(cotizado.IdInsumoCotizado > 0) { } else { }
+                    }
+
+                    foreach (var cotizado in ordentrabajo.InsumosCotizados)
+                    {
+                        db.InsumosCotizados.AddOrUpdate(cotizado);
+                    }
+                        db.SaveChanges();
+
 
                     foreach (var servicio in db.Servicios)
                     {
@@ -120,42 +138,56 @@ namespace MEDECAWebApp.Controllers
         }
 
         // POST api/OrdenesTrabajos
-        public HttpResponseMessage PostOrdenesTrabajo(OrdenesTrabajo ordenestrabajo)
+        public HttpResponseMessage PostOrdenesTrabajo(OrdenesTrabajo ordentrabajo)
         {
             if (ModelState.IsValid)
             {
 
-                var selServs = new List<Servicio>(ordenestrabajo.Servicios);
-                var selInsProv = new List<InsumosProveedore>(ordenestrabajo.InsumosProveedores);
+                var selServs = new List<Servicio>(ordentrabajo.Servicios);
+                var selInsProv = new List<InsumosProveedore>(ordentrabajo.InsumosProveedores);
+                var diagnosticos = new List<Diagnostico>(ordentrabajo.Diagnosticos);
+                var cotizados = new List<InsumosCotizados>(ordentrabajo.InsumosCotizados);
 
-                ordenestrabajo.Servicios.Clear();
-                ordenestrabajo.InsumosProveedores.Clear();
+
+                ordentrabajo.Servicios.Clear();
+                ordentrabajo.InsumosProveedores.Clear();
+                ordentrabajo.Diagnosticos.Clear();
 
                 foreach (var servicio in db.Servicios)
                 {
                     if (selServs.Any(s => s.Id.Equals(servicio.Id)))
                     {
-                        ordenestrabajo.Servicios.Add(servicio);
+                        ordentrabajo.Servicios.Add(servicio);
                     }
                 }
-
+                                
                 foreach (var insProv in selInsProv)
                 {
                     var ins = db.Insumos.Find(insProv.IdInsumo);
                     var prov = db.Proveedores.Find(insProv.IdProveedor);
 
-                    ordenestrabajo.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad });
+                    ordentrabajo.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad });
                 }
-                ordenestrabajo.NoOrden = db.OrdenesTrabajos.Max(ot => ot.NoOrden).Value + 1;
-                db.OrdenesTrabajos.Add(ordenestrabajo);
+                ordentrabajo.NoOrden = db.OrdenesTrabajos.Max(ot => ot.NoOrden).Value + 1;
+                db.OrdenesTrabajos.Add(ordentrabajo);
+
+                
+
                 db.SaveChanges();
 
-                ordenestrabajo.Servicios = ordenestrabajo.Servicios.Select(s => new Servicio
+                ordentrabajo.Servicios = ordentrabajo.Servicios.Select(s => new Servicio
                 {
                     Nombre = s.Nombre,
                     Id = s.Id
                 }).ToList();
-                ordenestrabajo.InsumosProveedores = ordenestrabajo.InsumosProveedores.Select(ip => new InsumosProveedore
+
+
+                foreach (var dg in diagnosticos)
+                {
+                    db.Diagnosticos.Add(new Diagnostico() { IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion });
+                }
+
+                ordentrabajo.InsumosProveedores = ordentrabajo.InsumosProveedores.Select(ip => new InsumosProveedore
                 {
                     Precio = ip.Precio,
                     IdInsumo = ip.IdInsumo,
@@ -174,8 +206,23 @@ namespace MEDECAWebApp.Controllers
                     }
                 }).ToList();
 
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ordenestrabajo);
-                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = ordenestrabajo.Id }));
+                var insumosCotizados = new List<InsumosCotizados>(ordentrabajo.InsumosCotizados);
+
+                ordentrabajo.InsumosCotizados.Clear();
+
+                foreach(var cotizado in insumosCotizados) {
+                    cotizado.OrdenesTrabajos = null;
+                    cotizado.Proveedores = null;
+                    cotizado.MarcasInsumos = null;
+                    cotizado.Insumos = null;
+                    cotizado.IdOrden = ordentrabajo.Id;
+                    ordentrabajo.InsumosCotizados.Add(cotizado);
+                }
+
+                ordentrabajo.Diagnosticos = diagnosticos;
+
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ordentrabajo);
+                response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = ordentrabajo.Id }));
                 return response;
             }
             else

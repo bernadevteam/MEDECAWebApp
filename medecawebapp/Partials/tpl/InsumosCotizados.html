@@ -1,0 +1,60 @@
+﻿<div class="panel panel-insumo-cotizado ng-class:{'panel-warning' : !cotizado.Aprobado, 'panel-success' : cotizado.Aprobado};">
+    <div class="panel-heading" role="tab">
+        <div class="panel-title"><span class="text-center">{{cotizado.NombreInsumo}}</span></div>
+    </div>
+    <div class="panel-body">
+        <div>Marca: {{cotizado.NombreMarca}} </div>
+        <b>
+            <i>{{cotizado.NombreProveedor || 'Proveedor no asignado'}} </i>
+        </b>
+        <div>
+            <span>Fecha de compra:</span><i class="pull-right">{{cotizado.FechaCompra | date: 'dd/MM/yyyy'}}</i>
+        </div>
+        <div>
+            <span>Fecha de llegada:</span><i class="pull-right">{{cotizado.FechaAproxLlegada | date: 'dd/MM/yyyy'}}</i>
+        </div>
+        <div>
+            <span>Procedencia:</span><i class="pull-right">{{cotizado.EsLocal ? 'Local' : 'Inter.'}}</i>
+        </div>
+        <div>
+            <span>Cantidad:</span><label class="pull-right">{{cotizado.Cantidad}}</label>
+        </div>
+        <div>
+            <span>Precio:</span><label class="pull-right">{{cotizado.Precio | currency}} RD$</label>
+        </div>
+        <hr />
+        <div>
+            <span>Total:</span><label class="pull-right">{{(cotizado.Precio * cotizado.Cantidad) | currency}} RD$</label>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="text-center">
+                    {{pendiente = tieneCotizacionesPendientes(cotizado);""}}
+                    <div ng-show="pendiente">
+                        Especificar precio y proveedor.
+                        <input type="hidden" ng-model="cotizado.Aprobado" /> 
+                    </div>
+                    <div class="checkbox" ng-hide="pendiente">
+                        <label>
+                            <input type="checkbox" ng-model="cotizado.Aprobado" /> Aprobado
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="btn-group pull-right" ng-show="(!cotizado.Aprobado)">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="#" ng-click="modificarInsumoCotizado(cotizado);">Modificar</a></li>
+                        <li><a href="#" ng-click="eliminarInsumoCotizado(cotizado)">Eliminar</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,16 @@ namespace MEDECAWebApp.Controllers
             return View();
         }
 
+        public ActionResult Actividades()
+        {
+            return View();
+        }
+
+        public ActionResult InsumosMarcas()
+        {
+            return View();
+        }
+
         public ActionResult Modelos()
         {
             return View();

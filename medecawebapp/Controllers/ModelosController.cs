@@ -19,7 +19,7 @@ namespace MEDECAWebApp.Controllers
         public IEnumerable<Modelo> GetModeloes()
         {
             var modelos = db.Modelos.Include(m => m.VehiculoMarca);
-            return modelos.AsEnumerable().OrderByDescending(m => m.Nombre).ThenBy(m => m.VehiculoMarca.Nombre).Select(x => new Modelo()
+            return modelos.AsEnumerable().OrderBy(m => m.Nombre).ThenBy(m => m.VehiculoMarca.Nombre).Select(x => new Modelo()
             {
                 IdMarca = x.IdMarca,
                 Nombre = x.Nombre,

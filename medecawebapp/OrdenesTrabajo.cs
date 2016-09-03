@@ -27,6 +27,8 @@ public partial class OrdenesTrabajo
 
         this.Diagnosticos = new HashSet<Diagnostico>();
 
+        this.InsumosCotizados = new HashSet<InsumosCotizados>();
+
     }
 
 
@@ -61,6 +63,8 @@ public partial class OrdenesTrabajo
     public virtual ICollection<InsumosProveedore> InsumosProveedores { get; set; }
 
     public virtual ICollection<Diagnostico> Diagnosticos { get; set; }
+
+    public virtual ICollection<InsumosCotizados> InsumosCotizados { get; set; }
 
 }
 

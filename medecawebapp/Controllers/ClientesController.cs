@@ -62,7 +62,7 @@ namespace MEDECAWebApp.Controllers
                     },
                     Kilometraje = v.Kilometraje,
                     UnidadDistancia = v.UnidadDistancia,
-                    Insumos = v.Insumos.Where( i => i.Activo).Select( i => new Insumo{
+                    Insumos = v.Insumos.OrderBy(i => i.Nombre).Where( i => i.Activo).Select( i => new Insumo{
                         Nombre = i.Nombre,
                         IdInsumo = i.IdInsumo
                     }),
@@ -80,11 +80,10 @@ namespace MEDECAWebApp.Controllers
             });
         }
 
-
         [HttpGet]
         public IEnumerable<object> ClientesOrdenes()
         {
-            return db.Clientes.AsEnumerable().Select(x => new 
+            return db.Clientes.AsEnumerable().OrderBy(c => c.Nombre).Select(x => new 
             {
                 Direccion = x.Direccion,
                 Email = x.Email,
@@ -114,7 +113,7 @@ namespace MEDECAWebApp.Controllers
                     },
                     Kilometraje = v.Kilometraje,
                     UnidadDistancia = v.UnidadDistancia,
-                    Insumos = v.Insumos.Where(i => i.Activo).Select(i => new Insumo
+                    Insumos = v.Insumos.OrderBy(i => i.Nombre).Where(i => i.Activo).Select(i => new Insumo
                     {
                         Nombre = i.Nombre,
                         IdInsumo = i.IdInsumo
@@ -145,6 +144,22 @@ namespace MEDECAWebApp.Controllers
                         Reparaciones = ot.Reparaciones,
                         Diagnostico = ot.Diagnostico,
                         IdVehiculo = v.IdVehiculo,
+                        InsumosCotizados = ot.InsumosCotizados.Select(ic => new {
+                            Aprobado = ic.Aprobado,
+                            Cantidad = ic.Cantidad,
+                            EsLocal = ic.EsLocal,
+                            FechaAproxLlegada = ic.FechaAproxLlegada,
+                            FechaCompra = ic.FechaCompra,
+                            IdInsumo = ic.IdInsumo,
+                            IdInsumoCotizado = ic.IdInsumoCotizado,
+                            IdMarcaInsumo = ic.IdMarcaInsumo,
+                            IdOrden = ic.IdOrden,
+                            IdProveedor = ic.IdProveedor,
+                            Precio = ic.Precio,
+                            NombreInsumo =  ic.Insumos.Nombre,
+                            NombreProveedor = ic.Proveedores != null ? ic.Proveedores.Nombre : null,
+                            NombreMarca = ic.MarcasInsumos != null ? ic.MarcasInsumos.Nombre : null
+                        }),
                         InsumosProveedores = ot.InsumosProveedores.Select(ip => new InsumosProveedore
                         {
                             Precio = ip.Precio,

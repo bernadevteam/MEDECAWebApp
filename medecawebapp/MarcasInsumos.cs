@@ -15,34 +15,22 @@ namespace MEDECAWebApp
 using System;
     using System.Collections.Generic;
     
-public partial class Insumo
+public partial class MarcasInsumos
 {
 
-    public Insumo()
+    public MarcasInsumos()
     {
-
-        this.Vehiculos = new HashSet<Vehiculo>();
-
-        this.InsumosProveedores = new HashSet<InsumosProveedore>();
 
         this.InsumosCotizados = new HashSet<InsumosCotizados>();
 
     }
 
 
-    public int IdInsumo { get; set; }
+    public int IdMarcaInsumo { get; set; }
 
     public string Nombre { get; set; }
 
-    public bool Activo { get; set; }
 
-    public Nullable<int> IdMarcaInsumo { get; set; }
-
-
-
-    public virtual ICollection<Vehiculo> Vehiculos { get; set; }
-
-    public virtual ICollection<InsumosProveedore> InsumosProveedores { get; set; }
 
     public virtual ICollection<InsumosCotizados> InsumosCotizados { get; set; }
 

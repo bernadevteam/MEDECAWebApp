@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Marcas de Insumos";
+}
+@section angularscripts{
+    <script src="~/Scripts/app/Controllers/InsumosMarcasController.js"></script>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-header">
+            <h1>Marcas de Insumos</h1>
+            <h5>En este modulo podr&aacute; administrar las marcas de los insumos.</h5>
+        </div>
+    </div>
+</div>
+<div class="row" ng-controller="InsumosMarcasController">
+    <div class="col-sm-12">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="insumomarca in modelos | orderObjectBy : 'Nombre' | filter: {Nombre: filtrarNombre}">
+                    <td>
+                        <span ng-show="!insumomarca.editar">
+                            {{insumomarca.Nombre}}
+                        </span>
+                        <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" ng-show="insumomarca.editar" class="form-control" />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-warning" ng-click="editar(insumomarca)" ng-show="!insumomarca.editar"> <i class="fa fa-edit"></i></button>
+                        <button type="submit" class="btn btn-danger" ng-click="cancelarEdicion(insumomarca)" ng-show="insumomarca.editar"> <i class="fa fa-close"></i></button>
+                        <button type="submit" class="btn btn-success" ng-click="guardar(insumomarca)" ng-show="insumomarca.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-check-square-o"></i></button>
+                        <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" ng-show="insumomarca.CanDelete && !insumomarca.editar"
+                                ng-click="eliminarinsumomarca(insumomarca)">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot ng-show="!nuevoModel.editar">
+
+                <tr>
+                    <td>
+                        <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" class="form-control" required 
+                               placeholder="Escriba aqu&iacute; el nombre de la marca de insumo que desea agregar..." />
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 6"> <i class="fa fa-plus-square"></i></button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <confirm-delete elementname="Marca de Insumo" objectelement="deleteInsumoMarca.Nombre" eliminar="eliminar()"></confirm-delete>
+
+</div>
+
+
+

@@ -64,6 +64,12 @@ public partial class MEDECAEntities : DbContext
 
     public DbSet<Cita> Citas { get; set; }
 
+    public DbSet<Actividades> Actividades { get; set; }
+
+    public DbSet<MarcasInsumos> MarcasInsumos { get; set; }
+
+    public DbSet<InsumosCotizados> InsumosCotizados { get; set; }
+
 
     public virtual ObjectResult<Dasboard> prc_Dashboard()
     {

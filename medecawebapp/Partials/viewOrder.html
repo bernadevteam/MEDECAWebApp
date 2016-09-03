@@ -7,30 +7,40 @@
                 <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
             </div>
             <div class="modal-body">
-                <h3>
-                    {{SelectedVehiculo.Info}}
-                </h3>
+              
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4><strong>{{SelectedCliente.Nombre}}</strong></h4>
-                        <small>Tel. {{SelectedCliente.Telefono}}</small>
+                        <h3>Cliente</h3>
+                        <h2>{{SelectedCliente.Nombre}}</h2>
+                        Tel. {{SelectedCliente.Telefono}}
+                        <div>
+                            <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
+                            <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
+                            <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
+
+                        </div>
                     </div>
                     <div class="col-sm-6">
-                       
+                        <h3>Veh&iacute;culo</h3>
+                        <h2>
+                            {{SelectedVehiculo.Info}}
+                        </h2>
+                        <div>
+                            <h5>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</h5>
+                            <h5>
+                                <label>VIN:</label> {{SelectedVehiculo.NoChasis}}
+                            </h5>
+                            <label>{{SelectedVehiculo.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.DistanciaRecorrida}}
+
+
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-6">
-                        <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
-                        <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
-                        <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
-                    </div>
+                         </div>
                     <div class="col-sm-6">
-                        <h5>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</h5>
-                        <h5>
-                            <label>VIN:</label> {{SelectedVehiculo.NoChasis}}
-                        </h5>
-                        <label>{{SelectedVehiculo.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.DistanciaRecorrida}}
+
                     </div>
                 </div>
                 {{mostrarViejo = (nuevoModel.Diagnostico + nuevoModel.Fallas + nuevoModel.Reparaciones).length > 0;""}}
@@ -59,6 +69,41 @@
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="servicio in nuevoModel.Servicios">{{servicio.Nombre}}</li>
                     </ul>
+                </div>
+                {{insumosAprobados = (nuevoModel.InsumosCotizados | filter:{Aprobado : true});""}}
+                <div ng-show="insumosAprobados.length > 0">
+                    <h3>Insumos <span class="badge">{{insumosAprobados.length}}</span></h3>
+                    <p>
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr ng-repeat="insumo in insumosAprobados | orderBy:'NombreInsumo'">
+                                    <td>
+                                        <strong>{{insumo.Cantidad}}</strong> {{insumo.NombreInsumo}}
+                                    </td>
+                                    <td>
+                                        {{insumo.NombreProveedor}}
+                                    </td>
+                                    <td>
+                                        <span class="pull-right">
+                                            {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <span class="pull-right">
+                                            <b>Total:</b> {{insumosAprobados | totalCal: ['Precio', 'Cantidad'] | currency}} RD$
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </p>
+
                 </div>
                 <div ng-show="selInsumosProvs.length != 0">
                     <hr />
