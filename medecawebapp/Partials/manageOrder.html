@@ -1,0 +1,425 @@
+﻿<form name="modelForm">
+    <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="star" ng-show="SelectedCliente.Favorito"></span>
+                    <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="otTabs" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
+                        <li role="presentation"><a href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
+                        <li role="presentation"><a href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <!-- OT INFO -->
+                        <div role="tabpanel" class="tab-pane fade in active" id="otinfo">
+                            <ng-form name="formOtInfo">
+                                <div class="form-group row">
+
+                                    <div class="col-md-4">
+                                        <label>Cliente</label>
+                                        <div>
+                                            {{SelectedCliente.Nombre}}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label>Veh&iacute;culo</label>
+                                        <div>
+                                            {{SelectedVehiculo.Info}} <br /> <strong>VIN:</strong> {{SelectedVehiculo.NoChasis}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>{{SelectedVehiculo.UnidadDistancia == 'Km' ? 'Kilometraje' : 'Millaje' }}:</label>
+                                        <input type="text" ng-model="nuevoModel.DistanciaRecorrida" class="form-control" pattern="[0-9]+(\.[0-9][0-9]?)?" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Estado</label> <span class="required"> *</span>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" ng-model="nuevoModel.Entregado" ng-value=false checked name="Entregado" ng-required="!nuevoModel.Entregado">
+                                                Recibido
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" ng-model="nuevoModel.Entregado" ng-value=true name="Entregado" ng-required="!nuevoModel.Entregado">
+                                                Entregado
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <h3>Fechas</h3>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label>Recibido el:</label> <span class="required"> *</span>
+                                        <br />
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                   ng-model="nuevoModel.Fecha" is-open="fechaRecibidoPopUp" datepicker-options="dateOptions"
+                                                   ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="fechaRecibidoPopUp = true">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Prometido para:</label>
+                                        <br />
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                   ng-model="nuevoModel.FechaPrometida" is-open="fechaPrometidoPopUp" datepicker-options="dateOptions"
+                                                   close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="fechaPrometidoPopUp = true">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Entregado el:</label>
+                                        <br />
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                   ng-model="nuevoModel.FechaEntrega" is-open="fechaEntregadoPopUp" datepicker-options="dateOptions"
+                                                   close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="fechaEntregadoPopUp = true">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </ng-form>
+                        </div>
+                        <!-- OT MAINTENANCE  -->
+                        <div role="tabpanel" class="tab-pane fade" id="otMant">
+                            <h3>Servicios</h3>
+                            <div class="form-group row">
+                                <div class="col-md-9">
+                                    <label class="checkbox-inline" ng-repeat="servicio in servicios">
+                                        <input type="checkbox" checklist-model="nuevoModel.Servicios" checklist-value="servicio">
+                                        {{servicio.Nombre}}
+                                    </label>
+                                </div>
+                            </div>
+                            <h3>Diagn&oacute;stico</h3>
+                            {{mostrarViejo = (nuevoModel.Reparaciones + nuevoModel.Diagnostico + nuevoModel.Fallas).length > 0;""}}
+                            <div ng-show="mostrarViejo">
+                                <div class="form-group">
+                                    <label>Aver&iacute;as</label>
+                                    <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Fallas" spellcheck></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Diagn&oacute;stico</label>
+                                    <textarea rows="7" class="form-control" name="averia" ng-model="nuevoModel.Diagnostico" spellcheck></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reparaciones</label>
+                                    <textarea rows="7" class="form-control" ng-model="nuevoModel.Reparaciones" spellcheck></textarea>
+                                </div>
+                            </div>
+                            <!-- NUEVO FORMATO -->
+                            <div id="otDiagnosticos" ng-hide="mostrarViejo">
+                                <div class="list-group">
+                                    <!-- Pendientes -->
+                                    <diagnostico-tpl idestado=1></diagnostico-tpl>
+                                    <!-- Reparados -->
+                                    <diagnostico-tpl idestado=2></diagnostico-tpl>
+                                    <!-- Cancelados -->
+                                    <diagnostico-tpl idestado=3></diagnostico-tpl>
+                                </div>
+                                <div class="row row-agregar-diagnostico">
+                                    <div class="col-md-8">
+                                        <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
+                                                  maxlength="250" ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
+                                                  ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="btn-group-vertical btn-block" role="group" aria-label="...">
+                                            <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5"
+                                                    ng-click="diagnosticoPivot.Editando ? guardarDiagnostico() : agregarDiagnostico();"
+                                                    class="btn btn-success" type="button">
+                                                <span class="glyphicon ng-class:{'glyphicon-ok' : diagnosticoPivot.Editando, 'glyphicon-plus-sign': !diagnosticoPivot.Editando};"></span> {{diagnosticoPivot.Editando ? "Guardar Cambio" : "Agregar Diagn&oacute;stico"}}
+                                            </button>
+                                            <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico" class="btn btn-default">
+                                                No Modificar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- OT INSUMOS  -->
+                        <div role="tabpanel" class="tab-pane fade" id="otInsumos">
+                            <div ng-hide="selInsumosProvs.length > 0">
+                                <div ng-hide="cotizarInsumo || buscarProveedor">
+                                    {{insumosPendientes = (nuevoModel.InsumosCotizados | filter: {Aprobado : false});""}}
+
+                                    {{insumosAprobados = (nuevoModel.InsumosCotizados | filter: {Aprobado : true});""}}
+
+
+                                    <div id="insumosCotizados">
+                                        <h3>
+                                            Cotizados <span class="pull-right">
+                                                <button class="btn btn-success btn-titulo" ng-click="ocultarGuardar = true; cotizarInsumo = true;">
+                                                    <i class="fa fa-plus-square"></i>
+                                                </button>
+                                                          <button class="btn btn-default btn-buscar-proveedor" ng-click="ocultarGuardar = true; buscarProveedor = true;">
+                                                              <i class="fa fa-phone-square"></i> Directorio
+                                                          </button>
+                                            </span>
+                                        </h3>
+                                        <div class="row insumos-cotizados"  ng-hide="(insumosPendientes.length == 0 && insumosAprobados.length > 0)">
+                                            <div class="insumo-cotizado" ng-repeat="cotizado in nuevoModel.InsumosCotizados | filter: {Aprobado : false} | orderBy:'NombreInsumo'">
+                                                <insumos-cotizados-tpl></insumos-cotizados-tpl>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div id="insumosAprobados" class="clearfix">
+                                        <h3>Aprobados</h3>
+                                        <div class="row insumos-cotizados">
+                                            <div class="insumos-aprobados-empty" ng-hide="insumosAprobados.length > 0">
+                                                <span>Aqu&iacute; aparecer&aacute;n los insumos que apruebe.</span>
+                                            </div>
+                                            <div class="insumo-cotizado" ng-repeat="cotizado in insumosAprobados | orderBy:'NombreInsumo'">
+                                                <insumos-cotizados-tpl></insumos-cotizados-tpl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- AGREGAR INSUMO -->
+                                <ng-form name="formAgregarInsumo">
+                                    <div ng-hide="!cotizarInsumo || verInsMarca">
+                                        <h3>Insumo a cotizar</h3>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Insumo</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-success" data-toggle="modal" onclick="modalAbrirEnSecuencia(this, '#manageVehiculo');" ng-click="editVeh(SelectedCliente, SelectedVehiculo, true);">
+                                                            <i class="fa fa-plus-square"></i>
+                                                        </button>
+                                                        <select class="form-control" required ng-model="insumoCotizado.IdInsumo" ng-options="ins.IdInsumo as ins.Nombre for ins in SelectedVehiculo.Insumos | orderBy:'Nombre'"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Marca</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-success" ng-click="verInsMarca = true; ocultarGuardar = true">
+                                                            <i class="fa fa-plus-square"></i>
+                                                        </button>
+                                                        <select class="form-control" ng-model="insumoCotizado.IdMarcaInsumo" ng-options="marca.IdMarcaInsumo as marca.Nombre for marca in marcasInsumos  | orderBy:'Nombre'"></select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Proveedor</label>
+                                                    <div>
+                                                        <button type="button" class="btn btn-success" data-toggle="modal" onclick="modalAbrirEnSecuencia(this, '#proveedoresForm')">
+                                                            <i class="fa fa-plus-square"></i>
+                                                        </button>
+                                                        <select class="form-control" ng-model="insumoCotizado.IdProveedor" ng-options="prov.IdProveedor as prov.Nombre for prov in proveedores | orderBy:'Nombre'"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label>Cantidad</label>
+                                                <input type="number" ng-model="insumoCotizado.Cantidad" class="form-control" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>Precio</label>
+                                                <div class="input-group">
+                                                    <input type="text" pattern="[0-9]+(\.[0-9][0-9]?)?" ng-model="insumoCotizado.Precio" class="form-control" />
+                                                    <span class="input-group-addon">$</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>Fecha de Compra:</label>
+                                                <br />
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="insumoCotizado.FechaCompra" is-open="fechaCompraPopUp" datepicker-options="dateOptions"
+                                                           close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="fechaCompraPopUp = true">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label>Fecha de Llegada:</label>
+                                                <br />
+                                                <p class="input-group">
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                                           ng-model="insumoCotizado.FechaAproxLlegada" is-open="fechaAproxLlegadaPopUp" datepicker-options="dateOptions"
+                                                           close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="fechaAproxLlegadaPopUp = true">
+                                                            <i class="glyphicon glyphicon-calendar"></i>
+                                                        </button>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <label>Procedencia:</label>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="procedencia" ng-model="insumoCotizado.EsLocal" value=true> Local
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="procedencia" ng-model="insumoCotizado.EsLocal" value=false> Internacional
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="checkbox ng-class:{'disabled' : tieneCotizacionesPendientes(insumoCotizado)}" ng-attr-title="{{tieneCotizacionesPendientes(insumoCotizado) ? 'Falta el precio y proveedor' : ''}}">
+                                                    <label>
+                                                        <input type="checkbox" ng-model="insumoCotizado.Aprobado" ng-disabled="tieneCotizacionesPendientes(insumoCotizado)"/> Aprobado
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-success btn-block" ng-disabled="formAgregarInsumo.$invalid" ng-click="cotizarInsumo = false; ocultarGuardar = false; guardarInsumoCotizado();">{{insumoCotizadoPivot ? 'Modificar' : 'Agregar'}} Insumo</button>
+                                                <button class="btn btn-danger btn-block" ng-click="cotizarInsumo = false; cancelarEdicionInsumoCotizado()">Regresar sin guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                                <div class="row" ng-show="verInsMarca">
+                                    <div class="col-sm-8">
+                                        <input ng-model="nuevaMarcaInsumo.Nombre" type="text" placeholder="Escribe aqu&iacute; el nombre de la marca" class="form-control" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button type="button" class="btn btn-success btn-block" ng-disabled="nuevaMarcaInsumo.Nombre.length < 4" ng-click="agregarMarcaInsumo(); verInsMarca = false; ocultarGuardar = false">AGREGAR MARCA</button>
+                                        <button type="button" class="btn btn-warning btn-block" ng-click="verInsMarca = false;">REGRESAR SIN GUARDAR</button>
+                                    </div>
+                                </div>
+                                <div ng-show="buscarProveedor" class="busqueda-proveedor">
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <input type="text" ng-model="busquedaProv" class="form-control" placeholder="Escribe aqu&iacute; el nombre del proveedor o el &aacute;rea a la que pertenece" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button class="btn btn-default" ng-click="buscarProveedor = false;ocultarGuardar = false;busquedaProv=null;">
+                                                <i class="fa fa-backward"></i> Regresar a Cotizados</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Proveedor</th>
+                                                        <th>Tel&eacute;fono</th>
+                                                        <th>Correo</th>
+                                                        <th>&Aacute;reas</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="prov in proveedores | propiedadOarray: 'Nombre' : 'Actividades' : 'Nombre' : busquedaProv | orderBy:'Nombre'">
+                                                        <td class="col-sm-4">{{prov.Nombre}} </td>
+                                                        <td class="col-sm-2">{{prov.Telefono}}</td>
+                                                        <td class="col-sm-3">{{prov.Correo}}</td>
+                                                        <td class="col-sm-3">
+                                                            <ul>
+                                                                <li ng-repeat="area in prov.Actividades">{{area.Nombre}}</li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+</div>
+                                </div>
+                            </div>
+                            <!-- VIEJO FORMATO -->
+                            <div ng-show="selInsumosProvs.length > 0">
+                                <div class="form-group">
+                                    <div layout="column" ng-cloak="">
+                                        <md-chips ng-model="selInsumosProvs" md-autocomplete-snap="" md-require-match="true">
+                                            <md-autocomplete md-selected-item="selInsumo" md-search-text="buscarInsumo" md-items="item in querySearch(buscarInsumo, SelectedVehiculo.Insumos)"
+                                                             md-item-text="item.Nombre" placeholder="Buscar insumo">
+                                                <span md-highlight-text="buscarInsumo">{{item.Nombre}} </span>
+                                            </md-autocomplete>
+                                            <md-chip-template>
+                                                <span>
+                                                    <strong>{{$chip.Nombre}}</strong>
+                                                </span>
+                                            </md-chip-template>
+                                        </md-chips>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="selInsumosProvs.length > 0">
+                                    <button class="btn btn-success" data-toggle="modal" onclick="modalAbrirEnSecuencia(this, '#proveedoresForm')">Agregar Proveedor <i class="fa fa-plus-square"></i></button>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="col-md-4">Insumo</th>
+                                                <th>Proveedor <span class="required"> *</span></th>
+                                                <th class="col-md-2">Cantidad <span class="required"> *</span></th>
+                                                <th class="col-md-2">Precio <span class="required"> *</span></th>
+                                                <th class="col-md-1">Sub Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="insumo in selInsumosProvs track by $index">
+                                                <td>{{insumo.Nombre}}</td>
+                                                <td>
+                                                    <select class="form-control" ng-model="insumo.IdProveedor" required ng-options="prov.IdProveedor as prov.Nombre for prov in proveedores"></select>
+                                                </td>
+                                                <td>  <input type="number" ng-model="insumo.Cantidad" class="form-control" required /></td>
+                                                <td>  <input type="text" pattern="[0-9]+(\.[0-9][0-9]?)?" ng-model="insumo.Precio" class="form-control" required /></td>
+                                                <td>{{(insumo.Precio * insumo.Cantidad) | currency}} RD$</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <span class="pull-right">
+                                                        <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad']| currency}} RD$
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div><!-- /.modal-content -->
+                <div class="modal-footer clearfix">
+                    <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo(); verInsMarca = false; ocultarGuardar = false;">Cerrar sin guardar</button>
+                    <button type="submit" class="btn btn-success" ng-hide="ocultarGuardar" ng-disabled="formOtInfo.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar();" data-dismiss="modal">Guardar modificaciones</button>
+                </div>
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</form>

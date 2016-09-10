@@ -22,6 +22,9 @@
         $scope.selInsumo = null;
         $scope.selProveedor = null;
         $scope.nuevaMarcaInsumo = {};
+
+        $scope.Math = window.Math;
+
         function restablecerOrdenTrabajo() {
             $scope.nuevoModel = { Diagnosticos: [], InsumosCotizados: [], Entregado: false };
         }

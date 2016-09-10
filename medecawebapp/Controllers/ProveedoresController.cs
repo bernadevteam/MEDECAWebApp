@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -25,6 +26,8 @@ namespace MEDECAWebApp.Controllers
                 Nombre = x.Nombre,
                 RNC = x.RNC,
                 Telefono = x.Telefono,
+                Correo = x.Correo,
+                Actividades = x.Actividades.Select(a => new Actividades() { IdActividad = a.IdActividad, Nombre = a.Nombre}),
                 CanDelete = x.InsumosProveedores.Count.Equals(0)
             });
         }
@@ -38,7 +41,8 @@ namespace MEDECAWebApp.Controllers
                 IdProveedor = x.IdProveedor,
                 Nombre = x.Nombre,
                 RNC = x.RNC,
-                Telefono = x.Telefono
+                Telefono = x.Telefono,
+                Actividades = x.Actividades.Select(a => new Actividades() { IdActividad = a.IdActividad, Nombre = a.Nombre }).ToList()
             });
         }
 
@@ -65,7 +69,29 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(proveedore).State = EntityState.Modified;
+                //db.Entry(proveedore).State = EntityState.Modified;
+                var prov = db.Proveedores.Find(proveedore.IdProveedor);
+                db.Proveedores.AddOrUpdate(proveedore);
+                var actividades = proveedore.Actividades.ToList();
+                prov.Actividades.Clear();
+
+                foreach (var act in db.Actividades)
+                {
+                    if (actividades.Any(i => i.IdActividad.Equals(act.IdActividad)))
+                    {
+                        prov.Actividades.Add(act);
+
+                    }
+                }
+
+                foreach (var act in actividades)
+                {
+                    if (act.IdActividad.Equals(0))
+                    {
+                        prov.Actividades.Add(act);
+                    }
+                }
+
 
                 try
                 {
@@ -89,7 +115,28 @@ namespace MEDECAWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                var actividades = proveedore.Actividades;
                 db.Proveedores.Add(proveedore);
+                db.SaveChanges();
+                var prov = db.Proveedores.Find(proveedore.IdProveedor);
+                foreach (var act in db.Actividades)
+                {
+                    if (actividades.Any(i => i.IdActividad.Equals(act.IdActividad)))
+                    {
+                        prov.Actividades.Add(act);
+
+                    }
+                }
+
+                foreach (var act in actividades)
+                {
+                    if (act.IdActividad.Equals(0))
+                    {
+                        prov.Actividades.Add(act);
+                    }
+
+                }
+
                 db.SaveChanges();
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, proveedore);

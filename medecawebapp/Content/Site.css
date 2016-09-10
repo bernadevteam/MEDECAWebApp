@@ -56,6 +56,7 @@ span.star:before {
     margin: 10px;
 }
 
+
 .modal-header {
     padding: 9px 15px;
     border-bottom: 1px solid #eee;
@@ -193,6 +194,13 @@ pre {
 }
 */
 
+.page-header {
+    color: #d9534f;
+    border-bottom-color: #d9534f !important;
+}
+
+    
+
 .row-agregar-diagnostico {
     padding-bottom: 25px;
 }
@@ -202,11 +210,11 @@ pre {
 }
 
 #nuevaOrdenTrabajo .modal-footer {
-    clear:both;
+    clear: both;
 }
 
 #nuevaOrdenTrabajo .modal-body label {
-    margin-bottom:0;
+    margin-bottom: 0;
 }
 
 #nuevaOrdenTrabajo h3, #viewOrder h3 {
@@ -218,33 +226,36 @@ pre {
     opacity: 0.8;
 }
 
+
 #otinfo h3 {
     margin: 0;
 }
 
-#otInsumos .panel-title{
-    min-height:45px;
+#otInsumos .panel-title {
+    min-height: 45px;
 }
 
-#otInsumos .panel-insumo-cotizado .panel-footer{
-    min-height:65px;
+#otInsumos .panel-insumo-cotizado .panel-footer {
+    min-height: 65px;
 }
 
 #otInsumos .insumo-cotizado {
     padding: 15px;
     width: 300px;
     display: inline-block;
-    height:420px;
-}
-#otInsumos .insumos-aprobados-empty{
-    padding:15px;
-}
-.btn-titulo{
-    width:120px;
+    height: 420px;
 }
 
-.modal-lg{
-    width:1000px !important;
+#otInsumos .insumos-aprobados-empty {
+    padding: 15px;
+}
+
+.btn-titulo {
+    width: 120px;
+}
+
+.modal-lg {
+    width: 1000px !important;
 }
 
 .hr-dashed {
@@ -254,32 +265,41 @@ pre {
 
 /*UPPERCASEs*/
 .list-item-categoria p, .btn {
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
+
 .list-item-categoria {
-padding:6px !important;
-margin:0;
-margin-top:5px;
-}
-.list-item-categoria p{
-    text-align:center;
-    font-size:17px;
-    font-weight:600;
-    margin:0;
+    padding: 6px !important;
+    margin: 0;
+    margin-top: 5px;
 }
 
-#tabActiveOrders .orden-activa-cuerpo{
-    height:170px;
-    position:relative;
-}
-#tabActiveOrders .orden-activa-cuerpo > .info-final{
-    position:absolute;
-    bottom:0;
-    width:98%;
+    .list-item-categoria p {
+        text-align: center;
+        font-size: 17px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    #proveedoresForm .prov-area-sel{
+        padding:5px 10px;
+        margin:5px;
+        border:1px solid;
+        border-color:gray;
+    }
+#tabActiveOrders .orden-activa-cuerpo {
+    height: 170px;
+    position: relative;
 }
 
-#nuevaOrdenTrabajo .radio{
-    margin:0;
+    #tabActiveOrders .orden-activa-cuerpo > .info-final {
+        position: absolute;
+        bottom: 0;
+        width: 98%;
+    }
+
+#nuevaOrdenTrabajo .radio {
+    margin: 0;
 }
 
 @media(max-width:767px) {

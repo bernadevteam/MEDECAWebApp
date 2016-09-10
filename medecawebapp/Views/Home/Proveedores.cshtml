@@ -2,52 +2,78 @@
     ViewBag.Title = "Proveedores";
 }
 
+@section angularscripts{
+    <script src="~/Scripts/app/Controllers/ProveedoresController.js"></script>
+    }
+
 <div class="row">
                 <div class="col-lg-12">
                     <div class="page-header">
-                    <h1 >Proveedores</h1>
-                    <h5>En este modulo podra añadir y editar Proveedores.</h5> 
+                        <h1>Proveedores</h1>
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <h5>En este modulo podra añadir y editar Proveedores.</h5> 
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-success btn-titulo pull-right" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-plus-square"></i></button>
+                            </div>
+                        </div>
+                   
                         </div>
                 </div>
             </div>
-<div class="row" ng-controller="ProveedoresController">
-    <manage-provider></manage-provider>
-    <confirm-delete elementname="Proveedor" objectelement="editingModel.Nombre" eliminar="eliminar()"></confirm-delete>
 
-                <div class="col-lg-5 col-sm-5 col-xs-8">
-
-    <table class="table table-striped">
-        <thead>
-          <tr>  <th>
-            Nombre
-        </th>
-              <th>RNC</th>
-            <th>Telefono</th>
-
-              <th></th>
-          </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="proveedor in proveedores">
-            <td>
-                {{proveedor.Nombre}}
-            </td>
-            <td>
-                {{proveedor.RNC}}
-            </td>
-               <td>
-                {{proveedor.Telefono}}
-            </td>
-            <td>
-               <button type="button" class="btn btn-warning" ng-click="editar(proveedor)" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-edit"></i></button>
-                <button type="button" class="btn btn-danger" ng-click="editar(proveedor)" data-toggle="modal" data-target="#confirmDelete" ng-if="proveedor.CanDelete"> <i class="fa fa-trash-o"></i></button>
-            </td>
-        </tr>
-            </tbody>
-    </table>
-
-                    </div>
-                <div class="col-lg-5 col-sm-5 col-xs-8">
-               <button  class="btn btn-success" data-toggle="modal" data-target="#proveedoresForm" > <i class="fa fa-plus-square"></i></button>
+<div ng-controller="ProveedoresController">
+    <div class="row">
+        <div class="col-sm-12">
+            <input class="form-control" type="text" ng-model="filterProv" placeholder="Escribe aqu&iacute; el nombre del proveedor o el &aacute;rea a la que pertenece" />
 </div>
+        </div>
+        <div class="row">
+            <manage-provider></manage-provider>
+            <confirm-delete elementname="Proveedor" objectelement="editingModel.Nombre" eliminar="eliminar()"></confirm-delete>
+
+            <div class="col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nombre
+                            </th>
+                            <th>RNC</th>
+                            <th>Telefono</th>
+                            <th>Correo</th>
+                            <th>&Aacute;reas</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="proveedor in proveedores | propiedadOarray: 'Nombre' : 'Actividades' : 'Nombre' : filterProv | orderBy:'Nombre'">
+                            <td>
+                                {{proveedor.Nombre}}
+                            </td>
+                            <td>
+                                {{proveedor.RNC}}
+                            </td>
+                            <td>
+                                {{proveedor.Telefono}}
+                            </td>
+                            <td>
+                                {{proveedor.Correo}}
+                            </td>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="area in proveedor.Actividades">{{area.Nombre}}</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-warning" data-backdrop="static" data-keyboard="false" ng-click="editar(proveedor)" data-toggle="modal" data-target="#proveedoresForm"> <i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" ng-click="editar(proveedor)" data-toggle="modal" data-target="#confirmDelete" ng-if="proveedor.CanDelete"> <i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </div>

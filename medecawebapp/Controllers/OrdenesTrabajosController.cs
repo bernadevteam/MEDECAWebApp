@@ -171,7 +171,10 @@ namespace MEDECAWebApp.Controllers
                 ordentrabajo.NoOrden = db.OrdenesTrabajos.Max(ot => ot.NoOrden).Value + 1;
                 db.OrdenesTrabajos.Add(ordentrabajo);
 
-                
+                foreach (var dg in diagnosticos)
+                {
+                    db.Diagnosticos.Add(new Diagnostico() { IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion });
+                }
 
                 db.SaveChanges();
 
@@ -180,12 +183,7 @@ namespace MEDECAWebApp.Controllers
                     Nombre = s.Nombre,
                     Id = s.Id
                 }).ToList();
-
-
-                foreach (var dg in diagnosticos)
-                {
-                    db.Diagnosticos.Add(new Diagnostico() { IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion });
-                }
+                                               
 
                 ordentrabajo.InsumosProveedores = ordentrabajo.InsumosProveedores.Select(ip => new InsumosProveedore
                 {

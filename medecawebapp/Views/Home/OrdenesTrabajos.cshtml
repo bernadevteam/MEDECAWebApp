@@ -2,10 +2,11 @@
     ViewBag.Title = "Ordenes Trabajos";
 }
 @section angularscripts{
+<script src="~/Scripts/app/Controllers/ProveedoresController.js"></script>
     <script src="~/Scripts/app/Controllers/OrdenesController.js"></script>
 }
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="page-header">
             <h1>Ordenes Trabajos</h1>
             <h5>En este modulo podr&aacute; crear y modificar ordenes de trabajos.</h5>
@@ -56,6 +57,7 @@
                 </div>
             </div>
         </div>
+        @* BUSQUEDA *@
         <div role="tabpanel" class="tab-pane" id="tabSearch">
             <div class="row">
                 <div class="col-md-12">
@@ -151,20 +153,39 @@
                 </div>
             </div>
         </div>
+        @* DIRECTORIO *@
         <div id="tabDirectorio" class="tab-pane" role="tabpanel">
             <div class="row">
-                <div class="col-sm-9">
-                    <input type="text" ng-model="busquedaProvDir" class="form-control" placeholder="Escribe aqu&iacute; el nombre del proveedor" />
+                <div class="col-sm-12">
+                    <input type="text" ng-model="busquedaProvDir" class="form-control" placeholder="Escribe aqu&iacute; el nombre del proveedor o el area a la que pertenece" />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-9">
-                    <ul class="list-group" ng-show="busquedaProvDir">
-                        <li class="list-group-item" ng-repeat="prov in proveedores | filter:{Nombre : busquedaProvDir} | orderBy:'Nombre'">
-                            {{prov.Nombre}} <span class="pull-right">{{prov.Telefono}}</span>
-                        </li>
-                    </ul>
+            <div class="row" ng-show="busquedaProvDir">
+                {{proveedoresFiltered = (proveedores | propiedadOarray: 'Nombre' : 'Actividades' : 'Nombre' : busquedaProvDir | orderBy:'Nombre');""}}
+
+                <div class="col-sm-12">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Proveedor</th>
+                                <th>Tel&eacute;fono</th>
+                                <th>Correo</th>
+                                <th>&Aacute;reas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="prov in proveedoresFiltered">
+                                <td class="col-sm-4">{{prov.Nombre}} </td>
+                                <td class="col-sm-2">{{prov.Telefono}}</td>
+                                <td class="col-sm-3">{{prov.Correo}}</td>
+                                <td class="col-sm-3"><ul>
+                                                         <li ng-repeat="area in prov.Actividades">{{area.Nombre}}</li>
+                                    </ul></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
         <div ng-controller="VehiculosController">

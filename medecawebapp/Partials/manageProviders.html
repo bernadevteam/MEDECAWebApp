@@ -18,24 +18,27 @@
                         </label>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group ">
-
                                 <label>RNC</label>
-
                                 <input type="text" ng-unique="/api/Proveedores/ExisteRNC" ng-modid="{{nuevoModel.IdProveedor}}" ng-model="nuevoModel.RNC" class="form-control"
                                        ng-minlength="8" ng-maxlength="12" ng-class="{'required-dirty' : proveedoresForm.RNC.$dirty && proveedoresForm.RNC.$invalid}" name="RNC"
                                        ng-prevValue="{{editingModel.RNC}}" />
-
                             </div>
-
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group ">
                                 <label>Tel&eacute;fono</label>
                                 <input type="tel" class="form-control" placeholder="xxx-xxx-xxxxx" ng-model="nuevoModel.Telefono">
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group ">
+                                <label>Correo</label>
+                                <input type="email" class="form-control" placeholder="ejemplo@mail.com" ng-model="nuevoModel.Correo">
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -45,8 +48,26 @@
                             </div>
                         </div>
                     </div>
+                    <label>&Aacute;reas de Trabajo</label>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Seleccionar
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="area in areasTrabajo" ng-click="cambioArea(area)"><a href="#"><input type="checkbox" ng-checked="areaSeleccionada(area)" /> {{area.Nombre}}</a></li>
+                                </ul>
+                            </div>
 
+                        </div>
+                        <div class="col-sm-10">
+                            <span ng-repeat="area in nuevoModel.Actividades" class="prov-area-sel">{{area.Nombre}} </span>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="reset" onclick="regresarVentanaAnterior(this)" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">{{abiertoEnSecuencia ? 'Regresar' : 'Cerrar'}}</button>
                     <button type="submit" onclick="regresarVentanaAnterior(this)" class="btn btn-success" ng-disabled="proveedoresForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar()" data-dismiss="modal">Guardar</button>

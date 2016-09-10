@@ -18,7 +18,7 @@ namespace MEDECAWebApp.Controllers
         // GET api/Actividades
         public IEnumerable<Actividades> GetActividades()
         {
-            return db.Actividades.AsEnumerable();
+            return db.Actividades.AsEnumerable().Select(a => new Actividades() { IdActividad = a.IdActividad , Nombre = a.Nombre}).AsEnumerable();
         }
 
         // GET api/Actividades/5

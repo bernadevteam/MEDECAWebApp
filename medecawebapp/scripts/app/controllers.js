@@ -319,54 +319,6 @@ angular.module('medecaApp')
 	    }
 
 	}])
-	.controller('ProveedoresController', ['$scope', 'proveedoresFactory', function ($scope, modelosFactory) {
-	    $scope.nuevoModel = { Activo: true };
-
-	    if (!$scope.proveedores) {
-	        $scope.proveedores = {};
-	        modelosFactory.get().then(function (response) {
-	            $scope.proveedores = response.data;
-	        });
-	    }
-
-	    $scope.agregar = function () {
-	        modelosFactory.agregar($scope.nuevoModel).then(function (response) {
-	            $scope.proveedores.push(response.data);
-	            reset();
-	        });
-	    };
-
-	    $scope.editar = function (model) {
-	        $scope.editingModel = model;
-	        angular.extend($scope.nuevoModel, model);
-	        $scope.nuevoModel.editar = true;
-	    };
-
-	    function reset() {
-	        $scope.proveedoresForm.$setPristine();
-	        $scope.nuevoModel = { Activo: true };
-	        $scope.uniquemsg = '';
-	    }
-
-	    $scope.guardar = function (model) {
-	        modelosFactory.editar(model).then(function () {
-	            model.editar = false;
-	            angular.extend($scope.editingModel, $scope.nuevoModel);
-	            reset();
-	        });
-	    };
-
-	    $scope.eliminar = function () {
-	        modelosFactory.eliminar($scope.editingModel.IdProveedor).then(function () {
-	            var i = $scope.proveedores.indexOf($scope.editingModel);
-	            $scope.proveedores.splice(i, 1);
-	        });
-	    };
-
-	    $scope.restablecerNuevo = function () {
-	        reset();
-	    };
-	}])
 	.controller('ClientesController', ['$scope', 'clientesFactory', function ($scope, modelosFactory) {
 	    $scope.modelos = {};
 	    $scope.nuevoModel = {};

@@ -145,21 +145,29 @@ app.filter('getByKey', function () {
 })
 .filter('porclienteoplaca', function () {
     return function (model, clienteoplaca) {
-        var items = {};
+        var items = [];
         if (clienteoplaca != null && clienteoplaca.length > 2) {
             angular.forEach(model, function (cliente) {
+                var anadir = false;
+
                 if (cliente.Nombre.toLowerCase().indexOf(clienteoplaca) != -1) {
                     cliente.PorPlaca = false;
-                    items.Cliente = cliente;
-                    return;
+                    anadir = true;
                 }
-                angular.forEach(cliente.Vehiculos, function (vehiculo) {
-                    if (vehiculo.Placa && vehiculo.Placa.toLowerCase().indexOf(clienteoplaca) != -1) {
-                        cliente.PorPlaca = true;
-                        items.Cliente = cliente;
-                        return;
-                    }
-                });
+
+                if (!anadir) {
+                    angular.forEach(cliente.Vehiculos, function (vehiculo) {
+                        if (vehiculo.Placa && vehiculo.Placa.toLowerCase().indexOf(clienteoplaca) != -1) {
+                            cliente.PorPlaca = true;
+                            items.Cliente = cliente;
+                            anadir = true;
+                        }
+                    });
+                }
+
+                if (anadir) {
+                    items.push(cliente);
+                }
 
             });
         }
@@ -167,7 +175,7 @@ app.filter('getByKey', function () {
     };
 })
 .filter('ordenesactivas', function () {
-    return function (model, clienteoplaca) {
+    return function (model) {
         var items = [];
         angular.forEach(model, function (cliente) {
             angular.forEach(cliente.Vehiculos, function (vehiculo) {
@@ -202,6 +210,26 @@ app.filter('getByKey', function () {
         }
         return items;
     };
+})
+.filter('propiedadOarray', function () {
+    return function (model, propiedad, arreglo, elemProp, filtro) {
+        var items = [];
+        if (filtro != null && filtro.length > 2) {
+            angular.forEach(model, function (entidad) {
+                if (entidad[propiedad].toLowerCase().indexOf(filtro) != -1) {
+                    items.push(entidad);
+                } else {
+                    angular.forEach(entidad[arreglo], function (elem) {
+                        if (elem[elemProp].toLowerCase().indexOf(filtro) != -1) {
+                            items.push(entidad);
+                        }
+                    });
+                }
+            });
+        }
+
+        return items;
+    }
 });
 
 
