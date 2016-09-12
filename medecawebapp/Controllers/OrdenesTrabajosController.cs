@@ -26,7 +26,8 @@ namespace MEDECAWebApp.Controllers
         [HttpGet]
         public IEnumerable<DiagnosticoEstado> ObtenerDiagnosticoEstados()
         {
-            return db.DiagnosticoEstados.AsEnumerable().Select(dg => new DiagnosticoEstado() {
+            return db.DiagnosticoEstados.AsEnumerable().Select(dg => new DiagnosticoEstado()
+            {
                 IdDiagnosticoEstado = dg.IdDiagnosticoEstado,
                 Nombre = dg.Nombre
             }).ToList();
@@ -64,8 +65,9 @@ namespace MEDECAWebApp.Controllers
             return ordenestrabajo;
         }
 
+        [HttpPut]
         // PUT api/OrdenesTrabajos/5
-        public HttpResponseMessage PutOrdenesTrabajo(OrdenesTrabajo ordentrabajo)
+        public HttpResponseMessage OrdenesTrabajo(OrdenesTrabajo ordentrabajo)
         {
             if (ModelState.IsValid)
             {
@@ -77,30 +79,39 @@ namespace MEDECAWebApp.Controllers
                     ot.Servicios.Clear();
                     ot.InsumosProveedores.Clear();
                     var dgIds = ot.Diagnosticos.Select(dg => dg.IdDiagnostico).ToArray();
+                    var dgActual = db.Diagnosticos.Where(dg => dg.IdOrden.Equals(ot.Id));
+                    var dgIdsActual = dgActual.Select(dg => dg.IdDiagnostico).ToArray();
+
                     foreach (var diag in dgIds)
                     {
-                        var dbDG = db.Diagnosticos.Find(diag);
-                        db.Diagnosticos.Remove(dbDG);
+                        if (!dgIdsActual.Contains(diag))
+                        {
+                            var dbDG = db.Diagnosticos.Find(diag);
+                            db.Diagnosticos.Remove(dbDG);
+                        }
                     }
+
                     var cotizados = db.InsumosCotizados.Where(c => c.IdOrden.Equals(ordentrabajo.Id));
 
-                    foreach(var cotizado in cotizados)
+                    foreach (var cotizado in cotizados)
                     {
                         if (!ordentrabajo.InsumosCotizados.Any(ic => ic.IdInsumoCotizado.Equals(cotizado.IdInsumoCotizado)))
                         {
                             db.InsumosCotizados.Remove(cotizado);
                         }
-                        else
-                        {
-                        }
-                        if(cotizado.IdInsumoCotizado > 0) { } else { }
+                    }
+
+                    foreach (var dg in ordentrabajo.Diagnosticos)
+                    {
+                        dg.IdOrden = ordentrabajo.Id;
+                        db.Diagnosticos.AddOrUpdate(dg);
                     }
 
                     foreach (var cotizado in ordentrabajo.InsumosCotizados)
                     {
                         db.InsumosCotizados.AddOrUpdate(cotizado);
                     }
-                        db.SaveChanges();
+                    db.SaveChanges();
 
 
                     foreach (var servicio in db.Servicios)
@@ -119,9 +130,7 @@ namespace MEDECAWebApp.Controllers
                         ot.InsumosProveedores.Add(new InsumosProveedore() { IdProveedor = insProv.IdProveedor, IdInsumo = insProv.IdInsumo, Precio = insProv.Precio, Cantidad = insProv.Cantidad });
                     }
 
-                    foreach (var dg in ordentrabajo.Diagnosticos) {
-                        db.Diagnosticos.Add(new Diagnostico() {IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion});
-                    }
+                    
                     db.SaveChanges();
                 }
                 catch (Exception ex)
@@ -160,7 +169,7 @@ namespace MEDECAWebApp.Controllers
                         ordentrabajo.Servicios.Add(servicio);
                     }
                 }
-                                
+
                 foreach (var insProv in selInsProv)
                 {
                     var ins = db.Insumos.Find(insProv.IdInsumo);
@@ -173,7 +182,7 @@ namespace MEDECAWebApp.Controllers
 
                 foreach (var dg in diagnosticos)
                 {
-                    db.Diagnosticos.Add(new Diagnostico() { IdEstado = dg.IdEstado, IdOrden = ordentrabajo.Id, Descripcion = dg.Descripcion });
+                    db.Diagnosticos.Add(dg);
                 }
 
                 db.SaveChanges();
@@ -183,7 +192,7 @@ namespace MEDECAWebApp.Controllers
                     Nombre = s.Nombre,
                     Id = s.Id
                 }).ToList();
-                                               
+
 
                 ordentrabajo.InsumosProveedores = ordentrabajo.InsumosProveedores.Select(ip => new InsumosProveedore
                 {
@@ -208,7 +217,8 @@ namespace MEDECAWebApp.Controllers
 
                 ordentrabajo.InsumosCotizados.Clear();
 
-                foreach(var cotizado in insumosCotizados) {
+                foreach (var cotizado in insumosCotizados)
+                {
                     cotizado.OrdenesTrabajos = null;
                     cotizado.Proveedores = null;
                     cotizado.MarcasInsumos = null;
@@ -217,7 +227,7 @@ namespace MEDECAWebApp.Controllers
                     ordentrabajo.InsumosCotizados.Add(cotizado);
                 }
 
-                ordentrabajo.Diagnosticos = diagnosticos;
+                ordentrabajo.Diagnosticos = diagnosticos.Select(d => new Diagnostico() { IdDiagnostico = d.IdDiagnostico, IdEstado = d.IdEstado, IdOrden = d.IdOrden, Descripcion = d.Descripcion}).ToList();
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ordentrabajo);
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = ordentrabajo.Id }));
@@ -250,6 +260,23 @@ namespace MEDECAWebApp.Controllers
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, ordenestrabajo);
+        }
+
+        [HttpPut]
+        public HttpResponseMessage AprobarDiagnostico(Diagnostico dg)
+        {
+            try
+            {
+                dg.IdEstado = 2;
+                db.Diagnosticos.AddOrUpdate(dg);
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, true);
         }
 
         protected override void Dispose(bool disposing)

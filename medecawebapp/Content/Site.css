@@ -254,10 +254,6 @@ pre {
     width: 120px;
 }
 
-.modal-lg {
-    width: 1000px !important;
-}
-
 .hr-dashed {
     border-style: dashed;
     border-width: 0.5px;
@@ -306,4 +302,10 @@ pre {
     #nuevaOrdenTrabajo .panel-body {
         height: 176px;
     }
+}
+
+@media(min-width:500px){
+    .modal-lg {
+    width: 1000px !important;
+}
 }

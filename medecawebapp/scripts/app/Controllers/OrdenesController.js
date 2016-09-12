@@ -218,20 +218,31 @@
             $scope.nuevoModel.Diagnosticos.push(angular.extend($scope.diagnosticoPivot));
             resetDiagPivot();
         };
+
         $scope.modificarDiagnostico = function (diagnostico) {
             angular.extend($scope.diagnosticoPivot, diagnostico);
             $scope.diagnosticoEdit = diagnostico;
             $scope.diagnosticoPivot.Editando = true;
         };
+
         $scope.guardarDiagnostico = function () {
             angular.extend($scope.diagnosticoEdit, $scope.diagnosticoPivot);
             resetDiagPivot();
         };
+
         $scope.removerDiagnostico = function (diagnostico) {
             var i = $scope.nuevoModel.Diagnosticos.indexOf(diagnostico);
             $scope.nuevoModel.Diagnosticos.splice(i, 1);
         };
+
         $scope.cancelarEdicionDiagnostico = resetDiagPivot;
+
+        $scope.aprobarDiagnostico = function (diag) {
+            modelosFactory.aprobarDiagnostico(diag).then(function () {
+                diag.IdEstado = 2;
+                angular.extend($scope.editingModel, $scope.nuevoModel);
+            });
+        };
 
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
