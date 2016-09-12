@@ -943,7 +943,6 @@
     <Content Include="Scripts\select.min.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="underscore-min.js" />
     <Content Include="Views\Home\Clientes.cshtml" />
     <Content Include="Views\Home\Vehiculos.cshtml" />
     <Content Include="Web.config">

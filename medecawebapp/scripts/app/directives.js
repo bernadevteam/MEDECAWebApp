@@ -113,7 +113,7 @@ angular.module('medecaApp')
                       scope.Estado = attrs.idestado;
                       scope.EsDetalle = attrs.esdetalle;
                   },
-                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.1.0'
+                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.1.2'
               }
           })
       .directive('insumosCotizadosTpl', function () {
