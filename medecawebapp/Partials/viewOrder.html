@@ -3,6 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="restablecerNuevo()"><span aria-hidden="true">&times;</span></button>
                 <span class="star" ng-show="SelectedCliente.Favorito"></span>
                 <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
             </div>

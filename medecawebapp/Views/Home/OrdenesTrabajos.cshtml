@@ -30,6 +30,8 @@
                                <h4 class="panel-title"></h4>
                            </div>
                            <div data-toggle="modal"
+                                data-backdrop="static"
+                                data-keyboard="false"
                                 data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)"
                                 style="cursor:pointer"
                                 class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
