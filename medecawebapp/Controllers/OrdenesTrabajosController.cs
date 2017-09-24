@@ -12,6 +12,7 @@ using System.Data.Entity.Migrations;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class OrdenesTrabajosController : ApiController
     {
         private MEDECAEntities db = new MEDECAEntities();
@@ -227,7 +228,10 @@ namespace MEDECAWebApp.Controllers
                     ordentrabajo.InsumosCotizados.Add(cotizado);
                 }
 
-                ordentrabajo.Diagnosticos = diagnosticos.Select(d => new Diagnostico() { IdDiagnostico = d.IdDiagnostico, IdEstado = d.IdEstado, IdOrden = d.IdOrden, Descripcion = d.Descripcion}).ToList();
+                ordentrabajo.Diagnosticos = diagnosticos.Select(d => new Diagnostico() { IdDiagnostico = d.IdDiagnostico, IdEstado = d.IdEstado,
+                    IdOrden = d.IdOrden, Descripcion = d.Descripcion,
+                    Ajustes = d.Ajustes
+                }).ToList();
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, ordentrabajo);
                 response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = ordentrabajo.Id }));

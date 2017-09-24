@@ -80,10 +80,13 @@
                             <a href="~/Content/MedecaGuiaUso.pdf" target="_blank"><i class="fa fa-newspaper-o fa-fw"></i> Guia de Uso</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                            <a href="#" ><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            <a href="#" data-toggle="modal"
+                                data-backdrop="static"
+                                data-keyboard="false"
+                                data-target="#viewUsers"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -163,6 +166,7 @@
             <div class="loading-spiner" data-loading>
             </div>
             @RenderBody()
+            <manage-users ng-controller="AutorizadosController"></manage-users>
         </div>
     </div>
     @Scripts.Render("~/bundles/jquery")
@@ -195,9 +199,9 @@
     <script src="~/Scripts/app/checklist-model.js"></script>
     <script src="~/Scripts/app/filters.js?V1.1.2"></script>
     <script src="~/Scripts/app/ng-order-object-by.js.js"></script>
-    <script src="~/Scripts/app/services.js?V1.1.2"></script>
-    <script src="~/Scripts/app/controllers.js?V1.1.1"></script>
-    <script src="~/Scripts/app/directives.js?V1.1.2"></script>
+    <script src="~/Scripts/app/services.js?V1.2.0"></script>
+    <script src="~/Scripts/app/controllers.js?V1.2.0"></script>
+    <script src="~/Scripts/app/directives.js?V1.2.0"></script>
     @RenderSection("angularscripts", required: false)
 </body>
 </html>

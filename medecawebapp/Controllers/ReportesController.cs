@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class ReportesController : ApiController
     {
          private MEDECAEntities db = new MEDECAEntities();

@@ -1,16 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MEDECAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="MEDECAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Actividades">
           <Key>
             <PropertyRef Name="IdActividad" />
           </Key>
           <Property Name="IdActividad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Autorizados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AppId" Type="int" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Rol" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Cita">
           <Key>
@@ -59,6 +68,7 @@
           <Property Name="IdEstado" Type="int" Nullable="false" />
           <Property Name="IdOrden" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
+          <Property Name="Ajustes" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Insumos">
           <Key>
@@ -470,6 +480,7 @@
         </Function>
         <EntityContainer Name="MEDECAModelStoreContainer">
           <EntitySet Name="Actividades" EntityType="Self.Actividades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Autorizados" EntityType="Self.Autorizados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Combustibles" EntityType="Self.Combustibles" Schema="dbo" store:Type="Tables" />
@@ -573,8 +584,8 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MEDECAModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="MEDECAEntities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="MEDECAModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="MEDECAEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="Clientes" EntityType="MEDECAModel.Cliente" />
           <EntitySet Name="Combustibles" EntityType="MEDECAModel.Combustible" />
           <EntitySet Name="Insumos" EntityType="MEDECAModel.Insumo" />
@@ -650,15 +661,6 @@
           <FunctionImport Name="ObtenerHistoricoServiciosMesesConteo" ReturnType="Collection(MEDECAModel.ObtenerHistoricoServiciosMesesConteo_Result)" />
           <FunctionImport Name="ObtenerVehiculosCambioAceiteProximo" ReturnType="Collection(MEDECAModel.ObtenerVehiculosCambioAceiteProximo_Result)" />
           <EntitySet Name="DiagnosticoEstados" EntityType="MEDECAModel.DiagnosticoEstado" />
-          <EntitySet Name="Diagnosticos" EntityType="MEDECAModel.Diagnostico" />
-          <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados">
-            <End Role="DiagnosticoEstado" EntitySet="DiagnosticoEstados" />
-            <End Role="Diagnostico" EntitySet="Diagnosticos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos">
-            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
-            <End Role="Diagnostico" EntitySet="Diagnosticos" />
-          </AssociationSet>
           <EntitySet Name="Citas" EntityType="MEDECAModel.Cita" />
           <EntitySet Name="Actividades" EntityType="MEDECAModel.Actividades" />
           <EntitySet Name="MarcasInsumos" EntityType="MEDECAModel.MarcasInsumos" />
@@ -683,12 +685,22 @@
             <End Role="Proveedore" EntitySet="Proveedores" />
             <End Role="InsumosCotizados" EntitySet="InsumosCotizados" />
           </AssociationSet>
+          <EntitySet Name="Autorizados" EntityType="MEDECAModel.Autorizados" />
+          <EntitySet Name="Diagnosticos" EntityType="MEDECAModel.Diagnostico" />
+          <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados">
+            <End Role="DiagnosticoEstado" EntitySet="DiagnosticoEstados" />
+            <End Role="Diagnostico" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos">
+            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
+            <End Role="Diagnostico" EntitySet="Diagnosticos" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="IDCliente" />
           </Key>
-          <Property Name="IDCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Identificacion" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
           <Property Name="TipoIdentificacion" Type="String" MaxLength="3" Unicode="false" FixedLength="true" />
           <Property Name="Direccion" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
@@ -702,7 +714,7 @@
           <Key>
             <PropertyRef Name="IdCombustible" />
           </Key>
-          <Property Name="IdCombustible" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCombustible" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="25" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Vehiculos" Relationship="MEDECAModel.FK_Vehiculos_Combustibles" FromRole="Combustibles" ToRole="Vehiculos" />
         </EntityType>
@@ -710,7 +722,7 @@
           <Key>
             <PropertyRef Name="IdInsumo" />
           </Key>
-          <Property Name="IdInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Vehiculos" Relationship="MEDECAModel.VehiculosInsumos" FromRole="Insumos" ToRole="Vehiculos" />
@@ -722,7 +734,7 @@
           <Key>
             <PropertyRef Name="IdModelo" />
           </Key>
-          <Property Name="IdModelo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdModelo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="IdMarca" Type="Int32" Nullable="false" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="VehiculoMarca" Relationship="MEDECAModel.FK_Modelos_VehiculoMarcas" FromRole="Modelos" ToRole="VehiculoMarcas" />
@@ -734,7 +746,7 @@
           </Key>
           <Property Name="name" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
@@ -742,7 +754,7 @@
           <Key>
             <PropertyRef Name="IdMarca" />
           </Key>
-          <Property Name="IdMarca" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMarca" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
           <NavigationProperty Name="Modelos" Relationship="MEDECAModel.FK_Modelos_VehiculoMarcas" FromRole="VehiculoMarcas" ToRole="Modelos" />
         </EntityType>
@@ -750,7 +762,7 @@
           <Key>
             <PropertyRef Name="IdVehiculo" />
           </Key>
-          <Property Name="IdVehiculo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdVehiculo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="IdCliente" Type="Int32" Nullable="false" />
           <Property Name="NoChasis" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="IdModelo" Type="Int32" Nullable="false" />
@@ -823,7 +835,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="Activo" Nullable="false" />
           <Property Type="Int32" Name="IntervaloDias" />
@@ -833,7 +845,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="NoOrden" />
           <Property Type="String" Name="Fallas" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Reparaciones" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -847,8 +859,8 @@
           <Property Name="FechaEntrega" Type="DateTime" Precision="3" />
           <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
           <Property Name="DistanciaRecorrida" Type="Double" />
-          <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
           <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosCotizados" />
+          <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -883,7 +895,7 @@
           <Property Type="String" Name="Vehiculo" Nullable="true" MaxLength="136" />
           <Property Type="String" Name="Nombre" Nullable="true" MaxLength="25" />
         </ComplexType>
-        <ComplexType Name="HistoricoServicios" >
+        <ComplexType Name="HistoricoServicios">
           <Property Type="String" Name="Info" Nullable="true" MaxLength="136" />
           <Property Type="String" Name="Placa" Nullable="false" MaxLength="50" />
           <Property Type="String" Name="Fecha" Nullable="true" MaxLength="30" />
@@ -915,7 +927,7 @@
           <Key>
             <PropertyRef Name="IdProveedor" />
           </Key>
-          <Property Type="Int32" Name="IdProveedor" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="IdProveedor" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="RNC" MaxLength="12" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="Activo" Nullable="false" />
@@ -997,51 +1009,16 @@
           <Key>
             <PropertyRef Name="IdDiagnosticoEstado" />
           </Key>
-          <Property Name="IdDiagnosticoEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdDiagnosticoEstado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Activo" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="DiagnosticoEstado" ToRole="Diagnostico" />
         </EntityType>
-        <EntityType Name="Diagnostico">
-          <Key>
-            <PropertyRef Name="IdDiagnostico" />
-          </Key>
-          <Property Name="IdDiagnostico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdEstado" Type="Int32" Nullable="false" />
-          <Property Name="IdOrden" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="DiagnosticoEstado" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="Diagnostico" ToRole="DiagnosticoEstado" />
-          <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="Diagnostico" ToRole="OrdenesTrabajo" />
-        </EntityType>
-        <Association Name="FK_Diagnosticos_DiagnosticoEstados">
-          <End Type="MEDECAModel.DiagnosticoEstado" Role="DiagnosticoEstado" Multiplicity="1" />
-          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DiagnosticoEstado">
-              <PropertyRef Name="IdDiagnosticoEstado" />
-            </Principal>
-            <Dependent Role="Diagnostico">
-              <PropertyRef Name="IdEstado" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Diagnosticos_OrdenesTrabajos">
-          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
-          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="OrdenesTrabajo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Diagnostico">
-              <PropertyRef Name="IdOrden" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Cita">
           <Key>
             <PropertyRef Name="IdCita" />
           </Key>
-          <Property Name="IdCita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCita" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Hora" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="IdVehiculo" Type="Int32" />
@@ -1052,7 +1029,7 @@
           <Key>
             <PropertyRef Name="IdActividad" />
           </Key>
-          <Property Name="IdActividad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdActividad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Proveedores" Relationship="MEDECAModel.ProveedoresActividades" FromRole="Actividades" ToRole="Proveedore" />
         </EntityType>
@@ -1060,7 +1037,7 @@
           <Key>
             <PropertyRef Name="IdMarcaInsumo" />
           </Key>
-          <Property Name="IdMarcaInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMarcaInsumo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_MarcasInsumos" FromRole="MarcasInsumos" ToRole="InsumosCotizados" />
         </EntityType>
@@ -1072,7 +1049,7 @@
           <Key>
             <PropertyRef Name="IdInsumoCotizado" />
           </Key>
-          <Property Name="IdInsumoCotizado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdInsumoCotizado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="IdOrden" Type="Int32" Nullable="false" />
           <Property Name="IdInsumo" Type="Int32" Nullable="false" />
           <Property Name="IdProveedor" Type="Int32" />
@@ -1136,11 +1113,56 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Autorizados">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AppId" Type="Int32" Nullable="false" />
+          <Property Name="Correo" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Rol" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diagnostico">
+          <Key>
+            <PropertyRef Name="IdDiagnostico" />
+          </Key>
+          <Property Name="IdDiagnostico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEstado" Type="Int32" Nullable="false" />
+          <Property Name="IdOrden" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Ajustes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="DiagnosticoEstado" Relationship="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" FromRole="Diagnostico" ToRole="DiagnosticoEstado" />
+          <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="Diagnostico" ToRole="OrdenesTrabajo" />
+        </EntityType>
+        <Association Name="FK_Diagnosticos_DiagnosticoEstados">
+          <End Type="MEDECAModel.DiagnosticoEstado" Role="DiagnosticoEstado" Multiplicity="1" />
+          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiagnosticoEstado">
+              <PropertyRef Name="IdDiagnosticoEstado" />
+            </Principal>
+            <Dependent Role="Diagnostico">
+              <PropertyRef Name="IdEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Diagnosticos_OrdenesTrabajos">
+          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
+          <End Type="MEDECAModel.Diagnostico" Role="Diagnostico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diagnostico">
+              <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MEDECAModelStoreContainer" CdmEntityContainer="MEDECAEntities">
           <EntitySetMapping Name="Clientes">
             <EntityTypeMapping TypeName="MEDECAModel.Cliente">
@@ -1283,9 +1305,9 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ObtenerHistoricoServicios" FunctionName="MEDECAModel.Store.ObtenerHistoricoServicios" >
+          <FunctionImportMapping FunctionImportName="ObtenerHistoricoServicios" FunctionName="MEDECAModel.Store.ObtenerHistoricoServicios">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="MEDECAModel.HistoricoServicios" >
+              <ComplexTypeMapping TypeName="MEDECAModel.HistoricoServicios">
                 <ScalarProperty Name="Info" ColumnName="Info" />
                 <ScalarProperty Name="Placa" ColumnName="Placa" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
@@ -1327,7 +1349,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ValidarCedORNC" FunctionName="MEDECAModel.Store.ValidarCedORNC" >
+          <FunctionImportMapping FunctionImportName="ValidarCedORNC" FunctionName="MEDECAModel.Store.ValidarCedORNC">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MEDECAModel.ValidarCedORNC_Result">
               <ScalarProperty Name="Existe" ColumnName="Existe" />
@@ -1335,7 +1357,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ValidarPlaca" FunctionName="MEDECAModel.Store.ValidarPlaca" >
+          <FunctionImportMapping FunctionImportName="ValidarPlaca" FunctionName="MEDECAModel.Store.ValidarPlaca">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MEDECAModel.ValidarPlaca_Result">
               <ScalarProperty Name="Existe" ColumnName="Existe" />
@@ -1354,7 +1376,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ValidarNoOrden" FunctionName="MEDECAModel.Store.ValidarNoOrden" >
+          <FunctionImportMapping FunctionImportName="ValidarNoOrden" FunctionName="MEDECAModel.Store.ValidarNoOrden">
             <ResultMapping>
               <ComplexTypeMapping TypeName="MEDECAModel.ValidarPlaca_Result">
                 <ScalarProperty Name="Existe" ColumnName="Existe" />
@@ -1396,16 +1418,6 @@
                 <ScalarProperty Name="Activo" ColumnName="Activo" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdDiagnosticoEstado" ColumnName="IdDiagnosticoEstado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Diagnosticos">
-            <EntityTypeMapping TypeName="MEDECAModel.Diagnostico">
-              <MappingFragment StoreEntitySet="Diagnosticos">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
-                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="IdDiagnostico" ColumnName="IdDiagnostico" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1462,27 +1474,48 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Autorizados">
+            <EntityTypeMapping TypeName="MEDECAModel.Autorizados">
+              <MappingFragment StoreEntitySet="Autorizados">
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="AppId" ColumnName="AppId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Diagnosticos">
+            <EntityTypeMapping TypeName="MEDECAModel.Diagnostico">
+              <MappingFragment StoreEntitySet="Diagnosticos">
+                <ScalarProperty Name="Ajustes" ColumnName="Ajustes" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="IdDiagnostico" ColumnName="IdDiagnostico" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
-        <DesignerProperty Name="UseLegacyProvider" Value="True" />
-      </DesignerInfoPropertySet>
-    </Options>
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <edmx:DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams></Diagrams>
-  </Designer>
+    <edmx:Diagrams />
+  </edmx:Designer>
 </edmx:Edmx>

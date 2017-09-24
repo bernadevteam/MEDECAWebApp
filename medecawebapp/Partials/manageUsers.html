@@ -1,0 +1,47 @@
+﻿<div class="modal fade" tabindex="-1" role="dialog" id="viewUsers">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="restablecerNuevo()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Acceso a usuarios</h4>
+            </div>
+            <div class="modal-body">
+                <form name="autorizadosForm">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-9">
+                                    Correo
+                                </th>
+                                <th class="col-sm-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="usuario in usuarios">
+                                <td>{{usuario.Correo}}</td>
+                                <td>
+                                    <div class="btn-group" ng-if="usuario.CanDelete">
+                                        <button type="button" class="btn btn-default" ng-show="usuario.delete" ng-click="eliminarCancel(usuario)"><span class="glyphicon glyphicon-remove"></span></button>
+                                        <button type="button" class="btn btn-danger" ng-hide="usuario.delete" ng-click="eliminarUsuario(usuario)"><span class="glyphicon glyphicon-trash"></span></button>
+                                        <button type="button" class="btn btn-success" ng-show="usuario.delete" ng-click="eliminar()"><span class="glyphicon glyphicon-ok"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <input name="correo" type="email" required class="form-control" placeholder="Escriba aquí el correo. Ej.: correo@correo.com" ng-model="usuario.Correo" />
+                                </td>
+                                <td><button type="button" class="btn btn-success" ng-click="agregar()" ng-disabled="autorizadosForm.correo.$invalid"><span class="glyphicon glyphicon-floppy-disk"></span></button></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-default" data-dismiss="modal" ng-click="restablecer()">Cerrar</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

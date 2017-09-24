@@ -141,9 +141,16 @@
                                 </div>
                                 <div class="row row-agregar-diagnostico">
                                     <div class="col-md-8">
-                                        <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
-                                                  maxlength="250" ng-model="diagnosticoPivot.Descripcion" cols="2" spellcheck="true"
-                                                  ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Escriba aqu&iacute; el problema"
+                                                   ng-model="diagnosticoPivot.Descripcion" spellcheck="true"
+                                                   ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false" />
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" placeholder="Escriba aqu&iacute; el diagn&oacute;stico"
+                                                      maxlength="250" ng-model="diagnosticoPivot.Ajustes" cols="2" spellcheck="true"
+                                                      ng-focus="ocultarGuardar = true" ng-blur="ocultarGuardar = false"></textarea>
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="btn-group-vertical btn-block" role="group" aria-label="...">
@@ -152,7 +159,7 @@
                                                     class="btn btn-success" type="button">
                                                 <span class="glyphicon ng-class:{'glyphicon-ok' : diagnosticoPivot.Editando, 'glyphicon-plus-sign': !diagnosticoPivot.Editando};"></span> {{diagnosticoPivot.Editando ? "Guardar Cambio" : "Agregar Diagn&oacute;stico"}}
                                             </button>
-                                            <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico" class="btn btn-default">
+                                            <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico()" class="btn btn-default">
                                                 No Modificar
                                             </button>
                                         </div>

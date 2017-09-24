@@ -58,7 +58,7 @@ angular.module('medecaApp')
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: medecaURL + 'partials/viewOrder.html?V1.1.1'
+               templateUrl: medecaURL + 'partials/viewOrder.html?V1.2.0'
            }
        })
          .directive('manageModel', function () {
@@ -102,7 +102,14 @@ angular.module('medecaApp')
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: medecaURL + 'partials/manageOrder.html?V1.1.0'
+            templateUrl: medecaURL + 'partials/manageOrder.html?V1.2.0'
+        }
+    })
+    .directive('manageUsers', function () {
+        return {
+            restrict: 'E',
+            scope: false,
+            templateUrl: medecaURL + 'partials/manageUsers.html?V1.2.0'
         }
     })
           .directive('diagnosticoTpl', function () {
@@ -113,7 +120,7 @@ angular.module('medecaApp')
                       scope.Estado = attrs.idestado;
                       scope.EsDetalle = attrs.esdetalle;
                   },
-                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.1.2'
+                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.2.0'
               }
           })
       .directive('insumosCotizadosTpl', function () {

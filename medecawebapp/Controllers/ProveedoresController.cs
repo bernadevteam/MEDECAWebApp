@@ -12,6 +12,7 @@ using System.Web.Http;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class ProveedoresController : ApiController
     {
         private MEDECAEntities db = new MEDECAEntities();

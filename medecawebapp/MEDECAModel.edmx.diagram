@@ -27,9 +27,6 @@
         <AssociationConnector Association="MEDECAModel.FK_InsumosProveedores_OrdenesTrabajos" />
         <AssociationConnector Association="MEDECAModel.FK_InsumosProveedores_Proveedores" />
         <EntityTypeShape EntityType="MEDECAModel.DiagnosticoEstado" Width="1.5" PointX="10.375" PointY="5.5" />
-        <EntityTypeShape EntityType="MEDECAModel.Diagnostico" Width="1.5" PointX="12.625" PointY="7.875" />
-        <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" />
-        <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" />
         <EntityTypeShape EntityType="MEDECAModel.Cita" Width="1.5" PointX="5.375" PointY="6.75" />
         <EntityTypeShape EntityType="MEDECAModel.Actividades" Width="1.5" PointX="4" PointY="17.5" />
         <EntityTypeShape EntityType="MEDECAModel.MarcasInsumos" Width="1.5" PointX="12.375" PointY="16.25" />
@@ -39,6 +36,10 @@
         <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_MarcasInsumos" />
         <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" />
         <AssociationConnector Association="MEDECAModel.FK_InsumosCotizados_Proveedores" />
+        <EntityTypeShape EntityType="MEDECAModel.Autorizados" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MEDECAModel.Diagnostico" Width="1.5" PointX="12.625" PointY="7.875" />
+        <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" />
+        <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

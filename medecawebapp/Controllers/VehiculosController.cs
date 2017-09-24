@@ -12,6 +12,7 @@ using System.Data.Entity.Migrations;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class VehiculosController : ApiController
     {
         private MEDECAEntities db = new MEDECAEntities();

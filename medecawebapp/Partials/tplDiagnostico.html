@@ -10,7 +10,8 @@
 {{aprobarDesdeDetalle = EsDetalle && diagnostico.IdEstado == 1;""}}
     <div class="row">
         <div ng-class="EsDetalle && !aprobarDesdeDetalle ? 'col-sm-12' : 'col-sm-11 col-xs-10'">
-            {{diagnostico.Descripcion}}
+            <strong>{{diagnostico.Descripcion}}</strong>
+            <p>{{diagnostico.Ajustes}}</p>
         </div>
         <div class="col-sm-1" ng-show="aprobarDesdeDetalle || !EsDetalle">
             <div class="btn-group">

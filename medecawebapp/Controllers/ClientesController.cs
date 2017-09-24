@@ -11,6 +11,7 @@ using System.Web.Http;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class ClientesController : ApiController
     {
         private MEDECAEntities db = new MEDECAEntities();
@@ -140,6 +141,7 @@ namespace MEDECAWebApp.Controllers
                             IdOrden = dg.IdOrden,
                             IdEstado = dg.IdEstado,
                             Descripcion = dg.Descripcion,
+                            Ajustes = dg.Ajustes,
                             DiagnosticoEstado = new DiagnosticoEstado() { IdDiagnosticoEstado = dg.DiagnosticoEstado.IdDiagnosticoEstado,
                             Nombre = dg.DiagnosticoEstado.Nombre}
                         }),

@@ -250,7 +250,28 @@ angular.module('medecaApp')
 		};
 
 		return modelFact;
-	}])
+    }])
+    .factory('usuariosFactory', ['$http', function ($http, baseURL) {
+        var modelFact = {};
+        var url = medecaURL + 'api/Autorizados';
+        modelFact.get = function () {
+            return $http.get(url);
+        };
+
+        modelFact.agregar = function (model) {
+            return $http.post(url, model);
+        };
+
+        modelFact.editar = function (model) {
+            return $http.put(url, model);
+        };
+
+        modelFact.eliminar = function (id) {
+            return $http.delete(url + '?id=' + id);
+        };
+
+        return modelFact;
+    }])
 	.factory('dashboardFactory', ['$http', function ($http, baseURL) {
 		var modelFact = {};
 		var url = medecaURL + 'api/Dashboard';

@@ -11,6 +11,7 @@ using System.Web.Http;
 
 namespace MEDECAWebApp.Controllers
 {
+    [Authorize]
     public class CitasController : ApiController
     {
         private MEDECAEntities db = new MEDECAEntities();
