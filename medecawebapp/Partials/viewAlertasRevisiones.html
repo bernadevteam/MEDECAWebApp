@@ -1,0 +1,61 @@
+﻿<div class="modal fade" tabindex="-1" role="dialog" id="AlertasRevisiones">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Veh&iacute;culos con mas de tres meses sin regresar</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead><tr>
+                        <th>Cliente</th>
+                        <th>Veh&iacute;culo</th>
+                        <th>Contacto</th>
+                        <th>
+                           
+                        </th>
+                        </tr></thead>
+                    <tbody>
+                        <tr current-page="currentPage" data-area="Alerta Revisiones"
+                        dir-paginate="alerta in alertas | orderBy: 'Nombre' | itemsPerPage: pageSize">
+                            <td>{{alerta.Nombre}}</td>
+                            <td>{{alerta.Marca}} {{alerta.Modelo}} {{alerta.Anio}}</td>
+                            <td>{{alerta.Telefono}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">Marcar como</li>
+                                        <li><a href="#" data-accion="Contactado" ng-click="marcarComo(alerta, 3)">Contactado</a></li>
+                                        <li><a href="#" data-accion="Pospuesto 4H" ng-click="posponer(alerta,4)">Pospuesto 4H</a></li>
+                                        <li><a href="#" data-accion="Pospuesto Mañana" ng-click="posponer(alerta,'M')">Pospuesto Mañana</a></li>
+                                        <li><a href="#" data-accion="Contactado" ng-click="marcarComo(alerta, 2)">No mostrar</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <!--<label>Registros por página:</label>
+                        <select ng-model="pageSize" class="form-control">
+                            <option value="15">15</option>
+                            <option value="25">25</option>
+                            <option value=50>50</option>
+                            <option value=100>100</option>
+                        </select>-->
+                    </div>
+                    <div class="col-lg-10">
+                        <dir-pagination-controls></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

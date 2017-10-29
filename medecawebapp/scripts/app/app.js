@@ -1,5 +1,19 @@
 ﻿'use strict';
 
+$(document).on('click','[data-accion]',function (e) {
+    var accion = e.target.dataset.accion || $(e.target).closest('[data-accion]').data('accion');
+
+    if (accion) {
+    debugger
+        var area = $(e.target).closest('[data-area]').data('area');
+        var seccion = $(e.target).closest('[data-seccion]').data('seccion');
+        gtag('event', accion, {
+            'event_category': area,
+            'event_label': seccion
+        });
+    }
+});
+
 angular.module('medecaApp', ['ngOrderObjectBy', 'checklist-model', 'ngMaterial', 'angular.morris-chart', 'mwl.calendar', 'ui.bootstrap', 'angularUtils.directives.dirPagination'])
 .run(function ($rootScope) {
     /*

@@ -12,6 +12,15 @@
           <Property Name="IdActividad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
+        <EntityType Name="AlertasProximosChequeos">
+          <Key>
+            <PropertyRef Name="IdAlerta" />
+          </Key>
+          <Property Name="IdAlerta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdOrden" Type="int" Nullable="false" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
+          <Property Name="FechaActualizacion" Type="date" Nullable="false" />
+        </EntityType>
         <EntityType Name="Autorizados">
           <Key>
             <PropertyRef Name="Id" />
@@ -215,6 +224,39 @@
           <Property Name="IdVehiculo" Type="int" Nullable="false" />
           <Property Name="IdInsumo" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MEDECA.dbo.View_ClientesProximasRevisiones' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_ClientesProximasRevisiones">
+          <Key>
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="OrdenId" />
+            <PropertyRef Name="FechaRecepcion" />
+            <PropertyRef Name="IdEstado" />
+            <PropertyRef Name="IdAlerta" />
+          </Key>
+          <Property Name="IdVehiculo" Type="int" />
+          <Property Name="IdCliente" Type="int" />
+          <Property Name="Placa" Type="varchar" MaxLength="50" />
+          <Property Name="NoChasis" Type="varchar" MaxLength="50" />
+          <Property Name="IdModelo" Type="int" />
+          <Property Name="Anio" Type="int" />
+          <Property Name="IdCombustible" Type="int" />
+          <Property Name="Color" Type="varchar" MaxLength="25" />
+          <Property Name="Kilometraje" Type="float" />
+          <Property Name="Motor" Type="varchar" MaxLength="150" />
+          <Property Name="UnidadDistancia" Type="varchar" MaxLength="2" />
+          <Property Name="IdMarca" Type="int" />
+          <Property Name="Modelo" Type="varchar" MaxLength="50" />
+          <Property Name="Marca" Type="varchar" MaxLength="50" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Telefono" Type="varchar" MaxLength="50" />
+          <Property Name="OrdenId" Type="int" Nullable="false" />
+          <Property Name="FechaRecepcion" Type="datetime" Nullable="false" />
+          <Property Name="ProximaRevision" Type="datetime" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
+          <Property Name="IdAlerta" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Diagnosticos_DiagnosticoEstados">
           <End Role="DiagnosticoEstados" Type="Self.DiagnosticoEstados" Multiplicity="1" />
           <End Role="Diagnosticos" Type="Self.Diagnosticos" Multiplicity="*" />
@@ -236,6 +278,18 @@
             </Principal>
             <Dependent Role="Diagnosticos">
               <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas">
+          <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
+          <End Role="AlertasProximosChequeos" Type="Self.AlertasProximosChequeos" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertasProximosChequeos">
+              <PropertyRef Name="IdAlerta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -455,6 +509,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ActualizarEstadoAlerta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdAlerta" Type="int" Mode="In" />
+          <Parameter Name="IdEstado" Type="int" Mode="In" />
+        </Function>
         <Function Name="ObtenerCitasdeHoy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ObtenerHistoricoServicios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ObtenerHistoricoServiciosConteo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -480,6 +538,7 @@
         </Function>
         <EntityContainer Name="MEDECAModelStoreContainer">
           <EntitySet Name="Actividades" EntityType="Self.Actividades" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlertasProximosChequeos" EntityType="Self.AlertasProximosChequeos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Autorizados" EntityType="Self.Autorizados" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clientes" EntityType="Self.Clientes" Schema="dbo" store:Type="Tables" />
@@ -500,6 +559,32 @@
           <EntitySet Name="VehiculoMarcas" EntityType="Self.VehiculoMarcas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vehiculos" EntityType="Self.Vehiculos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VehiculosInsumos" EntityType="Self.VehiculosInsumos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="View_ClientesProximasRevisiones" EntityType="Self.View_ClientesProximasRevisiones" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[View_ClientesProximasRevisiones].[IdVehiculo] AS [IdVehiculo], 
+[View_ClientesProximasRevisiones].[IdCliente] AS [IdCliente], 
+[View_ClientesProximasRevisiones].[Placa] AS [Placa], 
+[View_ClientesProximasRevisiones].[NoChasis] AS [NoChasis], 
+[View_ClientesProximasRevisiones].[IdModelo] AS [IdModelo], 
+[View_ClientesProximasRevisiones].[Anio] AS [Anio], 
+[View_ClientesProximasRevisiones].[IdCombustible] AS [IdCombustible], 
+[View_ClientesProximasRevisiones].[Color] AS [Color], 
+[View_ClientesProximasRevisiones].[Kilometraje] AS [Kilometraje], 
+[View_ClientesProximasRevisiones].[Motor] AS [Motor], 
+[View_ClientesProximasRevisiones].[UnidadDistancia] AS [UnidadDistancia], 
+[View_ClientesProximasRevisiones].[IdMarca] AS [IdMarca], 
+[View_ClientesProximasRevisiones].[Modelo] AS [Modelo], 
+[View_ClientesProximasRevisiones].[Marca] AS [Marca], 
+[View_ClientesProximasRevisiones].[Nombre] AS [Nombre], 
+[View_ClientesProximasRevisiones].[Email] AS [Email], 
+[View_ClientesProximasRevisiones].[Telefono] AS [Telefono], 
+[View_ClientesProximasRevisiones].[OrdenId] AS [OrdenId], 
+[View_ClientesProximasRevisiones].[FechaRecepcion] AS [FechaRecepcion], 
+[View_ClientesProximasRevisiones].[ProximaRevision] AS [ProximaRevision], 
+[View_ClientesProximasRevisiones].[IdEstado] AS [IdEstado], 
+[View_ClientesProximasRevisiones].[IdAlerta] AS [IdAlerta]
+FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="Self.FK_Diagnosticos_DiagnosticoEstados">
             <End Role="DiagnosticoEstados" EntitySet="DiagnosticoEstados" />
             <End Role="Diagnosticos" EntitySet="Diagnosticos" />
@@ -507,6 +592,10 @@
           <AssociationSet Name="FK_Diagnosticos_OrdenesTrabajos" Association="Self.FK_Diagnosticos_OrdenesTrabajos">
             <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
             <End Role="Diagnosticos" EntitySet="Diagnosticos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" Association="Self.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas">
+            <End Role="OrdenesTrabajos" EntitySet="OrdenesTrabajos" />
+            <End Role="AlertasProximosChequeos" EntitySet="AlertasProximosChequeos" />
           </AssociationSet>
           <AssociationSet Name="FK_InsumosCotizados_Insumos" Association="Self.FK_InsumosCotizados_Insumos">
             <End Role="Insumos" EntitySet="Insumos" />
@@ -695,6 +784,16 @@
             <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
             <End Role="Diagnostico" EntitySet="Diagnosticos" />
           </AssociationSet>
+          <EntitySet Name="AlertasProximosChequeos" EntityType="MEDECAModel.AlertasProximosChequeo" />
+          <EntitySet Name="View_ClientesProximasRevisiones" EntityType="MEDECAModel.View_ClientesProximasRevisiones" />
+          <AssociationSet Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" Association="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas">
+            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
+            <End Role="AlertasProximosChequeo" EntitySet="AlertasProximosChequeos" />
+          </AssociationSet>
+          <FunctionImport Name="ActualizarEstadoAlerta">
+            <Parameter Name="IdAlerta" Mode="In" Type="Int32" />
+            <Parameter Name="IdEstado" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Cliente">
           <Key>
@@ -861,6 +960,7 @@
           <Property Name="DistanciaRecorrida" Type="Double" />
           <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosCotizados" />
           <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
+          <NavigationProperty Name="AlertasProximosChequeo" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" FromRole="OrdenesTrabajo" ToRole="AlertasProximosChequeo" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -1155,6 +1255,59 @@
             </Principal>
             <Dependent Role="Diagnostico">
               <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AlertasProximosChequeo">
+          <Key>
+            <PropertyRef Name="IdAlerta" />
+          </Key>
+          <Property Name="IdAlerta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdOrden" Type="Int32" Nullable="false" />
+          <Property Name="IdEstado" Type="Int32" Nullable="false" />
+          <Property Name="FechaActualizacion" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" FromRole="AlertasProximosChequeo" ToRole="OrdenesTrabajo" />
+        </EntityType>
+        <EntityType Name="View_ClientesProximasRevisiones">
+          <Key>
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="OrdenId" />
+            <PropertyRef Name="FechaRecepcion" />
+            <PropertyRef Name="IdEstado" />
+            <PropertyRef Name="IdAlerta" />
+          </Key>
+          <Property Name="IdVehiculo" Type="Int32" />
+          <Property Name="IdCliente" Type="Int32" />
+          <Property Name="Placa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NoChasis" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdModelo" Type="Int32" />
+          <Property Name="Anio" Type="Int32" />
+          <Property Name="IdCombustible" Type="Int32" />
+          <Property Name="Color" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Kilometraje" Type="Double" />
+          <Property Name="Motor" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="UnidadDistancia" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="IdMarca" Type="Int32" />
+          <Property Name="Modelo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrdenId" Type="Int32" Nullable="false" />
+          <Property Name="FechaRecepcion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProximaRevision" Type="DateTime" Precision="3" />
+          <Property Name="IdEstado" Type="Int32" Nullable="false" />
+          <Property Name="IdAlerta" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas">
+          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
+          <End Type="MEDECAModel.AlertasProximosChequeo" Role="AlertasProximosChequeo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertasProximosChequeo">
+              <PropertyRef Name="IdAlerta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1495,6 +1648,45 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AlertasProximosChequeos">
+            <EntityTypeMapping TypeName="MEDECAModel.AlertasProximosChequeo">
+              <MappingFragment StoreEntitySet="AlertasProximosChequeos">
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="IdOrden" ColumnName="IdOrden" />
+                <ScalarProperty Name="IdAlerta" ColumnName="IdAlerta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_ClientesProximasRevisiones">
+            <EntityTypeMapping TypeName="MEDECAModel.View_ClientesProximasRevisiones">
+              <MappingFragment StoreEntitySet="View_ClientesProximasRevisiones">
+                <ScalarProperty Name="IdAlerta" ColumnName="IdAlerta" />
+                <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
+                <ScalarProperty Name="ProximaRevision" ColumnName="ProximaRevision" />
+                <ScalarProperty Name="FechaRecepcion" ColumnName="FechaRecepcion" />
+                <ScalarProperty Name="OrdenId" ColumnName="OrdenId" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="IdMarca" ColumnName="IdMarca" />
+                <ScalarProperty Name="UnidadDistancia" ColumnName="UnidadDistancia" />
+                <ScalarProperty Name="Motor" ColumnName="Motor" />
+                <ScalarProperty Name="Kilometraje" ColumnName="Kilometraje" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="IdCombustible" ColumnName="IdCombustible" />
+                <ScalarProperty Name="Anio" ColumnName="Anio" />
+                <ScalarProperty Name="IdModelo" ColumnName="IdModelo" />
+                <ScalarProperty Name="NoChasis" ColumnName="NoChasis" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ActualizarEstadoAlerta" FunctionName="MEDECAModel.Store.ActualizarEstadoAlerta" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

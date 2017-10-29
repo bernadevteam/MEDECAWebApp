@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - MEDECA</title>
@@ -17,6 +16,17 @@
     <link href="~/Scripts/angular/angular-material/angular-material.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="~/Content/angular-bootstrap-calendar.min.css" rel="stylesheet" />
+    <script src="~/Scripts/angular/angular.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-78959594-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-78959594-1');
+    </script>
+
 </head>
 
 <body ng-app="medecaApp">
@@ -36,9 +46,11 @@
             </div>
             <!-- /.navbar-header -->
 
-            <ul class="nav navbar-top-links navbar-right">
+            <ul class="nav navbar-top-links navbar-right" data-area="Barra Navegacion">
+                <li>@User.Identity.Name</li>
+                <li><a data-accion="Alertass" href="#" class="glyphicon glyphicon-exclamation-sign" data-target="#AlertasRevisiones" data-toggle="modal" ></a></li>
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" data-accion="Citas">
                         <span ng-class="{ 'notificacion-citas': citasdehoy.length > 0}"></span> <i class="fa fa-calendar fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
@@ -77,13 +89,14 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                            <a href="~/Content/MedecaGuiaUso.pdf" target="_blank"><i class="fa fa-newspaper-o fa-fw"></i> Guia de Uso</a>
+                            <a data-accion="Guia de Uso" href="~/Content/MedecaGuiaUso.pdf" target="_blank"><i class="fa fa-newspaper-o fa-fw"></i> Guia de Uso</a>
                         </li>
                         <li>
-                            <a href="#" ><i class="fa fa-user fa-fw"></i> User Profile</a>
+                            <a data-accion="Perfil" href="#" ><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
                         <li>
                             <a href="#" data-toggle="modal"
+                               data-accion="Configuraciones"
                                 data-backdrop="static"
                                 data-keyboard="false"
                                 data-target="#viewUsers"><i class="fa fa-gear fa-fw"></i> Settings</a>
@@ -97,7 +110,7 @@
                 </li>
                 <!-- /.dropdown -->
                 <li>
-                    <strong> V1.1.1</strong>
+                    <strong> V1.2.0</strong>
                 </li>
             </ul>
             <!-- /.navbar-top-links -->
@@ -163,15 +176,13 @@
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper" style="position:relative">
-            <div class="loading-spiner" data-loading>
-            </div>
+            @*<div class="loading-spiner" data-loading>
+            </div>*@
             @RenderBody()
             <manage-users ng-controller="AutorizadosController"></manage-users>
         </div>
     </div>
-    @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/underscore-min.js"></script>
-    <script src="~/Scripts/angular/angular.js"></script>
     <script src="~/Scripts/i18n/angular-locale_es-mx.js"></script>
     <script src="~/Scripts/angular/angular-animate.js"></script>
     <script src="~/Scripts/angular/angular-aria.js"></script>
@@ -195,7 +206,7 @@
     <script src="~/Scripts/angular-ui/dirPagination.js"></script>
 
 
-    <script src="~/Scripts/app/app.js?V1.1.1"></script>
+    <script src="~/Scripts/app/app.js?V1.2.1"></script>
     <script src="~/Scripts/app/checklist-model.js"></script>
     <script src="~/Scripts/app/filters.js?V1.1.2"></script>
     <script src="~/Scripts/app/ng-order-object-by.js.js"></script>

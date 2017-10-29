@@ -44,5 +44,6 @@ namespace MEDECAWebApp
         public virtual ICollection<InsumosCotizados> InsumosCotizados { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Diagnostico> Diagnosticos { get; set; }
+        public virtual AlertasProximosChequeo AlertasProximosChequeo { get; set; }
     }
 }

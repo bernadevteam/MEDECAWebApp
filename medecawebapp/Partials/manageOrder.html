@@ -1,5 +1,5 @@
 ﻿<form name="modelForm">
-    <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo">
+    <div class="modal fade" tabindex="-1" role="dialog" id="nuevaOrdenTrabajo" data-area="Manejar Orden">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -9,9 +9,9 @@
                 </div>
                 <div class="modal-body">
                     <ul id="otTabs" class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
-                        <li role="presentation"><a href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
-                        <li role="presentation"><a href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
+                        <li role="presentation" class="active"><a data-accion="Ver Info" href="#otinfo" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
+                        <li role="presentation"><a data-accion="Ver Mantenimiento" href="#otMant" aria-controls="otMant" role="tab" data-toggle="tab">Mantenimiento</a></li>
+                        <li role="presentation"><a data-accion="Ver Insumos" href="#otInsumos" aria-controls="otInsumos" role="tab" data-toggle="tab">Insumos</a></li>
                     </ul>
                     <div class="tab-content">
                         <!-- OT INFO -->
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <!-- NUEVO FORMATO -->
-                            <div id="otDiagnosticos" ng-hide="mostrarViejo">
+                            <div id="otDiagnosticos" ng-hide="mostrarViejo" data-seccion="Diagnosticos">
                                 <div class="list-group">
                                     <!-- Pendientes -->
                                     <diagnostico-tpl idestado=1></diagnostico-tpl>
@@ -155,11 +155,12 @@
                                     <div class="col-md-4">
                                         <div class="btn-group-vertical btn-block" role="group" aria-label="...">
                                             <button ng-disabled="!diagnosticoPivot.Descripcion || diagnosticoPivot.Descripcion.length < 5"
+                                                    ng-attr-data-accion="diagnosticoPivot.Editando ? 'Editar Diagnostico' : 'Agregar Diagnostico'"
                                                     ng-click="diagnosticoPivot.Editando ? guardarDiagnostico() : agregarDiagnostico();"
                                                     class="btn btn-success" type="button">
                                                 <span class="glyphicon ng-class:{'glyphicon-ok' : diagnosticoPivot.Editando, 'glyphicon-plus-sign': !diagnosticoPivot.Editando};"></span> {{diagnosticoPivot.Editando ? "Guardar Cambio" : "Agregar Diagn&oacute;stico"}}
                                             </button>
-                                            <button ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico()" class="btn btn-default">
+                                            <button data-accion="Cancelar Editar" ng-show="diagnosticoPivot.Editando" ng-click="cancelarEdicionDiagnostico()" class="btn btn-default">
                                                 No Modificar
                                             </button>
                                         </div>
@@ -424,8 +425,8 @@
 
                 </div><!-- /.modal-content -->
                 <div class="modal-footer clearfix">
-                    <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo(); verInsMarca = false; ocultarGuardar = false;">Cerrar sin guardar</button>
-                    <button type="submit" class="btn btn-success" ng-hide="ocultarGuardar" ng-disabled="formOtInfo.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar();" data-dismiss="modal">Guardar modificaciones</button>
+                    <button data-accion="Cerrar" type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo(); verInsMarca = false; ocultarGuardar = false;">Cerrar sin guardar</button>
+                    <button data-accion="Guardar" type="submit" class="btn btn-success" ng-hide="ocultarGuardar" ng-disabled="formOtInfo.$invalid" ng-click="nuevoModel.editar ? guardar() : agregar();" data-dismiss="modal">Guardar modificaciones</button>
                 </div>
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->

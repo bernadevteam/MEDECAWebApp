@@ -6,7 +6,7 @@
         <label ng-switch-when=3>Cancelados</label>
     </p>
 </div>
-<div class="list-group-item" ng-repeat="diagnostico in filtrados">
+<div class="list-group-item" ng-repeat="diagnostico in filtrados" data-seccion="Diagnosticos Detalle">
 {{aprobarDesdeDetalle = EsDetalle && diagnostico.IdEstado == 1;""}}
     <div class="row">
         <div ng-class="EsDetalle && !aprobarDesdeDetalle ? 'col-sm-12' : 'col-sm-11 col-xs-10'">
@@ -20,17 +20,17 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" ng-show="aprobarDesdeDetalle">
                     <li class="dropdown-header">Marcar como</li>
-                    <li><a href="#" ng-click="aprobarDiagnostico(diagnostico)" ng-show="Estado != 2">Reparado</a></li>
+                    <li><a data-accion="Marcar Reparado" href="#" ng-click="aprobarDiagnostico(diagnostico)" ng-show="Estado != 2">Reparado</a></li>
                 </ul>
                 <ul class="dropdown-menu dropdown-menu-right" ng-hide="EsDetalle">
                     <li class="dropdown-header">Marcar como</li>
-                    <li><a href="#" ng-click="diagnostico.IdEstado = 3" ng-show="Estado != 3">Cancelado</a></li>
-                    <li><a href="#" ng-click="diagnostico.IdEstado = 1" ng-show="Estado != 1">Pendiente</a></li>
-                    <li><a href="#" ng-click="diagnostico.IdEstado = 2" ng-show="Estado != 2">Reparado</a></li>
+                    <li><a data-accion="Marcar Cancelado" href="#" ng-click="diagnostico.IdEstado = 3" ng-show="Estado != 3">Cancelado</a></li>
+                    <li><a data-accion="Marcar Pendiente" href="#" ng-click="diagnostico.IdEstado = 1" ng-show="Estado != 1">Pendiente</a></li>
+                    <li><a data-accion="Marcar Reparado" href="#" ng-click="diagnostico.IdEstado = 2" ng-show="Estado != 2">Reparado</a></li>
                     <li class="divider"></li>
                     <li class="dropdown-header">Acciones</li>
-                    <li><a href="#" ng-click="modificarDiagnostico(diagnostico)">Modificar</a></li>
-                    <li><a href="#" ng-click="removerDiagnostico(diagnostico)">Eliminar</a></li>
+                    <li><a data-accion="Modificar" href="#" ng-click="modificarDiagnostico(diagnostico)">Modificar</a></li>
+                    <li><a data-accion="Eliminar" href="#" ng-click="removerDiagnostico(diagnostico)">Eliminar</a></li>
                 </ul>
             </div>
         </div>

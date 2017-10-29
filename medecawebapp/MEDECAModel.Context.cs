@@ -45,6 +45,8 @@ namespace MEDECAWebApp
         public virtual DbSet<InsumosCotizados> InsumosCotizados { get; set; }
         public virtual DbSet<Autorizados> Autorizados { get; set; }
         public virtual DbSet<Diagnostico> Diagnosticos { get; set; }
+        public virtual DbSet<AlertasProximosChequeo> AlertasProximosChequeos { get; set; }
+        public virtual DbSet<View_ClientesProximasRevisiones> View_ClientesProximasRevisiones { get; set; }
     
         public virtual ObjectResult<Dasboard> prc_Dashboard()
         {
@@ -131,6 +133,19 @@ namespace MEDECAWebApp
         public virtual ObjectResult<ObtenerVehiculosCambioAceiteProximo_Result> ObtenerVehiculosCambioAceiteProximo()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ObtenerVehiculosCambioAceiteProximo_Result>("ObtenerVehiculosCambioAceiteProximo");
+        }
+    
+        public virtual int ActualizarEstadoAlerta(Nullable<int> idAlerta, Nullable<int> idEstado)
+        {
+            var idAlertaParameter = idAlerta.HasValue ?
+                new ObjectParameter("IdAlerta", idAlerta) :
+                new ObjectParameter("IdAlerta", typeof(int));
+    
+            var idEstadoParameter = idEstado.HasValue ?
+                new ObjectParameter("IdEstado", idEstado) :
+                new ObjectParameter("IdEstado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarEstadoAlerta", idAlertaParameter, idEstadoParameter);
         }
     }
 }

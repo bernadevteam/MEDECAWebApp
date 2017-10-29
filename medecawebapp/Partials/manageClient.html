@@ -1,6 +1,6 @@
 ﻿<form name="clientForm">
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="manageClient">
+    <div class="modal fade" tabindex="-1" role="dialog" id="manageClient" data-area="Manejar Cliente">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -72,8 +72,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</button>
-                    <button type="submit" class="btn btn-success" ng-disabled="clientForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar(nuevoModel)" data-dismiss="modal">Guardar</button>
+                    <button ng-attr-data-accion="Cerrar" type="reset" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</button>
+                    <button ng-attr-data-accion="nuevoModel.editar ? 'Editar' : 'Agregar'" type="submit" class="btn btn-success" ng-disabled="clientForm.$invalid" ng-click="nuevoModel.editar ? guardar(nuevoModel) : agregar(nuevoModel)" data-dismiss="modal">Guardar</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

@@ -3,7 +3,7 @@
 }
 @section angularscripts{
 <script src="~/Scripts/app/Controllers/ProveedoresController.js"></script>
-    <script src="~/Scripts/app/Controllers/OrdenesController.js?V1.1.2"></script>
+    <script src="~/Scripts/app/Controllers/OrdenesController.js?V1.2.0"></script>
 }
 <div class="row">
     <div class="col-md-12">
@@ -13,18 +13,21 @@
         </div>
     </div>
 </div>
-<div class="row" ng-controller="OrdenesTrabajosController">
+<div class="row" ng-controller="OrdenesTrabajosController" data-area="Ordenes Trabajos">
    <div class="col-xs-12">
        <ul class="nav nav-tabs" role="tablist">
-           <li role="presentation" class="active"><a href="#tabActiveOrders" aria-controls="tabActiveOrders" role="tab" data-toggle="tab"><span class="badge">{{filtered.length}}</span> Ordenes Activas </a></li>
-           <li role="presentation"><a href="#tabSearch" aria-controls="tabSearch" role="tab" data-toggle="tab"><i class="fa fa-search"></i> B&uacute;squeda</a></li>
-           <li role="presentation"><a href="#tabDirectorio" aria-controls="tabSearchtabDirectorio" role="tab" data-toggle="tab"><i class="fa fa-phone-square"></i> Directorio</a></li>
+           <li role="presentation" class="active"><a data-accion="Ver Activas" href="#tabActiveOrders" aria-controls="tabActiveOrders" role="tab" data-toggle="tab"><span ng-cloak class="badge">{{filtered.length}}</span> Ordenes Activas </a></li>
+           <li role="presentation"><a data-accion="Buscar" href="#tabSearch" aria-controls="tabSearch" role="tab" data-toggle="tab"><i class="fa fa-search"></i> B&uacute;squeda</a></li>
+           <li role="presentation"><a data-accion="Buscar Directorio" href="#tabDirectorio" aria-controls="tabSearchtabDirectorio" role="tab" data-toggle="tab"><i class="fa fa-phone-square"></i> Directorio</a></li>
        </ul>
        <div class="tab-content">
            @* ========> ORDENES ACTIVAS <======== *@
            <div role="tabpanel" class="tab-pane fade in active" id="tabActiveOrders">
                <div class="row">
-                   <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'NoOrden':true as filtered ">
+                   <div ng-show="modelos.length === 0" class="col-md-12">
+                       Cargando...
+                   </div>
+                   <div ng-cloak ng-show="modelos" class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'NoOrden':true as filtered ">
                        <div class="panel panel-red">
                            <div class="panel-heading" role="tab">
                                <h4 class="panel-title"></h4>
@@ -32,6 +35,7 @@
                            <div data-toggle="modal"
                                 data-backdrop="static"
                                 data-keyboard="false"
+                                data-accion="Ver Orden Pendiente"
                                 data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)"
                                 style="cursor:pointer"
                                 class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
@@ -66,7 +70,7 @@
                    <div class="col-md-12">
                        <div class="input-group custom-search-form">
                            <span class="input-group-btn">
-                               <button class="btn btn-success" data-toggle="modal" data-target="#manageClient" data-backdrop="static" data-keyboard="false"
+                               <button data-accion="Agregar Cliente" class="btn btn-success" data-toggle="modal" data-target="#manageClient" data-backdrop="static" data-keyboard="false"
                                        ng-click="addClient()">
                                    <i class="fa fa-plus-square"></i>
                                </button>
@@ -86,7 +90,7 @@
 
                    <div class="col-md-12 client-box" ng-repeat="cliente in modelos | porclienteoplaca: filter.toLowerCase()">
                        <span>
-                           <a class="page-header-edit" ng-click="editClient(cliente)"
+                           <a data-accion="Modificar Cliente"  class="page-header-edit" ng-click="editClient(cliente)"
                               data-toggle="modal" data-target="#manageClient">
                                <i class="fa fa-edit fa-2x"></i>
                            </a>
@@ -98,6 +102,7 @@
                            <div class="panel panel-red" flex-xs flex-gt-xs="22" layout="column" style="margin-right:5px" ng-repeat="vehiculo in cliente.Vehiculos | getAllByKey: (cliente.PorPlaca ? 'Placa' : null ) : filter">
 
                                <div class="panel-heading panel-heading-veh" ng-click="editVeh(cliente, vehiculo)"
+                                    data-accion="Modificar Vehiculo"
                                     data-toggle="modal" data-target="#viewVehicle" data-backdrop="static" data-keyboard="false">
                                    <div class="row">
                                        <div class="col-xs-3">
@@ -113,13 +118,13 @@
                                <div class="panel-body">
                                    <button type="button" class="btn btn-default btn-block" ng-if="vehiculo.OrdenesTrabajos.length == 0" disabled>Sin servicios</button>
                                    <div class="dropdown" ng-if="vehiculo.OrdenesTrabajos.length > 0">
-                                       <button class="btn btn-default dropdown-toggle btn-block" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                       <button data-accion="Buscar Orden" class="btn btn-default dropdown-toggle btn-block" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                            Ordenes
                                            <span class="caret"></span>
                                        </button>
                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                            <li ng-repeat="ordenTrabajo in vehiculo.OrdenesTrabajos">
-                                               <a href="#" data-toggle="modal" data-target="#viewOrder" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
+                                               <a data-accion="Ver Orden" href="#" data-toggle="modal" data-target="#viewOrder" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
                                                    <div class="panel-body">
                                                        <i class="fa fa-comment fa-sticky-note"></i> {{parseOrden(ordenTrabajo.NoOrden.toString())}}
                                                        <span class="pull-right text-muted small">
@@ -133,6 +138,7 @@
                                </div>
                                <a href="#">
                                    <div class="panel-footer panel-green"
+                                        data-accion="Crear Orden"
                                         data-toggle="modal" data-target="#nuevaOrdenTrabajo" ng-click="editar(cliente, vehiculo)">
                                        <span class="pull-left">Crear Orden</span>
                                        <span class="pull-right"><i class="fa fa-plus"></i></span>
@@ -141,6 +147,7 @@
                                </a>
                                <a href="#">
                                    <div class="panel-footer panel-green" ng-click="editVeh(cliente, vehiculo)"
+                                        data-accion="Editar Vehiculo"
                                         data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false">
 
                                        <span class="pull-left">Editar</span>
@@ -149,7 +156,7 @@
                                    </div>
                                </a>
                            </div>
-                           <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false" ng-click="addVeh(cliente)"> <i class="fa fa-plus-square"></i></button>
+                           <button data-accion="Agregar Vehiculo" class="btn btn-success btn-lg" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false" ng-click="addVeh(cliente)"> <i class="fa fa-plus-square"></i></button>
 
                        </div>
 
@@ -203,10 +210,15 @@
            </div>
            <manage-provider ng-controller="ProveedoresController"></manage-provider>
            <view-order></view-order>
-           {{modalCaller='#nuevaOrdenTrabajo';""}}
-           @* *******************************  OT FORM ******************************* *@
-           <manage-order></manage-order>
-       </div>
+           <div ng-controller="AlertasController">
+               <view-alertas-revisiones></view-alertas-revisiones>
+           </div>
+           <span ng-cloak>
+               {{modalCaller='#nuevaOrdenTrabajo';""}}
+           </span>
+               @* *******************************  OT FORM ******************************* *@
+               <manage-order></manage-order>
+           </div>
    </div>
     @section scripts{
         <script>

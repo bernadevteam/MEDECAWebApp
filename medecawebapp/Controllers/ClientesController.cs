@@ -82,6 +82,18 @@ namespace MEDECAWebApp.Controllers
         }
 
         [HttpGet]
+        public IEnumerable<object> ProximasRevisiones()
+        {
+            return db.View_ClientesProximasRevisiones.Where( cp =>cp.IdEstado.Equals(1)).ToList();
+        }
+
+        [HttpGet]
+        public object MantenerSesion()
+        {
+            return new { Active = true};
+        }
+
+        [HttpGet]
         public IEnumerable<object> ClientesOrdenes()
         {
             return db.Clientes.AsEnumerable().OrderBy(c => c.Nombre).Select(x => new 

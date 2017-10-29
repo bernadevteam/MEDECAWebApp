@@ -1,5 +1,5 @@
 ﻿
-<div class="modal fade" tabindex="-1" role="dialog" id="viewOrder">
+<div class="modal fade" tabindex="-1" role="dialog" id="viewOrder" data-seccion="Ver Orden">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -142,8 +142,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
-                <a class="btn btn-warning" onclick="switchModal(this, '#nuevaOrdenTrabajo')"><span class="glyphicon glyphicon-forward"></span> Ir a Modificar</a>
+                <a data-accion="Cerrar" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                <a data-accion="Modificar" class="btn btn-warning" onclick="switchModal(this, '#nuevaOrdenTrabajo')"><span class="glyphicon glyphicon-forward"></span> Ir a Modificar</a>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -10,7 +10,7 @@
                         </div>
                 </div>
             </div>
-<div class="row" ng-controller="VehiculoMarcasController">
+<div class="row" ng-controller="VehiculoMarcasController" data-area="VehiculosMarcas">
                 <div class="col-lg-5 col-sm-5 col-xs-8">
 
     <table class="table table-striped">
@@ -30,10 +30,9 @@
                 <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" ng-show="marca.editar" class="form-control"/>
             </td>
             <td>
-               <button type="submit" class="btn btn-warning" ng-click="editar(marca)" ng-show="!marca.editar"> <i class="fa fa-edit"></i></button>
-               <button type="submit" class="btn btn-success" ng-click="guardar(marca)" ng-show="marca.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-check-square-o"></i></button>
-               <button type="submit" class="btn btn-danger"  ng-click="cancelarEdicion(marca)" ng-show="marca.editar"> <i class="fa fa-close"></i></button>
-
+               <button data-accion="Editar" type="submit" class="btn btn-warning" ng-click="editar(marca)" ng-show="!marca.editar"> <i class="fa fa-edit"></i></button>
+               <button data-accion="Editar_Guardar" type="submit" class="btn btn-success" ng-click="guardar(marca)" ng-show="marca.editar" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-check-square-o"></i></button>
+               <button data-accion="Editar_Cancelar" type="submit" class="btn btn-danger"  ng-click="cancelarEdicion(marca)" ng-show="marca.editar"> <i class="fa fa-close"></i></button>
             </td>
         </tr>
             </tbody>
@@ -43,7 +42,7 @@
                 <input type="text" name="Nombre" ng-model="nuevoModel.Nombre" class="form-control" placeholder="Escriba aqu&iacute; el nombre de la Marca que desea agregar..."/>
             </td>
             <td>
-               <button type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-plus-square"></i></button>
+               <button data-accion="Agregar" type="submit" class="btn btn-success" ng-click="agregar()" ng-disabled="!nuevoModel.Nombre || nuevoModel.Nombre.length < 3"> <i class="fa fa-plus-square"></i></button>
             </td>
         </tr>
         </tfoot>

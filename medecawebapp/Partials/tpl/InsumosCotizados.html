@@ -1,4 +1,5 @@
-﻿<div class="panel panel-insumo-cotizado ng-class:{'panel-warning' : !cotizado.Aprobado, 'panel-success' : cotizado.Aprobado};">
+﻿<div class="panel panel-insumo-cotizado ng-class:{'panel-warning' : !cotizado.Aprobado, 'panel-success' : cotizado.Aprobado};"
+     data-seccion="Insumos Cotizados">
     <div class="panel-heading" role="tab">
         <div class="panel-title"><span class="text-center">{{cotizado.NombreInsumo}}</span></div>
     </div>
@@ -50,8 +51,8 @@
                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#" ng-click="modificarInsumoCotizado(cotizado);">Modificar</a></li>
-                        <li><a href="#" ng-click="eliminarInsumoCotizado(cotizado)">Eliminar</a></li>
+                        <li><a data-accion="Modificar" href="#" ng-click="modificarInsumoCotizado(cotizado);">Modificar</a></li>
+                        <li><a data-accion="Eliminar" href="#" ng-click="eliminarInsumoCotizado(cotizado)">Eliminar</a></li>
                     </ul>
                 </div>
             </div>

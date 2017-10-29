@@ -1,0 +1,44 @@
+﻿@model MEDECAWebApp.Models.ExternalLoginConfirmationViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - MEDECA</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+    <link href="~/Content/Site.css?V1.1.1" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/img/icon.png" rel="icon" type="image/png" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body class="container">
+    <div class="col-md-12">
+        <div class="page-header">
+            <h2>Bienvenido al software en l&iacute;nea de Mecánica del Caribe.</h2>
+        </div>
+        @using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new {role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <p>
+                Has iniciado sesi&oacute;n con tu cuenta de <strong>@ViewBag.LoginProvider</strong>.
+                Para asociar tu cuenta <strong>@Model.Email</strong> con el sistema presiona 'SIGUIENTE'.
+            </p>
+                @Html.HiddenFor(m => m.Email)
+                <div>
+                    <input type="submit" class="btn btn-success" value="SIGUIENTE" />
+                </div>
+        }
+    </div>
+</body>
+</html>
+
+@section Scripts {
+}

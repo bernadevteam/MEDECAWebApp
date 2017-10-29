@@ -55,21 +55,21 @@
                             </dl>
                         </div>
                           <a href="#">
-                            <div class="panel-footer panel-green" data-toggle="modal" data-target="#manageVehiculo" ng-click="editar(vehiculo)">
+                            <div data-accion="Invocar_Editar" class="panel-footer panel-green" data-toggle="modal" data-target="#manageVehiculo" ng-click="editar(vehiculo)">
                                 <span class="pull-left">Modificar</span>
                                 <span class="pull-right"><i class="fa fa-pencil"></i></span>
                                 <div class="clearfix"></div>
                             </div>
                         </a>
                          <a href="#" ng-if="vehiculo.CanDelete">
-    <div class="panel-footer panel-green" data-toggle="modal" data-target="#confirmDelete" ng-click="eliminarVehiculo(cliente, vehiculo)">
+    <div data-accion="Invocar_Eliminar" class="panel-footer panel-green" data-toggle="modal" data-target="#confirmDelete" ng-click="eliminarVehiculo(cliente, vehiculo)">
         <span class="pull-left">Eliminar</span>
         <span class="pull-right"><i class="fa fa-trash-o"></i></span>
         <div class="clearfix"></div>
     </div>
 </a>
                     </div>
-            <button class="btn btn-success" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false"> <i class="fa fa-plus-square"></i></button>
+            <button data-accion="Agregar" class="btn btn-success" data-toggle="modal" data-target="#manageVehiculo" data-backdrop="static" data-keyboard="false"> <i class="fa fa-plus-square"></i></button>
         </div>
               
               </div>
@@ -88,8 +88,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="eliminar()">Eliminar</button>
+                    <button data-accion="Cancelar" type="submit" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button data-accion="Eliminar" type="submit" class="btn btn-success" data-dismiss="modal" ng-click="eliminar()">Eliminar</button>
                 </div>
             </div>
         </div>

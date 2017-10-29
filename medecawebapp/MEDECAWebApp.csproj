@@ -166,6 +166,9 @@
     <Compile Include="Actividades.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AlertasProximosChequeo.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -186,6 +189,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActividadesController.cs" />
+    <Compile Include="Controllers\AlertasProximosChequeosController.cs" />
     <Compile Include="Controllers\AutorizadosController.cs" />
     <Compile Include="Controllers\CitasController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
@@ -300,6 +304,9 @@
     <Compile Include="VehiculoMarca.cs">
       <DependentUpon>MEDECAModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="View_ClientesProximasRevisiones.cs">
+      <DependentUpon>MEDECAModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\angular-bootstrap-calendar.min.css" />
@@ -410,6 +417,7 @@
     <Content Include="Partials\manageUsers.html" />
     <Content Include="Partials\tplDiagnostico.html" />
     <Content Include="Partials\tpl\InsumosCotizados.html" />
+    <Content Include="Partials\viewAlertasRevisiones.html" />
     <Content Include="Partials\viewOrder.html" />
     <Content Include="Partials\viewVehicle.html" />
     <Content Include="Partials\viewClient.html" />
@@ -1593,6 +1601,7 @@
     <Content Include="Views\Home\InsumosMarcas.cshtml" />
     <Content Include="Views\Home\OrdenesTrabajos.cshtml" />
     <Content Include="Views\Account\AccesoDenegado.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

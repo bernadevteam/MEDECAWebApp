@@ -44,21 +44,21 @@ angular.module('medecaApp')
               return {
                   restrict: 'E',
                   scope: false,
-                  templateUrl: medecaURL + 'partials/viewClient.html?V1.0.3'
+                  templateUrl: medecaURL + 'partials/viewClient.html?V1.2.1'
               }
           })
      .directive('viewVehicle', function () {
          return {
              restrict: 'E',
              scope: false,
-             templateUrl: medecaURL + 'partials/viewVehicle.html?V1.1.1'
+             templateUrl: medecaURL + 'partials/viewVehicle.html?V1.2.1'
          }
      })
        .directive('viewOrder', function () {
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: medecaURL + 'partials/viewOrder.html?V1.2.0'
+               templateUrl: medecaURL + 'partials/viewOrder.html?V1.2.1'
            }
        })
          .directive('manageModel', function () {
@@ -72,7 +72,7 @@ angular.module('medecaApp')
           return {
               restrict: 'E',
               scope: false,
-              templateUrl: medecaURL + 'partials/manageProviders.html?V1.1.1'
+              templateUrl: medecaURL + 'partials/manageProviders.html?V1.2.1'
           }
       })
      .directive('confirmDelete', function () {
@@ -95,21 +95,28 @@ angular.module('medecaApp')
               return {
                   restrict: 'E',
                   scope: false,
-                  templateUrl: medecaURL + 'partials/manageServices.html?V1.0.3'
+                  templateUrl: medecaURL + 'partials/manageServices.html?V1.0.1'
               }
           })
     .directive('manageOrder', function () {
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: medecaURL + 'partials/manageOrder.html?V1.2.0'
+            templateUrl: medecaURL + 'partials/manageOrder.html?V1.2.1'
         }
     })
     .directive('manageUsers', function () {
         return {
             restrict: 'E',
             scope: false,
-            templateUrl: medecaURL + 'partials/manageUsers.html?V1.2.0'
+            templateUrl: medecaURL + 'partials/manageUsers.html?V1.2.1'
+        }
+    })
+    .directive('viewAlertasRevisiones', function () {
+        return {
+            restrict: 'E',
+            scope: false,
+            templateUrl: medecaURL + 'partials/viewAlertasRevisiones.html?V1.2.1'
         }
     })
           .directive('diagnosticoTpl', function () {
@@ -120,7 +127,7 @@ angular.module('medecaApp')
                       scope.Estado = attrs.idestado;
                       scope.EsDetalle = attrs.esdetalle;
                   },
-                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.2.0'
+                  templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.2.1'
               }
           })
       .directive('insumosCotizadosTpl', function () {

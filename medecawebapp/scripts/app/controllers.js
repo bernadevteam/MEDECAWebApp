@@ -1,12 +1,12 @@
 ﻿'use strict';
 
 angular.module('medecaApp')
-    .controller('NavBarController', ['$scope', 'citasFactory', function ($scope, citasFact) {
+    .controller('NavBarController', ['$scope', '$http', 'citasFactory', 'clientesFactory', function ($scope, $http, citasFact, clientesFactory) {
         $scope.citasdehoy = {};
 
         citasFact.getCitasdeHoy().then(function (response) {
             $scope.citasdehoy = response.data;
-        });
+        });       
 
         $scope.$on('manejarcambiocita', function (event, args) {
             citasFact.getCitasdeHoy().then(function (response) {
@@ -668,5 +668,112 @@ angular.module('medecaApp')
                 $scope.deleteUsuario = null;
             });
         };
+    }])
+    .controller('AlertasController', ['$scope', '$cacheFactory', 'clientesFactory', 'alertasFactory', function ($scope, $cacheFactory, clientesFactory, alertasFactory) {
+        var lastUpdateKey = 'lastUpdate';
+        var cache = $cacheFactory('MEDECA_WEB_APP');
+        $scope.alertas = [];
+        $scope.alertasManana = [];
+        $scope.alertasPospuestas = [];
+        $scope.pageSize = 10;
+        $scope.currentPage = 1;
+
+        $scope.$on('ordencreada', function (event, args) {
+            quitarAlerta(args.IdVehiculo, $scope.alertasManana);
+            quitarAlerta(args.IdVehiculo, $scope.alertas);
+            quitarAlerta(args.IdVehiculo, $scope.alertasPospuestas);
+        });
+
+        clientesFactory.getAlertasRevisiones().then(function (response) {
+            var currentDate = new Date();
+            var currentDateStr = '' + currentDate.getDate() + (currentDate.getMonth() + 1) + currentDate.getFullYear();
+            cache.put(lastUpdateKey, currentDateStr);
+            $scope.alertas = response.data;
+            $('#AlertasRevisiones').modal('show');
+        });
+
+        $scope.posponer = function (alerta, tiempo) {
+            var i = $scope.alertas.indexOf(alerta);
+            $scope.alertas.splice(i, 1);
+
+            if (tiempo === 'M') {
+                $scope.alertasManana.push(alerta);
+            }
+            else if (!isNaN(tiempo)) {
+                $scope.alertasPospuestas.push(alerta);
+
+                setTimeout(function () {
+                    if ($scope.alertasPospuestas.indexOf(alerta) >= 0) {
+                        $scope.alertas.push(alerta);
+                        $('#AlertasRevisiones').modal('show');
+                    }
+                }, tiempo * 60 * 1000);
+            }
+        };
+
+        $scope.marcarComo = function (alerta, estado) {
+            alertasFactory.editar(alerta, estado).then(function (response) {
+                var i = $scope.alertas.indexOf(alerta);
+                $scope.alertas.splice(i, 1);
+            });
+        };
+        /*
+        setInterval(function () {
+            clientesFactory.verificarEstadoSesion()
+                .then(function (response) {
+                }, function (response) {
+                    alert('El tiempo de sesión expiró, la página se recargará automáticamente.');
+                });
+        }, 1 * 60 * 1000);
+        */
+        setInterval(function () {
+            var lastUpdate = cache.get(lastUpdateKey);
+            var currentDate = new Date();
+            var currentDateStr = '' + currentDate.getDate() + (currentDate.getMonth() + 1) + currentDate.getFullYear();
+            if (lastUpdate !== currentDateStr) {
+                clientesFactory.getAlertasRevisiones().then(function (response) {
+                    cache.put(lastUpdateKey, currentDateStr);
+                    $scope.alertas = response.data;
+                    $('#AlertasRevisiones').modal('show');
+                }, function (response, rt) {
+                    if (response.status === -1) {
+                        window.location.reload();
+                    }
+                });
+            } else {
+                clientesFactory.verificarEstadoSesion()
+                    .then(function (response) {
+                    }, function (response, rt) {
+                        if (response.status === -1) {
+                            window.location.reload();
+                        }
+                    });
+            }
+        }, 1 * 5 * 1000);
+
+        function establecerAlarmaManana() {
+            var now = new Date();
+            var millisTill8 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 6, 0, 0, 0) - now;
+            if (millisTill8 < 0) {
+                millisTill8 += 86400000; 
+            }
+            setTimeout(function () {
+                if ($scope.alertasManana.length > 0) {
+                    for (var i = 0; i < $scope.alertasManana.length; i++) {
+                        $scope.alertas.push($scope.alertasManana[i]);
+                        $('#AlertasRevisiones').modal('show');
+                        establecerAlarmaManana();
+                    }
+                }
+            }, millisTill8);
+        }
+
+        function quitarAlerta(idVehiculo, alertas) {
+            for (var i = 0; i < alertas.length; i++) {
+                if (alertas[i].IdVehiculo == idVehiculo) {
+                    alertas.splice(i, 1);
+                }
+            }
+        }
     }])
     ;

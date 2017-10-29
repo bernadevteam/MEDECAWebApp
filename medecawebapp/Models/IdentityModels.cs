@@ -8,6 +8,10 @@ namespace MEDECAWebApp.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser() : base()
+        {
+            Hometown = "MEDECA";
+        }
         public string Hometown { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

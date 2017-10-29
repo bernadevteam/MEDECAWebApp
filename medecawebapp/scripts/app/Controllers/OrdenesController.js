@@ -1,7 +1,7 @@
 ﻿angular.module('medecaApp')
-.controller('OrdenesTrabajosController', ['$scope', '$filter', '$mdDialog', 'serviciosFactory', 'ordenesTrabajosFactory', 'clientesFactory',
+    .controller('OrdenesTrabajosController', ['$rootScope','$scope', '$filter', '$mdDialog', 'serviciosFactory', 'ordenesTrabajosFactory', 'clientesFactory',
     'proveedoresFactory', 'insumosMarcasFactory',
-    function ($scope, $filter, $mdDialog, serviciosFact, modelosFactory, clientesFact, provFact, insumosMarcasFactory) {
+    function ($rootScope, $scope, $filter, $mdDialog, serviciosFact, modelosFactory, clientesFact, provFact, insumosMarcasFactory) {
         //OT Variables
         $scope.modelos = [];
         $scope.format = 'dd/MM/yyyy';
@@ -182,6 +182,7 @@
                 response.data.Vehiculo = _.omit($scope.SelectedVehiculo, ['OrdenesTrabajos']);
                 response.data.Cliente = _.omit($scope.SelectedCliente, ['Vehiculos']);
                 $scope.SelectedVehiculo.OrdenesTrabajos.push(response.data);
+                $rootScope.$broadcast('ordencreada', response.data)
                 reset();
             });
         };

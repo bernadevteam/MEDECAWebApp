@@ -40,6 +40,9 @@
         <EntityTypeShape EntityType="MEDECAModel.Diagnostico" Width="1.5" PointX="12.625" PointY="7.875" />
         <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_DiagnosticoEstados" />
         <AssociationConnector Association="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" />
+        <EntityTypeShape EntityType="MEDECAModel.AlertasProximosChequeo" Width="1.5" PointX="12.625" PointY="4.625" />
+        <EntityTypeShape EntityType="MEDECAModel.View_ClientesProximasRevisiones" Width="1.5" PointX="7.375" PointY="3.75" />
+        <AssociationConnector Association="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -36,7 +36,7 @@ angular.module('medecaApp')
 		};
 
 		modelFact.getCitasdeHoy = function () {
-			return $http.get(url + '/CitasdeHoy');
+            return $http.get(url + '/CitasdeHoy');
 		};
 
 		modelFact.getClientes = function () {
@@ -168,11 +168,19 @@ angular.module('medecaApp')
 
 		modelFact.getWithVeh = function () {
 			return $http.get(url + '/ClientesOrdenes');
-		};
+        };
+
+        modelFact.getAlertasRevisiones = function () {
+            return $http.get(url + '/ProximasRevisiones');
+        };
 
 		modelFact.getVehiculos = function () {
 			return $http.get(url + '/ClientesVehiculos');
-		};
+        };
+
+        modelFact.verificarEstadoSesion = function () {
+            return $http.get(url + '/MantenerSesion');
+        };
 
 		modelFact.agregar = function (model) {
 			return $http.post(url, model);
@@ -264,6 +272,27 @@ angular.module('medecaApp')
 
         modelFact.editar = function (model) {
             return $http.put(url, model);
+        };
+
+        modelFact.eliminar = function (id) {
+            return $http.delete(url + '?id=' + id);
+        };
+
+        return modelFact;
+    }])
+    .factory('alertasFactory', ['$http', function ($http, baseURL) {
+        var modelFact = {};
+        var url = medecaURL + 'api/AlertasProximosChequeos';
+        modelFact.get = function () {
+            return $http.get(url);
+        };
+
+        modelFact.agregar = function (model) {
+            return $http.post(url, model);
+        };
+
+        modelFact.editar = function (alerta, idEstado) {
+            return $http.put(url + '?id=' + alerta.IdAlerta+'&idEstado='+idEstado);
         };
 
         modelFact.eliminar = function (id) {
