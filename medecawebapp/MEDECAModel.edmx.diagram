@@ -43,6 +43,9 @@
         <EntityTypeShape EntityType="MEDECAModel.AlertasProximosChequeo" Width="1.5" PointX="12.625" PointY="4.625" />
         <EntityTypeShape EntityType="MEDECAModel.View_ClientesProximasRevisiones" Width="1.5" PointX="7.375" PointY="3.75" />
         <AssociationConnector Association="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" />
+        <EntityTypeShape EntityType="MEDECAModel.View_OrdenesActivas" Width="1.5" PointX="9.375" PointY="0.75" />
+        <AssociationConnector Association="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1" />
+        <EntityTypeShape EntityType="MEDECAModel.View_OrdenesInfo" Width="1.5" PointX="9.375" PointY="13.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

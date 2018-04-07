@@ -4,7 +4,6 @@ $(document).on('click','[data-accion]',function (e) {
     var accion = e.target.dataset.accion || $(e.target).closest('[data-accion]').data('accion');
 
     if (accion) {
-    debugger
         var area = $(e.target).closest('[data-area]').data('area');
         var seccion = $(e.target).closest('[data-seccion]').data('seccion');
         gtag('event', accion, {

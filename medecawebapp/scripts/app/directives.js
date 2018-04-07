@@ -58,7 +58,7 @@ angular.module('medecaApp')
            return {
                restrict: 'E',
                scope: false,
-               templateUrl: medecaURL + 'partials/viewOrder.html?V1.2.1'
+               templateUrl: medecaURL + 'partials/viewOrder.html?V1.2.2'
            }
        })
          .directive('manageModel', function () {
@@ -124,7 +124,7 @@ angular.module('medecaApp')
                   restrict: 'E',
                   scope: true,
                   link: function (scope, element, attrs) {
-                      scope.Estado = attrs.idestado;
+                      scope.Estado = parseInt(attrs.idestado);
                       scope.EsDetalle = attrs.esdetalle;
                   },
                   templateUrl: medecaURL + 'partials/tplDiagnostico.html?V1.2.1'

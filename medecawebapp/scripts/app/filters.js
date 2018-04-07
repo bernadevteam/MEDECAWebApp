@@ -6,7 +6,7 @@ app.filter('getByKey', function () {
     return function (input, keyName, value) {
         var i = 0, len = input.length;
         for (; i < len; i++) {
-            if (+input[i][keyName] == +value || !value) {
+            if (+input[i][keyName] === +value || !value) {
                 return input[i];
             }
         }
@@ -66,7 +66,7 @@ app.filter('getByKey', function () {
                     return '';
                 }
 
-                return data == 'Km' ? 'Kilometraje' : 'Millaje';
+                return data === 'Km' ? 'Kilometraje' : 'Millaje';
             };
         })
     .filter('vehicleInfo', function () {
@@ -121,7 +121,7 @@ app.filter('getByKey', function () {
         return function (items, estado) {
             var filtered = [];
             angular.forEach(items, function (item) {
-                if (item.IdEstado == estado) {
+                if (item.IdEstado === estado) {
                     filtered.push(item);
                 }
             });
@@ -193,7 +193,7 @@ app.filter('getByKey', function () {
 .filter('existeClienteOPlaca', function () {
     return function (model, clienteoplaca) {
         var items = [];
-        if (clienteoplaca != null && clienteoplaca.length > 2) {
+        if (clienteoplaca !== null && clienteoplaca.length > 2) {
             angular.forEach(model, function (cliente) {
                 if (cliente.Nombre.toLowerCase().indexOf(clienteoplaca) != -1) {
                     items = [{ exists: true }];
@@ -214,13 +214,13 @@ app.filter('getByKey', function () {
 .filter('propiedadOarray', function () {
     return function (model, propiedad, arreglo, elemProp, filtro) {
         var items = [];
-        if (filtro != null && filtro.length > 2) {
+        if (filtro && filtro.length > 2) {
             angular.forEach(model, function (entidad) {
-                if (entidad[propiedad].toLowerCase().indexOf(filtro) != -1) {
+                if (entidad[propiedad].toLowerCase().indexOf(filtro) !== -1) {
                     items.push(entidad);
                 } else {
                     angular.forEach(entidad[arreglo], function (elem) {
-                        if (elem[elemProp].toLowerCase().indexOf(filtro) != -1) {
+                        if (elem[elemProp].toLowerCase().indexOf(filtro) !== -1) {
                             items.push(entidad);
                         }
                     });

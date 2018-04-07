@@ -3,7 +3,7 @@
 }
 @section angularscripts{
 <script src="~/Scripts/app/Controllers/ProveedoresController.js"></script>
-    <script src="~/Scripts/app/Controllers/OrdenesController.js?V1.2.0"></script>
+    <script src="~/Scripts/app/Controllers/OrdenesController.js?V1.2.1"></script>
 }
 <div class="row">
     <div class="col-md-12">
@@ -24,10 +24,10 @@
            @* ========> ORDENES ACTIVAS <======== *@
            <div role="tabpanel" class="tab-pane fade in active" id="tabActiveOrders">
                <div class="row">
-                   <div ng-show="modelos.length === 0" class="col-md-12">
+                   <div ng-show="ordenesActivas.length === 0" class="col-md-12">
                        Cargando...
                    </div>
-                   <div ng-cloak ng-show="modelos" class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in modelos | ordenesactivas | orderObjectBy:'NoOrden':true as filtered ">
+                   <div ng-cloak ng-show="modelos" class="col-lg-3 col-md-4 col-sm-6" ng-repeat="orden in ordenesActivas | orderObjectBy:'NoOrden':true as filtered ">
                        <div class="panel panel-red">
                            <div class="panel-heading" role="tab">
                                <h4 class="panel-title"></h4>
@@ -36,26 +36,28 @@
                                 data-backdrop="static"
                                 data-keyboard="false"
                                 data-accion="Ver Orden Pendiente"
-                                data-target="#viewOrder" ng-click="editar(orden.Vehiculo.Cliente, orden.Vehiculo, orden)"
+                                data-target="#viewOrder" ng-click="obtenerOrdenActiva(orden)"
                                 style="cursor:pointer"
                                 class="panel-body {{orden.FechaPrometida && orden.DaysOverdue < 0 ? 'list-group-item-danger' : ''}}{{orden.FechaPrometida && orden.DaysOverdue >= 0 && orden.DaysOverdue < 3 ? 'list-group-item-warning' : ''}}">
 
                                <div class="orden-activa-cuerpo">
-                                   <h4 class="list-group-item-heading"><strong>{{orden.Vehiculo.Cliente.Nombre}}</strong></h4>
-                                   <div class=""></div>
-                                   <h3 class="list-group-item-heading"> {{orden.Vehiculo | vehicleInfo}}</h3>
-                                   <h4 class="list-group-item-heading">Placa: {{orden.Vehiculo.Placa}}</h4>
-                                   <p class="list-group-item-text">
+                                   <h4 class="list-group-item-heading"><strong>{{orden.Nombre}}</strong></h4>
+                                   <h3 class="list-group-item-heading"> {{orden.Vehiculo}}</h3>
+                                   <div class="list-group-item-heading">Placa: {{orden.Placa}}</div>
+                                   <div class="list-group-item-text">
                                        <strong>{{parseOrden(orden.NoOrden.toString())}}</strong>
-                                       <br />
-                                       Fecha Prometida: <label>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</label>
-                                   </p>
+                                   </div>
                                    <div class="info-final">
                                        <p class="list-group-item-text">
-                                           Reparaciones pendientes? <span class="pull-right"><strong>{{orden.Diagnosticos.some(tienePendientes) ? 'Si' : 'No'}}</strong></span>
+                                           <small>
+                                               Fecha Prometida: <span class="pull-right"><strong>{{orden.FechaPrometida ? "" : "-"}}{{orden.FechaPrometida | date:'dd/MM/yyyy'}}</strong></span>
+                                           </small>
                                        </p>
                                        <p class="list-group-item-text">
-                                           Cotizaciones pendientes? <span class="pull-right"><strong>{{orden.InsumosCotizados.some(tieneCotizacionesPendientes) ? 'Si' : 'No'}}</strong></span>
+                                           <small>¿Reparaciones pendientes? <span class="pull-right"><strong>{{orden.ReparacionesPendientes ? 'Si' : 'No'}}</strong></span></small>
+                                       </p>
+                                       <p class="list-group-item-text">
+                                           <small>¿Cotizaciones pendientes? <span class="pull-right"><strong>{{orden.CotizacionesPendientes ? 'Si' : 'No'}}</strong></span></small>
                                        </p>
                                    </div>
                                </div>
@@ -124,7 +126,7 @@
                                        </button>
                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                            <li ng-repeat="ordenTrabajo in vehiculo.OrdenesTrabajos">
-                                               <a data-accion="Ver Orden" href="#" data-toggle="modal" data-target="#viewOrder" ng-click="editar(cliente, vehiculo, ordenTrabajo)">
+                                               <a data-accion="Ver Orden" href="#" data-toggle="modal" data-target="#viewOrder" ng-click="obtenerOrden(vehiculo, ordenTrabajo)">
                                                    <div class="panel-body">
                                                        <i class="fa fa-comment fa-sticky-note"></i> {{parseOrden(ordenTrabajo.NoOrden.toString())}}
                                                        <span class="pull-right text-muted small">

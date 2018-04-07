@@ -16,8 +16,8 @@
     <link href="~/Scripts/angular/angular-material/angular-material.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-timepicker.min.css" rel="stylesheet" />
     <link href="~/Content/angular-bootstrap-calendar.min.css" rel="stylesheet" />
-    <script src="~/Scripts/angular/angular.js"></script>
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/angular/angular.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-78959594-1"></script>
     <script>
@@ -47,8 +47,9 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right" data-area="Barra Navegacion">
+                <li><img src="@Url.Content("Content/img/balls.gif")" class="img-loading" data-loading/></li>
                 <li>@User.Identity.Name</li>
-                <li><a data-accion="Alertass" href="#" class="glyphicon glyphicon-exclamation-sign" data-target="#AlertasRevisiones" data-toggle="modal" ></a></li>
+                <li><a data-accion="Alertas" href="#" class="glyphicon glyphicon-exclamation-sign" data-target="#AlertasRevisiones" data-toggle="modal" ></a></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" data-accion="Citas">
                         <span ng-class="{ 'notificacion-citas': citasdehoy.length > 0}"></span> <i class="fa fa-calendar fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -176,8 +177,7 @@
             <!-- /.navbar-static-side -->
         </nav>
         <div id="page-wrapper" style="position:relative">
-            @*<div class="loading-spiner" data-loading>
-            </div>*@
+           
             @RenderBody()
             <manage-users ng-controller="AutorizadosController"></manage-users>
         </div>
@@ -210,9 +210,9 @@
     <script src="~/Scripts/app/checklist-model.js"></script>
     <script src="~/Scripts/app/filters.js?V1.1.2"></script>
     <script src="~/Scripts/app/ng-order-object-by.js.js"></script>
-    <script src="~/Scripts/app/services.js?V1.2.0"></script>
-    <script src="~/Scripts/app/controllers.js?V1.2.0"></script>
-    <script src="~/Scripts/app/directives.js?V1.2.0"></script>
+    <script src="~/Scripts/app/services.js?V1.2.1"></script>
+    <script src="~/Scripts/app/controllers.js?V1.2.1"></script>
+    <script src="~/Scripts/app/directives.js?V1.2.2"></script>
     @RenderSection("angularscripts", required: false)
 </body>
 </html>

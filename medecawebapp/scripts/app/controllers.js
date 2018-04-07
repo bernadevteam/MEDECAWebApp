@@ -319,7 +319,7 @@ angular.module('medecaApp')
         }
 
     }])
-    .controller('ClientesController', ['$scope', 'clientesFactory', function ($scope, modelosFactory) {
+    .controller('ClientesController', ['$scope', 'clientesFactory', '$rootScope', function ($scope, modelosFactory, $rootScope) {
         $scope.modelos = {};
         $scope.nuevoModel = {};
         $scope.editingModel = {};
@@ -371,7 +371,9 @@ angular.module('medecaApp')
                 });
                 $scope.nuevoModel.Vehiculos = vehicles;
                 angular.extend($scope.editingModel, $scope.nuevoModel);
+                $rootScope.$broadcast('clienteeditado',$scope.editingModel);
                 reset();
+
             });
         };
 
@@ -397,8 +399,8 @@ angular.module('medecaApp')
             $scope.ordenClients = args.Clients;
         });
     }])
-    .controller('VehiculosController', ['$scope', '$filter', 'vehiculosFactory', 'clientesFactory', 'modelosFactory', 'vehiculoMarcasFactory', 'insumosFactory',
-        function ($scope, $filter, modelosFactory, clientesFact, modFact, vehMarcVehFact, insumosFact) {
+    .controller('VehiculosController', ['$scope', '$filter', 'vehiculosFactory', 'clientesFactory', 'modelosFactory', 'vehiculoMarcasFactory', 'insumosFactory','$rootScope',
+        function ($scope, $filter, modelosFactory, clientesFact, modFact, vehMarcVehFact, insumosFact, $rootScope) {
             $scope.modelos = [];
             $scope.nuevaMarca = {};
             $scope.clientes = [];
@@ -512,6 +514,7 @@ angular.module('medecaApp')
                 modelosFactory.editar($scope.nuevoModel).then(function (response) {
                     $scope.nuevoModel.editar = false;
                     var nVeh = response.data;
+                    $rootScope.$broadcast('vehiculoeditado', $scope.nuevoModel);
                     angular.forEach(nVeh.OrdenesTrabajos, function (ordenTrabajo) {
                         ordenTrabajo.Vehiculo = _.omit(nVeh, ['OrdenesTrabajos', 'editar']);
                     });
@@ -689,7 +692,10 @@ angular.module('medecaApp')
             var currentDateStr = '' + currentDate.getDate() + (currentDate.getMonth() + 1) + currentDate.getFullYear();
             cache.put(lastUpdateKey, currentDateStr);
             $scope.alertas = response.data;
-            $('#AlertasRevisiones').modal('show');
+
+            if ($scope.alertas.length > 0) {
+                $('#AlertasRevisiones').modal('show');
+            }
         });
 
         $scope.posponer = function (alerta, tiempo) {
@@ -745,11 +751,15 @@ angular.module('medecaApp')
                     .then(function (response) {
                     }, function (response, rt) {
                         if (response.status === -1) {
+                            gtag('event', 'Expirado', {
+                                'event_category': 'Info',
+                                'event_label': 'Codigo Js'
+                            });
                             window.location.reload();
                         }
                     });
             }
-        }, 1 * 5 * 1000);
+        }, 60 * 60 * 1000);
 
         function establecerAlarmaManana() {
             var now = new Date();

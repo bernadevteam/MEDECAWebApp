@@ -21,6 +21,7 @@ namespace MEDECAWebApp
             this.InsumosProveedores = new HashSet<InsumosProveedore>();
             this.InsumosCotizados = new HashSet<InsumosCotizados>();
             this.Diagnosticos = new HashSet<Diagnostico>();
+            this.AlertasProximosChequeos = new HashSet<AlertasProximosChequeo>();
         }
     
         public int Id { get; set; }
@@ -45,5 +46,7 @@ namespace MEDECAWebApp
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Diagnostico> Diagnosticos { get; set; }
         public virtual AlertasProximosChequeo AlertasProximosChequeo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AlertasProximosChequeo> AlertasProximosChequeos { get; set; }
     }
 }

@@ -22,11 +22,14 @@
         $scope.selInsumo = null;
         $scope.selProveedor = null;
         $scope.nuevaMarcaInsumo = {};
+        $scope.ordenesActivas = [];
 
         $scope.Math = window.Math;
 
         function restablecerOrdenTrabajo() {
             $scope.nuevoModel = { Diagnosticos: [], InsumosCotizados: [], Entregado: false };
+            $scope.SelectedCliente = {};
+            $scope.SelectedVehiculo = {};
         }
 
         restablecerOrdenTrabajo();
@@ -41,7 +44,8 @@
                 });
             });
         }
-
+        
+        /*
         clientesFact.getWithVeh().then(function (response) {
             $scope.modelos = response.data;
             updateClients();
@@ -60,6 +64,7 @@
                 });
             });
         });
+        */
         $scope.parseOrden = function (noorden) {
             return noorden ? "No. " + "00000".slice(0, -noorden.length) + noorden : "";
         };
@@ -71,8 +76,7 @@
             return total;
         };
         $scope.editar = function (cliente, vehiculo, model, ev) {
-            $scope.editingModel = model;
-            angular.merge($scope.nuevoModel, model);
+            $scope.nuevoModel = model;
             $scope.selInsumosProvs = [];
             if (model != null) {
                 $scope.nuevoModel.Fecha = new Date(model.Fecha);
@@ -122,7 +126,7 @@
 
         //Funcion para evaluar si la orden tiene cotizaciones pendientes.
         $scope.tieneCotizacionesPendientes = function (cotizacion) {
-            return !cotizacion.Precio || isNaN(cotizacion.Precio) || cotizacion.Precio == 0 || !cotizacion.IdProveedor;
+            return !cotizacion.Precio || isNaN(cotizacion.Precio) || cotizacion.Precio === 0 || !cotizacion.IdProveedor;
         };
 
         $scope.guardarInsumoCotizado = function () {
@@ -179,10 +183,12 @@
         $scope.agregar = function () {
             asignarInsumosProvs();
             modelosFactory.agregar($scope.nuevoModel).then(function (response) {
-                response.data.Vehiculo = _.omit($scope.SelectedVehiculo, ['OrdenesTrabajos']);
-                response.data.Cliente = _.omit($scope.SelectedCliente, ['Vehiculos']);
-                $scope.SelectedVehiculo.OrdenesTrabajos.push(response.data);
-                $rootScope.$broadcast('ordencreada', response.data)
+                var orden = response.data;
+                if (orden.Entregado === 0){ 
+                    $scope.ordenesActivas.push(orden);
+                }
+                $scope.SelectedVehiculo.OrdenesTrabajos.push({ Id: orden.Id, NoOrden: orden.NoOrden, Fecha: orden.Fecha});
+                $rootScope.$broadcast('ordencreada', orden)
                 reset();
             });
         };
@@ -190,16 +196,20 @@
 
         $scope.guardar = function (model) {
             asignarInsumosProvs();
-            modelosFactory.editar($scope.nuevoModel).then(function () {
+            modelosFactory.editar($scope.nuevoModel).then(function (response) {
                 $scope.nuevoModel.editar = false;
-                angular.extend($scope.editingModel, $scope.nuevoModel);
+                var ordenData = response.data;
+                var ordenIndex = $scope.ordenesActivas.indexOf($scope.editingModel);
+
+                if (ordenIndex !== -1 && ordenData.Entregado) {
+                    $scope.ordenesActivas.splice(ordenIndex, 1);
+                } else if (ordenIndex === -1 && !ordenData.Entregado){
+                    $scope.ordenesActivas.push(ordenData);
+                }
+                angular.extend($scope.editingModel, ordenData);
                 reset();
             });
         };
-
-        $scope.selectedItemChange = function (item) {
-
-        }
 
         $scope.querySearch = function (query, items) {
             var results = query && items ? items.filter(createFilterFor(query)) : [];
@@ -212,7 +222,7 @@
         };
         //Funcion para evaluar si un diagnostico tiene reparaciones pendientes.
         $scope.tienePendientes = function (diagnostico) {
-            return diagnostico.IdEstado == 1;
+            return diagnostico.IdEstado === 1;
         };
 
         $scope.agregarDiagnostico = function () {
@@ -239,9 +249,9 @@
         $scope.cancelarEdicionDiagnostico = resetDiagPivot;
 
         $scope.aprobarDiagnostico = function (diag) {
-            modelosFactory.aprobarDiagnostico(diag).then(function () {
+            modelosFactory.aprobarDiagnostico(diag).then(function (response) {
                 diag.IdEstado = 2;
-                angular.extend($scope.editingModel, $scope.nuevoModel);
+                angular.extend($scope.editingModel, response.data);
             });
         };
 
@@ -249,7 +259,7 @@
             var lowercaseQuery = angular.lowercase(query);
 
             return function filterFn(item) {
-                return (item.Nombre.toLowerCase().indexOf(lowercaseQuery) != -1);
+                return (item.Nombre.toLowerCase().indexOf(lowercaseQuery) !== -1);
             };
         }
 
@@ -266,6 +276,64 @@
         $scope.editClient = function (cl) {
             $scope.$emit('editingclient', { Client: cl });
         }
+        //Nueva implementacion
+        modelosFactory.obtenerOrdenesActivas().then(function (response) {
+            $scope.ordenesActivas = response.data;
+            clientesFact.getWithVeh().then(function (response) {
+            $scope.modelos = response.data;
+            serviciosFact.get().then(function (response) {
+                $scope.servicios = response.data;
 
-
+                provFact.getActivos().then(function (response) {
+                    $scope.proveedores = response.data;
+                    modelosFactory.obtenerDiagnosticosEstados().then(function (response) {
+                        $scope.diagEstados = response.data;
+                        resetDiagPivot();
+                        insumosMarcasFactory.get().then(function (response) {
+                            $scope.marcasInsumos = response.data;
+                        });
+                    });
+                });
+            });
+        });
+        });
+        $scope.obtenerOrdenActiva = function (orden) {
+            $scope.editingModel = orden;
+            obtenerOrden(orden);
+        }
+        $scope.obtenerOrden = function (vehiculo, orden) {
+            $scope.editingModel = orden;
+            $scope.SelectedVehiculo = vehiculo;
+            obtenerOrden(orden);
+        }
+        function obtenerOrden(orden) {
+            modelosFactory.obtenerOrden(orden.Id).then(function (response) {
+                var ordenData = response.data;
+                $scope.editar(ordenData.Vehiculo.Cliente, ordenData.Vehiculo, ordenData);
+            });
+        }
+        $rootScope.$on('clienteeditado', function (event, args) {
+            for (var i in $scope.ordenesActivas) {
+                var orden = $scope.ordenesActivas[i];
+                if (orden.IdCliente === args.IDCliente) {
+                    modelosFactory.obtenerOrdenActiva(orden.Id).then(function (response) {
+                        var ordenData = response.data;
+                        angular.extend(orden, ordenData);
+                    });
+                    break;
+                }
+            }
+        });
+        $rootScope.$on('vehiculoeditado', function (event, args) {
+            for (var i in $scope.ordenesActivas) {
+                var orden = $scope.ordenesActivas[i];
+                if (orden.IdVehiculo === args.IdVehiculo) {
+                    modelosFactory.obtenerOrdenActiva(orden.Id).then(function (response) {
+                        var ordenData = response.data;
+                        angular.extend(orden, ordenData);
+                    });
+                    break;
+                }
+            }
+        });
     }]);

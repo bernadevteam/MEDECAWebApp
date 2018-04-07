@@ -326,7 +326,7 @@ angular.module('medecaApp')
 		};
 		modelFact.obtenerDiagnosticosEstados = function () {
 			return $http.get(url + '/ObtenerDiagnosticoEstados');
-		};
+        };        
 		modelFact.agregar = function (model) {
 			return $http.post(url, model);
 		};
@@ -337,7 +337,19 @@ angular.module('medecaApp')
 
 		modelFact.aprobarDiagnostico = function (model) {
 		    return $http.put(url + '/AprobarDiagnostico', model);
-		};
+        };
+
+        modelFact.obtenerOrdenesActivas = function () {
+            return $http.get(url + '/OrdenesActivas');
+        };
+
+        modelFact.obtenerOrden = function (orden) {
+            return $http.get(url + '/ClienteOrden?idOrden=' + orden);
+        };
+
+        modelFact.obtenerOrdenActiva = function (orden) {
+            return $http.get(url + '/OrdenActiva?id=' + orden);
+        };
 
 		return modelFact;
 	}]);

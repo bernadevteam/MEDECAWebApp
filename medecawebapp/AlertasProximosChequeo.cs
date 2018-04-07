@@ -20,5 +20,6 @@ namespace MEDECAWebApp
         public System.DateTime FechaActualizacion { get; set; }
     
         public virtual OrdenesTrabajo OrdenesTrabajo { get; set; }
+        public virtual OrdenesTrabajo OrdenesTrabajo1 { get; set; }
     }
 }

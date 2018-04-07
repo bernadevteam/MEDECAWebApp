@@ -47,6 +47,8 @@ namespace MEDECAWebApp
         public virtual DbSet<Diagnostico> Diagnosticos { get; set; }
         public virtual DbSet<AlertasProximosChequeo> AlertasProximosChequeos { get; set; }
         public virtual DbSet<View_ClientesProximasRevisiones> View_ClientesProximasRevisiones { get; set; }
+        public virtual DbSet<View_OrdenesActivas> View_OrdenesActivas { get; set; }
+        public virtual DbSet<View_OrdenesInfo> View_OrdenesInfo { get; set; }
     
         public virtual ObjectResult<Dasboard> prc_Dashboard()
         {

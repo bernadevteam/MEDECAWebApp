@@ -7,146 +7,146 @@
                 <span class="star" ng-show="SelectedCliente.Favorito"></span>
                 <h4 class="modal-title">Recepci&oacute;n de Veh&iacute;culo {{parseOrden(nuevoModel.NoOrden.toString())}}</h4>
             </div>
-            <div class="modal-body">
-              
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h3>Cliente</h3>
-                        <h2>{{SelectedCliente.Nombre}}</h2>
-                        Tel. {{SelectedCliente.Telefono}}
-                        <div>
-                            <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
-                            <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
-                            <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
+            <div class="modal-body" ng-hide="nuevoModel.Id">
+                Cargando...
+            </div>
+                <div class="modal-body" ng-if="nuevoModel.Id">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>Cliente</h3>
+                            <h2>{{SelectedCliente.Nombre}}</h2>
+                            Tel. {{SelectedCliente.Telefono}}
+                            <div>
+                                <p class="">Recibido el: <strong>{{nuevoModel.Fecha | date: 'dd/MM/yyyy'}}{{nuevoModel.Fecha ? "" : "No establecida"}}</strong></p>
+                                <p class="">Para entregar el: <strong>{{nuevoModel.FechaPrometida | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaPrometida ? "" : "-"}}</strong></p>
+                                <p class="">Entregado el: <strong>{{nuevoModel.FechaEntrega | date: 'dd/MM/yyyy'}}{{nuevoModel.FechaEntrega ? "" : "-"}}</strong></p>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <h3>Veh&iacute;culo</h3>
+                            <h2>
+                                {{SelectedVehiculo.Info}}
+                            </h2>
+                            <div>
+                                <h5>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</h5>
+                                <h5>
+                                    <label>VIN:</label> {{SelectedVehiculo.NoChasis}}
+                                </h5>
+                                <label>{{SelectedVehiculo.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.DistanciaRecorrida}}
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
 
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <h3>Veh&iacute;culo</h3>
-                        <h2>
-                            {{SelectedVehiculo.Info}}
-                        </h2>
-                        <div>
-                            <h5>{{nuevoModel.Entregado ? 'Entregado' : 'En Taller'}}</h5>
-                            <h5>
-                                <label>VIN:</label> {{SelectedVehiculo.NoChasis}}
-                            </h5>
-                            <label>{{SelectedVehiculo.UnidadDistancia | distanceUnit }}:</label> {{nuevoModel.DistanciaRecorrida}}
-
-
+                    {{mostrarViejo = (nuevoModel.Diagnostico && nuevoModel.Fallas && nuevoModel.Reparaciones);""}}
+                    <div ng-show="mostrarViejo">
+                        <h4><strong>Aver&iacute;as</strong></h4>
+                        <pre>{{nuevoModel.Fallas}}</pre>
+                        <h4><strong>Diagn&oacute;stico</strong></h4>
+                        <pre>{{nuevoModel.Diagnostico}}</pre>
+                        <h4><strong>Reparaciones</strong></h4>
+                        <pre>{{nuevoModel.Reparaciones}}</pre>
+                    </div>
+                    <div ng-hide="mostrarViejo">
+                        <h3>Diagn&oacute;stico</h3>
+                        <div ng-show="nuevoModel.Diagnosticos.length == 0">Pendiente de realizar.</div>
+                        <div class="list-group">
+                            <diagnostico-tpl idestado=1 esdetalle="true"></diagnostico-tpl>
+                            <diagnostico-tpl idestado=2 esdetalle="true"></diagnostico-tpl>
+                            <diagnostico-tpl idestado=3 esdetalle="true"></diagnostico-tpl>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                         </div>
-                    <div class="col-sm-6">
+                    <div ng-if="nuevoModel.Servicios.length > 0">
+                        <h3>Servicios</h3>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="servicio in nuevoModel.Servicios">{{servicio.Nombre}}</li>
+                        </ul>
+                    </div>
+                    {{insumosAprobados = (nuevoModel.InsumosCotizados | filter:{Aprobado : true});""}}
+                    <div ng-show="insumosAprobados.length > 0">
+                        <h3>Insumos <span class="badge">{{insumosAprobados.length}}</span></h3>
+                        <p>
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="insumo in insumosAprobados | orderBy:'NombreInsumo'">
+                                        <td>
+                                            <strong>{{insumo.Cantidad}}</strong> {{insumo.NombreInsumo}}
+                                        </td>
+                                        <td>
+                                            {{insumo.NombreProveedor}}
+                                        </td>
+                                        <td>
+                                            <span class="pull-right">
+                                                {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3">
+                                            <span class="pull-right">
+                                                <b>Total:</b> {{insumosAprobados | totalCal: ['Precio', 'Cantidad'] | currency}} RD$
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </p>
 
                     </div>
-                </div>
-                {{mostrarViejo = (nuevoModel.Diagnostico + nuevoModel.Fallas + nuevoModel.Reparaciones).length > 0;""}}
-                <div ng-show="mostrarViejo">
-                    <h4><strong>Aver&iacute;as</strong></h4>
-                    <pre>{{nuevoModel.Fallas}}</pre>
-                    <h4><strong>Diagn&oacute;stico</strong></h4>
-                    <pre>{{nuevoModel.Diagnostico}}</pre>
-                    <h4><strong>Reparaciones</strong></h4>
-                    <pre>{{nuevoModel.Reparaciones}}</pre>
-                </div>
-                <div ng-hide="mostrarViejo">
-                    <h3>Diagn&oacute;stico</h3>
-                    {{diagsPendientes = (nuevoModel.Diagnosticos | filtrarDiagnosticos: 1);""}}
-                    {{diagsRealizados = (nuevoModel.Diagnosticos | filtrarDiagnosticos: 2);""}}
-                    {{diagsCancel = (nuevoModel.Diagnosticos | filtrarDiagnosticos: 3);""}}
-                    <div ng-show="nuevoModel.Diagnosticos.length == 0">Pendiente de realizar.</div>
-                    <div class="list-group">
-                        <diagnostico-tpl idestado=1 esdetalle="true"></diagnostico-tpl>
-                        <diagnostico-tpl idestado=2 esdetalle="true"></diagnostico-tpl>
-                        <diagnostico-tpl idestado=3 esdetalle="true"></diagnostico-tpl>
+                    <div ng-show="selInsumosProvs.length != 0">
+                        <hr />
+                        <h3>Insumos <span class="badge">{{selInsumosProvs.length}}</span></h3>
+                        <p>
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr ng-repeat="insumo in selInsumosProvs ">
+                                        <td>
+                                            <strong>{{insumo.Cantidad}}</strong> {{insumo.Nombre}}
+                                        </td>
+                                        <td>
+                                            {{insumo.NombreProveedor}}
+                                        </td>
+                                        <td>
+                                            <span class="pull-right">
+                                                {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3">
+                                            <span class="pull-right">
+                                                <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad'] | currency}} RD$
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </p>
                     </div>
                 </div>
-                <div ng-if="nuevoModel.Servicios.length > 0">
-                    <h3>Servicios</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="servicio in nuevoModel.Servicios">{{servicio.Nombre}}</li>
-                    </ul>
+                <div class="modal-footer">
+                    <a data-accion="Cerrar" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
+                    <a data-accion="Modificar" class="btn btn-warning" onclick="switchModal(this, '#nuevaOrdenTrabajo')"><span class="glyphicon glyphicon-forward"></span> Ir a Modificar</a>
                 </div>
-                {{insumosAprobados = (nuevoModel.InsumosCotizados | filter:{Aprobado : true});""}}
-                <div ng-show="insumosAprobados.length > 0">
-                    <h3>Insumos <span class="badge">{{insumosAprobados.length}}</span></h3>
-                    <p>
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr ng-repeat="insumo in insumosAprobados | orderBy:'NombreInsumo'">
-                                    <td>
-                                        <strong>{{insumo.Cantidad}}</strong> {{insumo.NombreInsumo}}
-                                    </td>
-                                    <td>
-                                        {{insumo.NombreProveedor}}
-                                    </td>
-                                    <td>
-                                        <span class="pull-right">
-                                            {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
-                                        </span>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3">
-                                        <span class="pull-right">
-                                            <b>Total:</b> {{insumosAprobados | totalCal: ['Precio', 'Cantidad'] | currency}} RD$
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-
-                    </p>
-
-                </div>
-                <div ng-show="selInsumosProvs.length != 0">
-                    <hr />
-                    <h3>Insumos <span class="badge">{{selInsumosProvs.length}}</span></h3>
-                    <p>
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr ng-repeat="insumo in selInsumosProvs ">
-                                    <td>
-                                        <strong>{{insumo.Cantidad}}</strong> {{insumo.Nombre}}
-                                    </td>
-                                    <td>
-                                        {{insumo.NombreProveedor}}
-                                    </td>
-                                    <td>
-                                        <span class="pull-right">
-                                            {{(insumo.Precio * insumo.Cantidad)| currency}} RD$
-                                        </span>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3">
-                                        <span class="pull-right">
-                                            <b>Total:</b> {{selInsumosProvs | totalCal: ['Precio', 'Cantidad'] | currency}} RD$
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a data-accion="Cerrar" class="btn btn-default" data-dismiss="modal" ng-click="restablecerNuevo()">Cerrar</a>
-                <a data-accion="Modificar" class="btn btn-warning" onclick="switchModal(this, '#nuevaOrdenTrabajo')"><span class="glyphicon glyphicon-forward"></span> Ir a Modificar</a>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <script>
 </script>

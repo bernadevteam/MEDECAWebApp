@@ -96,7 +96,7 @@ namespace MEDECAWebApp.Controllers
         [HttpGet]
         public IEnumerable<object> ClientesOrdenes()
         {
-            return db.Clientes.AsEnumerable().OrderBy(c => c.Nombre).Select(x => new 
+            return db.Clientes.AsEnumerable().OrderBy(c => c.Nombre).Select(x => new
             {
                 Direccion = x.Direccion,
                 Email = x.Email,
@@ -106,7 +106,7 @@ namespace MEDECAWebApp.Controllers
                 TipoIdentificacion = x.TipoIdentificacion,
                 Nombre = x.Nombre,
                 Telefono = x.Telefono,
-                Vehiculos = x.Vehiculos.Select(v => new 
+                Vehiculos = x.Vehiculos.Select(v => new
                 {
                     Info = string.Format("{0} {1} {2}", v.Modelo.VehiculoMarca.Nombre, v.Modelo.Nombre, v.Anio),
                     Modelo = new Modelo
@@ -140,68 +140,13 @@ namespace MEDECAWebApp.Controllers
                     IdCombustible = v.IdCombustible,
                     OrdenesTrabajos = v.OrdenesTrabajos.Select(ot => new
                     {
-                        Fallas = ot.Fallas,
-                        Fecha = ot.Fecha,
-                        FechaEntrega = ot.FechaEntrega,
-                        FechaPrometida = ot.FechaPrometida,
                         Id = ot.Id,
-                        Entregado = ot.Entregado,
                         NoOrden = ot.NoOrden,
-                        DistanciaRecorrida = ot.DistanciaRecorrida,
-                        Diagnosticos = ot.Diagnosticos.Select(dg => new Diagnostico {
-                            IdDiagnostico = dg.IdDiagnostico,
-                            IdOrden = dg.IdOrden,
-                            IdEstado = dg.IdEstado,
-                            Descripcion = dg.Descripcion,
-                            Ajustes = dg.Ajustes,
-                            DiagnosticoEstado = new DiagnosticoEstado() { IdDiagnosticoEstado = dg.DiagnosticoEstado.IdDiagnosticoEstado,
-                            Nombre = dg.DiagnosticoEstado.Nombre}
-                        }),
-                        Reparaciones = ot.Reparaciones,
-                        Diagnostico = ot.Diagnostico,
-                        IdVehiculo = v.IdVehiculo,
-                        InsumosCotizados = ot.InsumosCotizados.Select(ic => new {
-                            Aprobado = ic.Aprobado,
-                            Cantidad = ic.Cantidad,
-                            EsLocal = ic.EsLocal,
-                            FechaAproxLlegada = ic.FechaAproxLlegada,
-                            FechaCompra = ic.FechaCompra,
-                            IdInsumo = ic.IdInsumo,
-                            IdInsumoCotizado = ic.IdInsumoCotizado,
-                            IdMarcaInsumo = ic.IdMarcaInsumo,
-                            IdOrden = ic.IdOrden,
-                            IdProveedor = ic.IdProveedor,
-                            Precio = ic.Precio,
-                            NombreInsumo =  ic.Insumos.Nombre,
-                            NombreProveedor = ic.Proveedores != null ? ic.Proveedores.Nombre : null,
-                            NombreMarca = ic.MarcasInsumos != null ? ic.MarcasInsumos.Nombre : null
-                        }),
-                        InsumosProveedores = ot.InsumosProveedores.Select(ip => new InsumosProveedore
-                        {
-                            Precio = ip.Precio,
-                            IdInsumo = ip.IdInsumo,
-                            IdOrdenServicio = ip.IdOrdenServicio,
-                            Proveedore = new Proveedore { Nombre = ip.Proveedore.Nombre},
-                            IdProveedor = ip.IdProveedor,
-                            Cantidad = ip.Cantidad,
-                            Insumo = new Insumo { 
-                                Activo = ip.Insumo.Activo,
-                                Nombre = ip.Insumo.Nombre,
-                                IdInsumo = ip.IdInsumo
-                            }
-                        }).ToList(),
-                        Servicios = ot.Servicios.Select(s => new Servicio
-                        {
-                            Activo = s.Activo,
-                            Id = s.Id,
-                            Nombre = s.Nombre,
-                            IntervaloDias = s.IntervaloDias
-                        }).ToList()
+                        Fecha = ot.Fecha
                     }).ToList()
                 }).ToList()
             });
         }
-
         // GET api/Clientes/5
         public Cliente GetCliente(int id)
         {

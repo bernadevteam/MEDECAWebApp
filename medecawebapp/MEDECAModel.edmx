@@ -257,6 +257,56 @@ warning 6002: The table/view 'MEDECA.dbo.View_ClientesProximasRevisiones' does n
           <Property Name="IdEstado" Type="int" Nullable="false" />
           <Property Name="IdAlerta" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MEDECA.dbo.View_OrdenesActivas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_OrdenesActivas">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdVehiculo" />
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entregado" />
+            <PropertyRef Name="Vehiculo" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="IdVehiculo" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="NoOrden" Type="int" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="FechaPrometida" Type="datetime" />
+          <Property Name="Entregado" Type="bit" Nullable="false" />
+          <Property Name="DaysOverdue" Type="int" />
+          <Property Name="Vehiculo" Type="varchar" MaxLength="114" Nullable="false" />
+          <Property Name="Placa" Type="varchar" MaxLength="50" />
+          <Property Name="ReparacionesPendientes" Type="bit" />
+          <Property Name="CotizacionesPendientes" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MEDECA.dbo.View_OrdenesInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_OrdenesInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdVehiculo" />
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entregado" />
+            <PropertyRef Name="Vehiculo" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="IdVehiculo" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="NoOrden" Type="int" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="FechaPrometida" Type="datetime" />
+          <Property Name="Entregado" Type="bit" Nullable="false" />
+          <Property Name="DaysOverdue" Type="int" />
+          <Property Name="Vehiculo" Type="varchar" MaxLength="114" Nullable="false" />
+          <Property Name="Placa" Type="varchar" MaxLength="50" />
+          <Property Name="ReparacionesPendientes" Type="bit" />
+          <Property Name="CotizacionesPendientes" Type="bit" />
+        </EntityType>
         <Association Name="FK_Diagnosticos_DiagnosticoEstados">
           <End Role="DiagnosticoEstados" Type="Self.DiagnosticoEstados" Multiplicity="1" />
           <End Role="Diagnosticos" Type="Self.Diagnosticos" Multiplicity="*" />
@@ -283,13 +333,13 @@ warning 6002: The table/view 'MEDECA.dbo.View_ClientesProximasRevisiones' does n
         </Association>
         <Association Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas">
           <End Role="OrdenesTrabajos" Type="Self.OrdenesTrabajos" Multiplicity="1" />
-          <End Role="AlertasProximosChequeos" Type="Self.AlertasProximosChequeos" Multiplicity="0..1" />
+          <End Role="AlertasProximosChequeos" Type="Self.AlertasProximosChequeos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrdenesTrabajos">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AlertasProximosChequeos">
-              <PropertyRef Name="IdAlerta" />
+              <PropertyRef Name="IdOrden" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -585,6 +635,40 @@ warning 6002: The table/view 'MEDECA.dbo.View_ClientesProximasRevisiones' does n
 [View_ClientesProximasRevisiones].[IdAlerta] AS [IdAlerta]
 FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="View_OrdenesActivas" EntityType="Self.View_OrdenesActivas" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[View_OrdenesActivas].[Id] AS [Id], 
+[View_OrdenesActivas].[IdVehiculo] AS [IdVehiculo], 
+[View_OrdenesActivas].[IdCliente] AS [IdCliente], 
+[View_OrdenesActivas].[Nombre] AS [Nombre], 
+[View_OrdenesActivas].[NoOrden] AS [NoOrden], 
+[View_OrdenesActivas].[Fecha] AS [Fecha], 
+[View_OrdenesActivas].[FechaPrometida] AS [FechaPrometida], 
+[View_OrdenesActivas].[Entregado] AS [Entregado], 
+[View_OrdenesActivas].[DaysOverdue] AS [DaysOverdue], 
+[View_OrdenesActivas].[Vehiculo] AS [Vehiculo], 
+[View_OrdenesActivas].[Placa] AS [Placa], 
+[View_OrdenesActivas].[ReparacionesPendientes] AS [ReparacionesPendientes], 
+[View_OrdenesActivas].[CotizacionesPendientes] AS [CotizacionesPendientes]
+FROM [dbo].[View_OrdenesActivas] AS [View_OrdenesActivas]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_OrdenesInfo" EntityType="Self.View_OrdenesInfo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[View_OrdenesInfo].[Id] AS [Id], 
+[View_OrdenesInfo].[IdVehiculo] AS [IdVehiculo], 
+[View_OrdenesInfo].[IdCliente] AS [IdCliente], 
+[View_OrdenesInfo].[Nombre] AS [Nombre], 
+[View_OrdenesInfo].[NoOrden] AS [NoOrden], 
+[View_OrdenesInfo].[Fecha] AS [Fecha], 
+[View_OrdenesInfo].[FechaPrometida] AS [FechaPrometida], 
+[View_OrdenesInfo].[Entregado] AS [Entregado], 
+[View_OrdenesInfo].[DaysOverdue] AS [DaysOverdue], 
+[View_OrdenesInfo].[Vehiculo] AS [Vehiculo], 
+[View_OrdenesInfo].[Placa] AS [Placa], 
+[View_OrdenesInfo].[ReparacionesPendientes] AS [ReparacionesPendientes], 
+[View_OrdenesInfo].[CotizacionesPendientes] AS [CotizacionesPendientes]
+FROM [dbo].[View_OrdenesInfo] AS [View_OrdenesInfo]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Diagnosticos_DiagnosticoEstados" Association="Self.FK_Diagnosticos_DiagnosticoEstados">
             <End Role="DiagnosticoEstados" EntitySet="DiagnosticoEstados" />
             <End Role="Diagnosticos" EntitySet="Diagnosticos" />
@@ -794,6 +878,12 @@ FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones
             <Parameter Name="IdAlerta" Mode="In" Type="Int32" />
             <Parameter Name="IdEstado" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="View_OrdenesActivas" EntityType="MEDECAModel.View_OrdenesActivas" />
+          <AssociationSet Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1" Association="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1">
+            <End Role="OrdenesTrabajo" EntitySet="OrdenesTrabajos" />
+            <End Role="AlertasProximosChequeo" EntitySet="AlertasProximosChequeos" />
+          </AssociationSet>
+          <EntitySet Name="View_OrdenesInfo" EntityType="MEDECAModel.View_OrdenesInfo" />
           </EntityContainer>
         <EntityType Name="Cliente">
           <Key>
@@ -961,6 +1051,7 @@ FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones
           <NavigationProperty Name="InsumosCotizados" Relationship="MEDECAModel.FK_InsumosCotizados_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="InsumosCotizados" />
           <NavigationProperty Name="Diagnosticos" Relationship="MEDECAModel.FK_Diagnosticos_OrdenesTrabajos" FromRole="OrdenesTrabajo" ToRole="Diagnostico" />
           <NavigationProperty Name="AlertasProximosChequeo" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" FromRole="OrdenesTrabajo" ToRole="AlertasProximosChequeo" />
+          <NavigationProperty Name="AlertasProximosChequeos" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1" FromRole="OrdenesTrabajo" ToRole="AlertasProximosChequeo" />
         </EntityType>
         <Association Name="FK_OrdenesTrabajos_Vehiculos">
           <End Type="MEDECAModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
@@ -1267,6 +1358,7 @@ FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
           <Property Name="FechaActualizacion" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="OrdenesTrabajo" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas" FromRole="AlertasProximosChequeo" ToRole="OrdenesTrabajo" />
+          <NavigationProperty Name="OrdenesTrabajo1" Relationship="MEDECAModel.FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1" FromRole="AlertasProximosChequeo" ToRole="OrdenesTrabajo" />
         </EntityType>
         <EntityType Name="View_ClientesProximasRevisiones">
           <Key>
@@ -1311,6 +1403,64 @@ FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="View_OrdenesActivas">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="Vehiculo" />
+            <PropertyRef Name="IdVehiculo" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entregado" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NoOrden" Type="Int32" />
+          <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
+          <Property Name="DaysOverdue" Type="Int32" />
+          <Property Name="Vehiculo" Type="String" Nullable="false" MaxLength="114" FixedLength="false" Unicode="false" />
+          <Property Name="Placa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReparacionesPendientes" Type="Boolean" />
+          <Property Name="CotizacionesPendientes" Type="Boolean" />
+          <Property Name="IdVehiculo" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Entregado" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_IdOrden_OrdenesTrabajo_IdOrden_Alertas1">
+          <End Type="MEDECAModel.OrdenesTrabajo" Role="OrdenesTrabajo" Multiplicity="1" />
+          <End Type="MEDECAModel.AlertasProximosChequeo" Role="AlertasProximosChequeo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrdenesTrabajo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AlertasProximosChequeo">
+              <PropertyRef Name="IdOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="View_OrdenesInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="IdVehiculo" />
+            <PropertyRef Name="Nombre" />
+            <PropertyRef Name="Fecha" />
+            <PropertyRef Name="Entregado" />
+            <PropertyRef Name="Vehiculo" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="IdVehiculo" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="NoOrden" Type="Int32" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaPrometida" Type="DateTime" Precision="3" />
+          <Property Name="Entregado" Type="Boolean" Nullable="false" />
+          <Property Name="DaysOverdue" Type="Int32" />
+          <Property Name="Vehiculo" Type="String" Nullable="false" MaxLength="114" FixedLength="false" Unicode="false" />
+          <Property Name="Placa" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReparacionesPendientes" Type="Boolean" />
+          <Property Name="CotizacionesPendientes" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1687,6 +1837,44 @@ FROM [dbo].[View_ClientesProximasRevisiones] AS [View_ClientesProximasRevisiones
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ActualizarEstadoAlerta" FunctionName="MEDECAModel.Store.ActualizarEstadoAlerta" />
+          <EntitySetMapping Name="View_OrdenesActivas">
+            <EntityTypeMapping TypeName="MEDECAModel.View_OrdenesActivas">
+              <MappingFragment StoreEntitySet="View_OrdenesActivas">
+                <ScalarProperty Name="Entregado" ColumnName="Entregado" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+                <ScalarProperty Name="CotizacionesPendientes" ColumnName="CotizacionesPendientes" />
+                <ScalarProperty Name="ReparacionesPendientes" ColumnName="ReparacionesPendientes" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+                <ScalarProperty Name="Vehiculo" ColumnName="Vehiculo" />
+                <ScalarProperty Name="DaysOverdue" ColumnName="DaysOverdue" />
+                <ScalarProperty Name="FechaPrometida" ColumnName="FechaPrometida" />
+                <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_OrdenesInfo">
+            <EntityTypeMapping TypeName="MEDECAModel.View_OrdenesInfo">
+              <MappingFragment StoreEntitySet="View_OrdenesInfo">
+                <ScalarProperty Name="CotizacionesPendientes" ColumnName="CotizacionesPendientes" />
+                <ScalarProperty Name="ReparacionesPendientes" ColumnName="ReparacionesPendientes" />
+                <ScalarProperty Name="Placa" ColumnName="Placa" />
+                <ScalarProperty Name="Vehiculo" ColumnName="Vehiculo" />
+                <ScalarProperty Name="DaysOverdue" ColumnName="DaysOverdue" />
+                <ScalarProperty Name="Entregado" ColumnName="Entregado" />
+                <ScalarProperty Name="FechaPrometida" ColumnName="FechaPrometida" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
