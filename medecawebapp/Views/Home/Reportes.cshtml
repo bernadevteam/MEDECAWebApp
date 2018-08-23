@@ -44,16 +44,35 @@ line-colors='["#31C0BE"]'>
         </div>
   
       <div class="row" >
-             <div class="col-md-2">
-                 <label>Fecha Inicio</label>
-                 <md-datepicker ng-model="FechaInicio" ></md-datepicker>
-                    
-                </div>
-         <div class="col-md-2">
-                 <label>Fecha Fin</label>
-                 <md-datepicker ng-model="FechaFin" ></md-datepicker>
-                    
-                </div>
+          <div class="col-md-2">
+              <label>Fecha Inicio</label>
+              <br />
+              <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                         ng-model="FechaInicio" is-open="fechaInicioPopUp" datepicker-options="dateOptions"
+                         ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="fechaInicioPopUp = true">
+                          <i class="glyphicon glyphicon-calendar"></i>
+                      </button>
+                  </span>
+              </p>
+          </div>
+          <div class="col-md-2">
+              <label>Fecha Fin</label>
+              <br />
+              <p class="input-group">
+                  <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                         ng-model="FechaFin" is-open="fechaFinPopUp" datepicker-options="dateOptions"
+                         ng-required="true" close-text="Cerrar" current-text="Hoy" clear-text="Limpiar" alt-input-formats="altInputFormats" />
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="fechaFinPopUp = true">
+                          <i class="glyphicon glyphicon-calendar"></i>
+                      </button>
+                  </span>
+              </p>
+
+          </div>
                         <div class="col-md-2">
                   <label>Estado</label>
                 <select ng-model="Entregado" class="form-control"> 

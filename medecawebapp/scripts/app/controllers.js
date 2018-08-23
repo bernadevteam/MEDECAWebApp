@@ -120,6 +120,8 @@ angular.module('medecaApp')
         $scope.currentPage = 1;
         $scope.pageSize = "15";
         $scope.verHist = "0";
+        $scope.fechaInicioPopUp = $scope.fechaFinPopUp = false;
+        $scope.format = 'dd/MM/yyyy';
 
         modelosFactory.getHist().then(function (response) {
             $scope.historicos = response.data;
