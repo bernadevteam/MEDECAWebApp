@@ -34,7 +34,9 @@ span.star:before {
 .required-dirty {
     border-color: red !important;
 }
-
+.img-loading {
+    width:40px;
+}
 .loading-spiner {
     position: absolute;
     z-index: 1000;
@@ -284,7 +286,7 @@ pre {
         border-color:gray;
     }
 #tabActiveOrders .orden-activa-cuerpo {
-    height: 170px;
+    min-height: 200px;
     position: relative;
 }
 
