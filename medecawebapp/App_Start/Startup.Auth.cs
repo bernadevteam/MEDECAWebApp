@@ -8,6 +8,10 @@ using Owin;
 using MEDECAWebApp.Models;
 using Microsoft.Owin.Security.OAuth;
 using IMPEMASA.Providers;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace MEDECAWebApp
 {
@@ -81,13 +85,83 @@ namespace MEDECAWebApp
             //app.UseFacebookAuthentication(
             //    appId: "",
             //    appSecret: "");
+#if DEBUG
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
+                ClientId = "30889076172-p6sg88hq4ff4upcrvqpqnefrqtc2ird4.apps.googleusercontent.com",
+                ClientSecret = "RoG4EvpE4fSsoLR0hV7X52aL",
+                UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo",
+                BackchannelHttpHandler = new GoogleUserInfoRemapper(new WebRequestHandler())
+            });
+        }
+#else
+         app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
                 ClientId = "282963924364-6d1j9dik8grqifggjulbocr1gvt0oif0.apps.googleusercontent.com",
                 ClientSecret = "8NXDQmTDYSTncHDTY-fEMuXk",
-                CallbackPath = new PathString("/AuthCallback/Index")
+                UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo",
+                BackchannelHttpHandler = new GoogleUserInfoRemapper(new WebRequestHandler())
             });
+        }
+#endif
+    }
+
+    internal class GoogleUserInfoRemapper : DelegatingHandler
+    {
+        public GoogleUserInfoRemapper(HttpMessageHandler innerHandler) : base(innerHandler) { }
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = await base.SendAsync(request, cancellationToken);
+
+            if (!request.RequestUri.AbsoluteUri.Equals("https://www.googleapis.com/oauth2/v2/userinfo"))
+            {
+                return response;
+            }
+
+            response.EnsureSuccessStatusCode();
+            var text = await response.Content.ReadAsStringAsync();
+            JObject user = JObject.Parse(text);
+            JObject legacyFormat = new JObject();
+
+            JToken token;
+            if (user.TryGetValue("id", out token))
+            {
+                legacyFormat["id"] = token;
+            }
+            if (user.TryGetValue("name", out token))
+            {
+                legacyFormat["displayName"] = token;
+            }
+            JToken given, family;
+            if (user.TryGetValue("given_name", out given) && user.TryGetValue("family_name", out family))
+            {
+                var name = new JObject();
+                name["givenName"] = given;
+                name["familyName"] = family;
+                legacyFormat["name"] = name;
+            }
+            if (user.TryGetValue("link", out token))
+            {
+                legacyFormat["url"] = token;
+            }
+            if (user.TryGetValue("email", out token))
+            {
+                var email = new JObject();
+                email["value"] = token;
+                legacyFormat["emails"] = new JArray(email);
+            }
+            if (user.TryGetValue("picture", out token))
+            {
+                var image = new JObject();
+                image["url"] = token;
+                legacyFormat["image"] = image;
+            }
+
+            text = legacyFormat.ToString();
+            response.Content = new StringContent(text);
+            return response;
         }
     }
 }
